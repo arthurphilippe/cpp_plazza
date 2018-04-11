@@ -17,6 +17,8 @@ jobs:
       - run:
           name: Unit Tests Execution
           command: ./unit_tests.out  --xml=tests/results.xml --always-succeed
+      - store_test_results:
+          path: .
       # - run:
       #     name: Code Coverage - Processing
       #     command: ./tests/coverage.sh
@@ -50,6 +52,8 @@ jobs:
       - run:
           name: Unit Tests Execution
           command: ./unit_tests.out  --xml=tests/results.xml --always-succeed
+      - store_test_results:
+          path: .
 
 workflows:
   version: 2
