@@ -33,7 +33,7 @@ jobs:
       - checkout
       - run:
           name: Build Project Using clang
-          command: make CXX=clang++ CPPFLAGS=-W\ -Wextra\ -Wall\ -Werror\ -Iinclude/\ -std=c++17 arcade
+          command: make CXX=clang++ CPPFLAGS=-W\ -Wextra\ -Wall\ -Werror\ -Iinclude/\ -std=c++17
 
   epitest:
     docker:
@@ -42,7 +42,7 @@ jobs:
       - checkout
       - run:
           name: Build Project
-          command: make -j 4 arcade
+          command: make -j 4
       - run:
           name: Build Unit Tests Suites
           command: make tests -j 4
