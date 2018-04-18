@@ -11,6 +11,9 @@
 #include <regex>
 #include <fstream>
 
+#include "Command.hpp"
+#include "Information.hpp"
+
 std::string getfile()
 {
 	std::ifstream te("google.csv");

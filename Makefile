@@ -13,7 +13,7 @@ RM		=	rm -vf
 
 MAIN		=	src/main.cpp
 
-SRCS		=
+SRCS		=	src/Command.cpp
 
 OBJ_MAIN	=	$(MAIN:.cpp=.o)
 
@@ -21,7 +21,7 @@ OBJS		=	$(SRCS:.cpp=.o)
 
 TEST		=	unit_tests.out
 
-SRCS_TEST	=
+SRCS_TEST	=	tests/test-Command.cpp
 
 SRCS_TEST	+=	$(OBJS)
 
