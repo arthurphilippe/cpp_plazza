@@ -27,11 +27,18 @@ std::string getfile()
 
 int main()
 {
+	std::ifstream test("test.serial");
+	std::istream &test2(test);
+
 	Plazza::Command cmd;
 
-	cmd.cmdFileName = "toto";
-	cmd.cmdId = 1;
-	cmd.cmdInfoType = Plazza::PHONE_NUMBER;
+	test >> cmd;
+	// cmd.cmdFileName = "toto";
+	// cmd.cmdId = 1;
+	// cmd.cmdInfoType = Plazza::PHONE_NUMBER;
+
+
+
 	std::cout << cmd;
 	std::regex r("([0-9]{10})");
  //   std::string file = getfile();

@@ -22,5 +22,6 @@ struct Plazza::Command {
 };
 
 std::ostream& operator<<(std::ostream& os, const Plazza::Command &cmd);
+std::istream& operator>>(std::istream &in, Plazza::Command &cmd);
 
 #endif /* !COMMAND_HPP_ */

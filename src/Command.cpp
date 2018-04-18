@@ -6,18 +6,20 @@
 */
 
 #include <iostream>
+#include <vector>
 #include "Command.hpp"
 
 std::ostream& operator<<(std::ostream& os, const Plazza::Command &cmd)
 {
 	// os << std::to_string(cmd.cmdId);
 	os << cmd.cmdId;
-	os << std::string(",");
+	os << ",";
 
 	os << cmd.cmdInfoType;
-	os << std::string(",");
+	os << ",";
 
 	os << cmd.cmdFileName.length();
+	os << ',';
 	os << cmd.cmdFileName;
 	return os;
 }
@@ -29,7 +31,16 @@ std::istream& operator>>(std::istream &in, Plazza::Command &cmd)
 
 	in >> cmd.cmdId;
 	in >> separator;
+
 	in >> tmp;
 	cmd.cmdInfoType = static_cast<Plazza::Information>(tmp);
+	in >> separator;
+
+	in >> tmp;
+	if (tmp) {
+		std::vector<char> arr(tmp);
+		in.read(arr.data() , tmp);
+		cmd.cmdFileName.assign(arr.data(), tmp);
+	}
 	return in;
 }
