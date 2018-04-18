@@ -13,7 +13,9 @@ RM		=	rm -vf
 
 MAIN		=	src/main.cpp
 
-SRCS		=	src/Command.cpp
+SRCS		=	src/Command.cpp		\
+			src/NamedPipe.cpp	\
+			src/ILink.cpp
 
 OBJ_MAIN	=	$(MAIN:.cpp=.o)
 
