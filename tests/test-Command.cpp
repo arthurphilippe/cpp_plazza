@@ -88,5 +88,12 @@ Test(Command, serialasation_empty_id) {
 	cr_assert_str_eq(cmd1.cmdFileName.c_str(), cmd2.cmdFileName.c_str());
 	cr_assert_str_eq(cmd1.cmdFileName.c_str(), cmd2.cmdFileName.c_str());
 	cr_assert_eq(cmd1.cmdInfoType, cmd2.cmdInfoType);
-}
+	ioss << cmd2;
 
+	Plazza::Command cmd3;
+	ioss >> cmd3;
+	cr_assert_eq(cmd1.cmdId, cmd3.cmdId);
+	cr_assert_str_eq(cmd1.cmdFileName.c_str(), cmd3.cmdFileName.c_str());
+	cr_assert_str_eq(cmd1.cmdFileName.c_str(), cmd3.cmdFileName.c_str());
+	cr_assert_eq(cmd1.cmdInfoType, cmd3.cmdInfoType);
+}

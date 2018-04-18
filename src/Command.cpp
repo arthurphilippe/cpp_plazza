@@ -11,7 +11,6 @@
 
 std::ostream& operator<<(std::ostream& os, const Plazza::Command &cmd)
 {
-	// os << std::to_string(cmd.cmdId);
 	os << cmd.cmdId;
 	os << ",";
 
