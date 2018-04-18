@@ -11,6 +11,9 @@
 #include <regex>
 #include <fstream>
 
+#include "Command.hpp"
+#include "Information.hpp"
+
 std::string getfile()
 {
 	std::ifstream te("google.csv");
@@ -24,6 +27,12 @@ std::string getfile()
 
 int main()
 {
+	Plazza::Command cmd;
+
+	cmd.cmdFileName = "toto";
+	cmd.cmdId = 1;
+	cmd.cmdInfoType = Plazza::PHONE_NUMBER;
+	std::cout << cmd;
 	std::regex r("([0-9]{10})");
  //   std::string file = getfile();
 

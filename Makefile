@@ -13,7 +13,7 @@ RM		=	rm -vf
 
 MAIN		=	src/main.cpp
 
-SRCS		=
+SRCS		=	src/Command.cpp
 
 OBJ_MAIN	=	$(MAIN:.cpp=.o)
 
