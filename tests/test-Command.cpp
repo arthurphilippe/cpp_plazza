@@ -7,8 +7,8 @@
 
 #include <criterion/criterion.h>
 #include <criterion/assert.h>
-#include "Command.hpp"
 #include <sstream>
+#include "Command.hpp"
 
 Test(Command, serialasation_basic) {
 	Plazza::Command cmd1;

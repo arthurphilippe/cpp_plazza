@@ -21,13 +21,16 @@ OBJS		=	$(SRCS:.cpp=.o)
 
 TEST		=	unit_tests.out
 
-SRCS_TEST	=	tests/test-Command.cpp
+SRCS_TEST	=	tests/test-Command.cpp		\
+			tests/test-ScopedLock.cpp
 
 SRCS_TEST	+=	$(OBJS)
 
 OBJS_TEST	=	$(SRCS_TEST:.cpp=.o)
 
 CPPFLAGS	=	-W -Wextra -Wall -Iinclude/ -std=c++17
+
+LDFLAGS		=	 -lpthread
 
 %.o: %.cpp
 	@printf "[\033[0;36mcompiling\033[0m]% 39s\r" $< | tr " " "."
@@ -48,12 +51,12 @@ tests_run: tests
 
 $(NAME): $(OBJ_MAIN) $(OBJS)
 	@printf "[\033[0;36mlinking\033[0m]% 41s\r" $(NAME) | tr " " "."
-	@$(CXX) $(OBJ_MAIN) $(OBJS) -o $(NAME)
+	@$(CXX) $(OBJ_MAIN) $(OBJS) -o $(NAME) $(LDFLAGS)
 	@printf "[\033[0;36mlinked\033[0m]% 42s\n" $(NAME) | tr " " "."
 
 $(TEST): $(OBJS_TEST)
 	@printf "[\033[0;36mlinking\033[0m]% 41s\r" $(TEST) | tr " " "."
-	@$(CXX) $(OBJS_TEST) -o $(TEST) -lcriterion
+	@$(CXX) $(OBJS_TEST) -o $(TEST) -lcriterion $(LDFLAGS)
 	@printf "[\033[0;36mlinked\033[0m]% 42s\n" $(TEST) | tr " " "."
 clean:
 	@printf "[\033[0;31mdeletion\033[0m][objects]% 31s\n" `$(RM) $(OBJ_MAIN) $(OBJS) $(OBJS_TEST) | wc -l | tr -d '\n'` | tr " " "."
