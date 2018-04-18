@@ -27,7 +27,6 @@ std::string getfile()
 
 int main()
 {
-	std::cout << cmd;
 	std::regex r("([0-9]{10})");
  //   std::string file = getfile();
 
