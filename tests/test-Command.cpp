@@ -96,4 +96,5 @@ Test(Command, serialasation_empty_id) {
 	cr_assert_str_eq(cmd1.cmdFileName.c_str(), cmd3.cmdFileName.c_str());
 	cr_assert_str_eq(cmd1.cmdFileName.c_str(), cmd3.cmdFileName.c_str());
 	cr_assert_eq(cmd1.cmdInfoType, cmd3.cmdInfoType);
+	ioss >> cmd3;
 }

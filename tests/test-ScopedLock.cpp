@@ -19,7 +19,7 @@ void callLock(char *str)
 	Plazza::ScopedLock lock(mtx);
 	for (char c = '0'; c <= '9'; c++) {
 		strncat(str, &c, 1);
-		std::this_thread::sleep_for(10ms);
+		std::this_thread::sleep_for(10us);
 	}
 }
 
@@ -27,7 +27,7 @@ void callNoLock(char *str)
 {
 	for (char c = '0'; c <= '9'; c++) {
 		strncat(str, &c, 1);
-		std::this_thread::sleep_for(10ms);
+		std::this_thread::sleep_for(10us);
 	}
 }
 
