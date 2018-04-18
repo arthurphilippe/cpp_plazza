@@ -24,7 +24,8 @@ OBJS		=	$(SRCS:.cpp=.o)
 TEST		=	unit_tests.out
 
 SRCS_TEST	=	tests/test-Command.cpp		\
-			tests/test-ScopedLock.cpp
+			tests/test-ScopedLock.cpp	\
+			tests/test-Fifo.cpp
 
 SRCS_TEST	+=	$(OBJS)
 

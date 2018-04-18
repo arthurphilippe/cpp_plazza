@@ -15,6 +15,7 @@
 #include "Command.hpp"
 #include "Information.hpp"
 #include "ScopedLock.hpp"
+#include "NamedPipe.hpp"
 
 
 void print_block(int n, char c) {
@@ -39,6 +40,8 @@ std::string getfile()
 
 int main()
 {
+	Plazza::NamedPipe master(1, Plazza::NamedPipe::CREATE);
+
 	std::thread th1(print_block, 50, '*');
 	std::thread th2(print_block, 50, '$');
 
