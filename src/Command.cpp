@@ -37,6 +37,7 @@ std::istream& operator>>(std::istream &in, Plazza::Command &cmd)
 	in >> separator;
 
 	in >> tmp;
+	in >> separator;
 	if (tmp) {
 		std::vector<char> arr(tmp);
 		in.read(arr.data() , tmp);

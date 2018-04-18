@@ -21,7 +21,7 @@ OBJS		=	$(SRCS:.cpp=.o)
 
 TEST		=	unit_tests.out
 
-SRCS_TEST	=
+SRCS_TEST	=	tests/test-Command.cpp
 
 SRCS_TEST	+=	$(OBJS)
 
