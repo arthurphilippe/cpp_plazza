@@ -30,6 +30,7 @@ private:
 	std::string _nameOut;
 	std::ifstream _in;
 	std::ofstream _out;
+	ILink::Mode _mode;
 };
 
 #endif /* !NAMEDPIPE_HPP_ */

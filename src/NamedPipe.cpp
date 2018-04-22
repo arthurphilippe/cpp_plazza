@@ -10,13 +10,17 @@
 #include <cerrno>
 #include <iostream>
 #include <sstream>
+#include <thread>
+#include <cstdio>
 #include "NamedPipe.hpp"
 
 using Plazza::NamedPipe;
+using namespace std::chrono_literals;
 
 NamedPipe::NamedPipe(uint id, ILink::Mode mode)
 	: _nameIn(LINK_PREFIX + std::to_string(id)),
-	_nameOut(LINK_PREFIX + std::to_string(id))
+	_nameOut(LINK_PREFIX + std::to_string(id)),
+	_mode(mode)
 {
 	_nameIn.append("_in");
 	_nameOut.append("_out");
@@ -25,14 +29,19 @@ NamedPipe::NamedPipe(uint id, ILink::Mode mode)
 		_out.open(_nameOut);
 		_in.open(_nameIn);
 	} else {
-		_out.open(_nameIn);
+		std::this_thread::sleep_for(10us);
 		_in.open(_nameOut);
+		_out.open(_nameIn);
 	}
-	std::cout << "Constructed" << std::endl;
 }
 
 NamedPipe::~NamedPipe()
-{}
+{
+	if (_mode == JOIN) {
+		std::remove(_nameIn.c_str());
+		std::remove(_nameOut.c_str());
+	}
+}
 
 std::ostream &NamedPipe::send(std::ostream &os)
 {

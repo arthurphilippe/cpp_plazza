@@ -38,12 +38,30 @@ std::string getfile()
 	return file;
 }
 
+static void fifo_master_create()
+{
+	try {
+		Plazza::NamedPipe master(1, Plazza::NamedPipe::CREATE);
+	} catch (std::exception &exept) {
+		exept.what();
+	}
+}
+
+static void fifo_slave_join()
+{
+	try {
+		Plazza::NamedPipe master(1, Plazza::NamedPipe::JOIN);
+	} catch (std::exception &exept) {
+		exept.what();
+	}
+}
+
 int main()
 {
-	Plazza::NamedPipe master(1, Plazza::NamedPipe::CREATE);
+	// Plazza::NamedPipe master(1, Plazza::NamedPipe::CREATE);
 
-	std::thread th1(print_block, 50, '*');
-	std::thread th2(print_block, 50, '$');
+	std::thread th1(fifo_master_create);
+	std::thread th2(fifo_slave_join);
 
 	th1.join();
 	th2.join();
