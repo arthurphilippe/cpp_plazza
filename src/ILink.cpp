@@ -9,9 +9,9 @@
 
 using Plazza::ILink;
 
-// ILink &operator<<(ILink &out, std::string &str)
+// ILink &operator<<(ILink &out, auto &os)
 // {
-// 	out.send(str);
+// 	out.send(os);
 // }
 
 std::ostream& operator<<(std::ostream& os, ILink &link)

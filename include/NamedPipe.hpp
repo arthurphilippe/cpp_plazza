@@ -24,6 +24,14 @@ public:
 	~NamedPipe();
 	std::ostream &send(std::ostream &os) override;
 	std::istream &recive(std::istream &in) override;
+	std::ostream &output() override
+	{
+		return _out;
+	}
+	std::istream &input() override
+	{
+		return _in;
+	}
 private:
 	void _createFifos();
 	std::string _nameIn;

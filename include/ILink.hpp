@@ -26,6 +26,8 @@ public:
 	virtual ~ILink() = default;
 	virtual std::ostream &send(std::ostream &os) = 0;
 	virtual std::istream &recive(std::istream &in) = 0;
+	virtual std::ostream &output() = 0;
+	virtual std::istream &input() = 0;
 };
 
 class Plazza::LinkExeption : std::exception {

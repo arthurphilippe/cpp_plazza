@@ -27,10 +27,10 @@ NamedPipe::NamedPipe(uint id, ILink::Mode mode)
 	if (mode == Mode::CREATE) {
 		_createFifos();
 		_out.open(_nameOut);
-		_in.open(_nameIn);
+		_in.open(_nameIn, std::ifstream::in);
 	} else {
 		std::this_thread::sleep_for(10us);
-		_in.open(_nameOut);
+		_in.open(_nameOut, std::ifstream::in);
 		_out.open(_nameIn);
 	}
 }
