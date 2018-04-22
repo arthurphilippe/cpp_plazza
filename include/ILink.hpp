@@ -42,7 +42,7 @@ public:
 	std::string _what;
 };
 
-std::ostream& operator<<(std::ostream& os, Plazza::ILink &link);
+std::ostream& operator<<(std::ostream &os, Plazza::ILink &link);
 std::istream& operator>>(std::istream &in, Plazza::ILink &link);
 
 #endif /* !ILINK_HPP_ */

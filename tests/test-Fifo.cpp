@@ -8,33 +8,32 @@
 #include <criterion/criterion.h>
 #include <criterion/assert.h>
 #include <thread>
+#include <iostream>
 #include "NamedPipe.hpp"
-using namespace std::chrono_literals;
 
-void fifo_master_create(Plazza::NamedPipe **master)
+void fifo_master_create(Plazza::NamedPipe **master, uint id)
 {
 	try {
-		*master = new Plazza::NamedPipe(1, Plazza::NamedPipe::CREATE);
-	} catch (std::exception &exept) {
+		*master = new Plazza::NamedPipe(id, Plazza::NamedPipe::CREATE);
+	} catch (Plazza::LinkExeption &exept) {
 		*master = nullptr;
 	}
 }
 
-void fifo_slave_join(Plazza::NamedPipe **slave)
+void fifo_slave_join(Plazza::NamedPipe **slave, uint id)
 {
-	std::this_thread::sleep_for(10us);
 	try {
-		*slave = new Plazza::NamedPipe(1, Plazza::NamedPipe::JOIN);
-	} catch (std::exception &exept) {
+		*slave = new Plazza::NamedPipe(id, Plazza::NamedPipe::JOIN);
+	} catch (Plazza::LinkExeption &exept) {
 		*slave = nullptr;
 	}
 }
 
 Test(Fifo, TwoWayCreation) {
-	Plazza::NamedPipe *master;
-	Plazza::NamedPipe *slave;
-	std::thread th1(fifo_master_create, &master);
-	std::thread th2(fifo_slave_join, &slave);
+	Plazza::NamedPipe *master = nullptr;
+	Plazza::NamedPipe *slave = nullptr;
+	std::thread th1(fifo_master_create, &master, 1);
+	std::thread th2(fifo_slave_join, &slave, 1);
 
 	th1.join();
 	th2.join();
@@ -43,3 +42,18 @@ Test(Fifo, TwoWayCreation) {
 	delete master;
 	delete slave;
 }
+
+// Test(Fifo, TwoWayComm) {
+// 	Plazza::NamedPipe *master = nullptr;
+// 	Plazza::NamedPipe *slave = nullptr;
+// 	std::thread th1(fifo_master_create, &master, 2);
+// 	std::thread th2(fifo_slave_join, &slave, 2);
+
+// 	th1.join();
+// 	th2.join();
+// 	cr_assert(master);
+// 	cr_assert(slave);
+// 	*master << "hey there";
+// 	delete master;
+// 	delete slave;
+// }
