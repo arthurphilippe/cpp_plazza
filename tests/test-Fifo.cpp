@@ -55,7 +55,7 @@ static void fifo_rvc_test_msg(Plazza::ILink *pipe, const char *str)
 	cr_expect_str_eq(toto.c_str(), str);
 }
 
-Test(Fifo, TwoWayComm) {
+Test(Fifo, SlaveBound) {
 	Plazza::ILink *master = nullptr;
 	Plazza::ILink *slave = nullptr;
 	std::thread th1(fifo_master_create, &master, 2);
