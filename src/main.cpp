@@ -17,72 +17,77 @@
 #include "ScopedLock.hpp"
 #include "NamedPipe.hpp"
 
-
-void print_block(int n, char c) {
-	static std::mutex mtx;
-	// critical section (exclusive access to std::cout signaled by locking mtx):
-	Plazza::ScopedLock lock(mtx);
-	for (int i=0; i<n; ++i) { std::cout << c; }
-	std::cout << '\n';
-}
-
-
-std::string getfile()
-{
-	std::ifstream te("google.csv");
-	std::stringstream buffer;
-	buffer << te.rdbuf();
-	std::string file(buffer.str());
-
-//	std::cout << file << std::endl;
-	return file;
-}
-
-static void fifo_master_create()
+static void fifo_master_create(Plazza::ILink **master, uint id)
 {
 	try {
-		Plazza::NamedPipe master(1, Plazza::NamedPipe::CREATE);
-	} catch (std::exception &exept) {
+		*master = new Plazza::NamedPipe(id, Plazza::NamedPipe::CREATE);
+	} catch (Plazza::LinkExeption &exept) {
 		exept.what();
+		*master = nullptr;
+		throw;
 	}
 }
 
-static void fifo_slave_join()
+static void fifo_slave_join(Plazza::ILink **slave, uint id)
 {
 	try {
-		Plazza::NamedPipe master(1, Plazza::NamedPipe::JOIN);
-	} catch (std::exception &exept) {
+		*slave = new Plazza::NamedPipe(id, Plazza::NamedPipe::JOIN);
+	} catch (Plazza::LinkExeption &exept) {
 		exept.what();
+		*slave = nullptr;
+		throw;
 	}
 }
+
+static void cmd_send(Plazza::ILink *link, Plazza::Command *cmd)
+{
+	std::cout << "voiture" << std::endl;
+	link->output() << *cmd;
+}
+
+static void cmd_rcvd(Plazza::ILink *link, Plazza::Command *cmd)
+{
+	std::cout << "autocar" << std::endl;
+	link->input() >> *cmd;
+}
+
 
 int main()
 {
-	// Plazza::NamedPipe master(1, Plazza::NamedPipe::CREATE);
-
-	std::thread th1(fifo_master_create);
-	std::thread th2(fifo_slave_join);
-
+	Plazza::ILink *master = nullptr;
+	Plazza::ILink *slave = nullptr;
+	std::thread th1(fifo_master_create, &master, 8);
+	std::thread th2(fifo_slave_join, &slave, 8);
 	th1.join();
 	th2.join();
-	std::regex r("([0-9]{10})");
- //   std::string file = getfile();
 
-	std::string file("1234567890");
-	std::smatch sm;
+	Plazza::Command cmd1;
+	cmd1.cmdFileName = "toto";
+	cmd1.cmdId = 42;
+	cmd1.cmdInfoType = Plazza::Information::EMAIL_ADDRESS;
 
-	if (regex_search(file, sm, r))
-	{
-		std::cout << "match" << std::endl;
-		for (uint i=1; i<sm.size(); i++)
-		{
-			std::cout << sm[i] << std::endl;
-		}
-	}
+	Plazza::Command cmd2;
+	std::thread th3(cmd_send, master, &cmd1);
+	std::thread th4(cmd_rcvd, slave, &cmd2);
+	th3.join();
+	th4.join();
+	delete master;
+	delete slave;
 }
-
 
 // int main()
 // {
-// 	std::cout << "Heyyyy" << std::endl;
+// 	std::regex r("([0-9]{10})");
+
+// 	std::string file("1234567890");
+// 	std::smatch sm;
+
+// 	if (regex_search(file, sm, r))
+// 	{
+// 		std::cout << "match" << std::endl;
+// 		for (uint i=1; i<sm.size(); i++)
+// 		{
+// 			std::cout << sm[i] << std::endl;
+// 		}
+// 	}
 // }

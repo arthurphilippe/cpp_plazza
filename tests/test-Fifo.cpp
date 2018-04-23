@@ -10,6 +10,7 @@
 #include <thread>
 #include <iostream>
 #include "NamedPipe.hpp"
+#include "Command.hpp"
 
 static void fifo_master_create(Plazza::ILink **master, uint id)
 {
@@ -148,4 +149,50 @@ Test(Fifo, 6_TwoWayCreationErr) {
 	cr_expect_throw(fifo_master_create(&master, 6), Plazza::LinkExeption);
 
 	delete slave;
+}
+
+static void cmd_send(Plazza::ILink *link, Plazza::Command *cmd)
+{
+	std::cout << "voiture" << std::endl;
+	link->output() << *cmd;
+}
+
+static void cmd_rcvd(Plazza::ILink *link, Plazza::Command *cmd)
+{
+	std::cout << "autocar" << std::endl;
+	link->input() >> *cmd;
+}
+
+Test(Fifo, 7_CmdSerial) {
+	Plazza::ILink *master = nullptr;
+	Plazza::ILink *slave = nullptr;
+	std::thread th1(fifo_master_create, &master, 8);
+	std::thread th2(fifo_slave_join, &slave, 8);
+	th1.join();
+	th2.join();
+	cr_assert(master);
+	cr_assert(slave);
+
+	Plazza::Command cmd1;
+	cmd1.cmdFileName = "toto";
+	cmd1.cmdId = 42;
+	cmd1.cmdInfoType = Plazza::Information::EMAIL_ADDRESS;
+
+	Plazza::Command cmd2;
+	std::thread th3(cmd_send, master, &cmd1);
+	std::thread th4(cmd_rcvd, slave, &cmd2);
+	// std::thread th4(cmd_rcvd, slave, &cmd2);
+	th3.join();
+	th4.join();
+	cr_expect_eq(cmd1.cmdId, cmd2.cmdId, "%d != %d\n", cmd1.cmdId, cmd2.cmdId);
+	// cr_expect_str_eq(cmd1.cmdFileName.c_str(), cmd2.cmdFileName.c_str());
+	cr_expect_eq(cmd1.cmdInfoType, cmd2.cmdInfoType);
+	// master->output() << cmd2;
+
+	// Plazza::Command cmd3;
+	// slave->input() >> cmd3;
+	// cr_assert_eq(cmd1.cmdId, cmd3.cmdId);
+	// cr_assert_str_eq(cmd1.cmdFileName.c_str(), cmd3.cmdFileName.c_str());
+	// cr_assert_str_eq(cmd1.cmdFileName.c_str(), cmd3.cmdFileName.c_str());
+	// cr_assert_eq(cmd1.cmdInfoType, cmd3.cmdInfoType);
 }

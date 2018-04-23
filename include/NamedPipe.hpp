@@ -12,6 +12,8 @@
 	#include <fstream>
 	#include "ILink.hpp"
 
+using namespace std::chrono_literals;
+
 namespace Plazza {
 	class NamedPipe;
 	constexpr auto FIFO_MODE = 0666;
@@ -28,6 +30,7 @@ public:
 	}
 	std::istream &input() override
 	{
+		std::this_thread::sleep_for(10ms);
 		return _in;
 	}
 private:
