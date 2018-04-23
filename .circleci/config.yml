@@ -19,12 +19,12 @@ jobs:
           command: ./unit_tests.out -j 1 --xml=tests/results.xml --always-succeed
       - store_test_results:
           path: .
-      # - run:
-      #     name: Code Coverage - Processing
-      #     command: ./tests/coverage.sh
-      # - run:
-      #     name: Code Coverage - Output
-      #     command: cat coverage.log
+      - run:
+          name: Code Coverage - Processing
+          command: ./tests/coverage.sh
+      - run:
+          name: Code Coverage - Output
+          command: cat coverage.log
 
   build_clang:
     docker:
