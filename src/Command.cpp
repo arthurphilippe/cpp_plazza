@@ -30,7 +30,6 @@ std::istream& operator>>(std::istream &in, Plazza::Command &cmd)
 {
 	char separator;
 	int tmp;
-	std::string ramen;
 
 	in >> cmd.cmdId;
 	in >> separator;
