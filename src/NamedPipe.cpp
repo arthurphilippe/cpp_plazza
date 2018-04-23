@@ -29,7 +29,7 @@ NamedPipe::NamedPipe(uint id, ILink::Mode mode)
 		_out.open(_nameOut);
 		_in.open(_nameIn, std::ifstream::in);
 	} else {
-		std::this_thread::sleep_for(10us);
+		std::this_thread::sleep_for(50us);
 		_in.open(_nameOut, std::ifstream::in);
 		_out.open(_nameIn);
 	}
@@ -43,25 +43,11 @@ NamedPipe::~NamedPipe()
 	}
 }
 
-std::ostream &NamedPipe::send(std::ostream &os)
-{
-	// std::stringstream ss;
-	// ss << os.rdbuf();
-	// _out.write(ss.str().c_str(), ss.str().length());
-	(void) os;
-	return _out;
-}
-
-std::istream &NamedPipe::recive(std::istream &in)
-{
-	(void) in;
-	return _in;
-}
-
 void NamedPipe::_createFifos()
 {
-	if (mkfifo(_nameIn.c_str(), FIFO_MODE) == MKFIFO_ERR)
-		throw LinkExeption(_nameIn, errno);
-	if (mkfifo(_nameOut.c_str(), FIFO_MODE) == MKFIFO_ERR)
-		throw LinkExeption(_nameOut, errno);
+	if (mkfifo(_nameIn.c_str(), FIFO_MODE) == MKFIFO_ERR && errno != 17) {
+		throw LinkExeption(_nameIn + " ", errno);
+	}
+	if (mkfifo(_nameOut.c_str(), FIFO_MODE) == MKFIFO_ERR && errno != 17)
+		throw LinkExeption(_nameOut + " ", errno);
 }

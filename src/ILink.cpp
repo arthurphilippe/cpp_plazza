@@ -14,13 +14,13 @@ using Plazza::ILink;
 // 	out.send(os);
 // }
 
-std::ostream& operator<<(std::ostream& os, ILink &link)
-{
-	link.send(os);
-	return os;
-}
+// std::ostream& operator<<(std::ostream& os, ILink &link)
+// {
+// 	link.send(os);
+// 	return os;
+// }
 
-std::istream& operator>>(std::istream &in, ILink &link)
-{
-	return link.recive(in);
-}
+// std::istream& operator>>(std::istream &in, ILink &link)
+// {
+// 	return link.recive(in);
+// }

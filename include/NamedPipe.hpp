@@ -22,8 +22,6 @@ class Plazza::NamedPipe : public ILink {
 public:
 	NamedPipe(uint id, ILink::Mode mode);
 	~NamedPipe();
-	std::ostream &send(std::ostream &os) override;
-	std::istream &recive(std::istream &in) override;
 	std::ostream &output() override
 	{
 		return _out;

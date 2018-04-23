@@ -16,6 +16,7 @@ static void fifo_master_create(Plazza::ILink **master, uint id)
 	try {
 		*master = new Plazza::NamedPipe(id, Plazza::NamedPipe::CREATE);
 	} catch (Plazza::LinkExeption &exept) {
+		exept.what();
 		*master = nullptr;
 	}
 }
@@ -25,11 +26,12 @@ static void fifo_slave_join(Plazza::ILink **slave, uint id)
 	try {
 		*slave = new Plazza::NamedPipe(id, Plazza::NamedPipe::JOIN);
 	} catch (Plazza::LinkExeption &exept) {
+		exept.what();
 		*slave = nullptr;
 	}
 }
 
-Test(Fifo, TwoWayCreation) {
+Test(Fifo, 1_TwoWayCreation) {
 	Plazza::ILink *master = nullptr;
 	Plazza::ILink *slave = nullptr;
 	std::thread th1(fifo_master_create, &master, 1);
@@ -55,7 +57,7 @@ static void fifo_rvc_test_msg(Plazza::ILink *pipe, const char *str)
 	cr_expect_str_eq(toto.c_str(), str);
 }
 
-Test(Fifo, SlaveBound) {
+Test(Fifo, 2_SlaveBound) {
 	Plazza::ILink *master = nullptr;
 	Plazza::ILink *slave = nullptr;
 	std::thread th1(fifo_master_create, &master, 2);
@@ -70,5 +72,80 @@ Test(Fifo, SlaveBound) {
 	th3.join();
 	th4.join();
 	delete master;
+	delete slave;
+}
+
+Test(Fifo, 3_MasterBound) {
+	Plazza::ILink *master = nullptr;
+	Plazza::ILink *slave = nullptr;
+	std::thread th1(fifo_master_create, &master, 3);
+	std::thread th2(fifo_slave_join, &slave, 3);
+
+	th1.join();
+	th2.join();
+	cr_assert(master);
+	cr_assert(slave);
+	std::thread th3(fifo_send_test_msg, slave, "hey-there");
+	std::thread th4(fifo_rvc_test_msg, master, "hey-there");
+	th3.join();
+	th4.join();
+	delete master;
+	delete slave;
+}
+
+Test(Fifo, 4_MasterBound) {
+	Plazza::ILink *master = nullptr;
+	Plazza::ILink *slave = nullptr;
+	std::thread th1(fifo_master_create, &master, 4);
+	std::thread th2(fifo_slave_join, &slave, 4);
+
+	th1.join();
+	th2.join();
+	cr_assert(master);
+	cr_assert(slave);
+	std::thread th3(fifo_send_test_msg, slave, "hey-there");
+	std::thread th4(fifo_rvc_test_msg, master, "hey-there");
+	th3.join();
+	th4.join();
+	delete master;
+	delete slave;
+}
+
+Test(Fifo, 5_MasterAndSlaveBound) {
+	Plazza::ILink *master = nullptr;
+	Plazza::ILink *slave = nullptr;
+	std::thread th1(fifo_master_create, &master, 5);
+	std::thread th2(fifo_slave_join, &slave, 5);
+
+	th1.join();
+	th2.join();
+	cr_assert(master);
+	cr_assert(slave);
+	std::thread th3(fifo_send_test_msg, slave, "hey-there");
+	std::thread th4(fifo_rvc_test_msg, master, "hey-there");
+	th3.join();
+	th4.join();
+	std::thread th5(fifo_send_test_msg, master, "hey-there");
+	std::thread th6(fifo_rvc_test_msg, slave, "hey-there");
+	th5.join();
+	th6.join();
+	delete master;
+	delete slave;
+}
+
+Test(Fifo, 6_TwoWayCreationErr) {
+	Plazza::ILink *master = nullptr;
+	Plazza::ILink *slave = nullptr;
+	std::thread th1(fifo_master_create, &master, 6);
+	std::thread th2(fifo_slave_join, &slave, 6);
+
+	th1.join();
+	th2.join();
+	cr_assert(master);
+	delete master;
+	cr_assert(slave);
+
+	cr_expect_throw(fifo_master_create(&master, 6), Plazza::LinkExeption);
+
 	delete slave;
 }
