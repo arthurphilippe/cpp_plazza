@@ -26,12 +26,15 @@ NamedPipe::NamedPipe(uint id, ILink::Mode mode)
 	_nameOut.append("_out");
 	if (mode == Mode::CREATE) {
 		_createFifos();
-		_out.open(_nameOut);
-		_in.open(_nameIn, std::ifstream::in);
+		_out.open(_nameOut, std::ofstream::binary);
+		_in.open(_nameIn, std::ofstream::binary);
 	} else {
-		std::this_thread::sleep_for(1ms);
-		_in.open(_nameOut, std::ifstream::in);
-		_out.open(_nameIn);
+		std::this_thread::sleep_for(5ms);
+		_in.open(_nameOut, std::ofstream::binary);
+		_out.open(_nameIn, std::ofstream::binary);
+	}
+	if (!_in || !_out) {
+		throw LinkExeption("Not open ", 0);
 	}
 }
 

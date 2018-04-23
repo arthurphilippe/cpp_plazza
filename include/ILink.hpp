@@ -10,6 +10,7 @@
 
 	#include <iostream>
 	#include <cstring>
+	#include "Command.hpp"
 
 namespace Plazza {
 	class ILink;
@@ -45,5 +46,6 @@ public:
 
 std::ostream& operator<<(std::ostream &os, Plazza::ILink &link);
 std::istream& operator>>(std::istream &in, Plazza::ILink &link);
+Plazza::ILink &operator<<(Plazza::ILink &out, const Plazza::Command &cmd);
 
 #endif /* !ILINK_HPP_ */

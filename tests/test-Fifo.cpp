@@ -153,21 +153,47 @@ Test(Fifo, 6_TwoWayCreationErr) {
 
 static void cmd_send(Plazza::ILink *link, Plazza::Command *cmd)
 {
-	std::cout << "voiture" << std::endl;
-	link->output() << *cmd;
+	*link << *cmd;
 }
 
 static void cmd_rcvd(Plazza::ILink *link, Plazza::Command *cmd)
 {
-	std::cout << "autocar" << std::endl;
 	link->input() >> *cmd;
 }
 
-Test(Fifo, 7_CmdSerial) {
+Test(Fifo, 8_SlaveBound) {
 	Plazza::ILink *master = nullptr;
 	Plazza::ILink *slave = nullptr;
 	std::thread th1(fifo_master_create, &master, 8);
 	std::thread th2(fifo_slave_join, &slave, 8);
+
+	th1.join();
+	th2.join();
+	cr_assert(master);
+	cr_assert(slave);
+
+	Plazza::Command cmd1;
+	cmd1.cmdFileName = "toto";
+	cmd1.cmdId = 42;
+	cmd1.cmdInfoType = Plazza::Information::EMAIL_ADDRESS;
+
+	std::stringstream ioss;
+	ioss << cmd1;
+
+	std::thread th3(fifo_send_test_msg, master, ioss.str().c_str());
+	std::thread th4(fifo_rvc_test_msg, slave, ioss.str().c_str());
+	th3.join();
+	th4.join();
+	delete master;
+	delete slave;
+}
+
+
+Test(Fifo, 9_CmdSerial) {
+	Plazza::ILink *master = nullptr;
+	Plazza::ILink *slave = nullptr;
+	std::thread th1(fifo_master_create, &master, 9);
+	std::thread th2(fifo_slave_join, &slave, 9);
 	th1.join();
 	th2.join();
 	cr_assert(master);

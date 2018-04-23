@@ -5,14 +5,18 @@
 ** ILink
 */
 
+#include <sstream>
 #include "ILink.hpp"
 
 using Plazza::ILink;
 
-// ILink &operator<<(ILink &out, auto &os)
-// {
-// 	out.send(os);
-// }
+ILink &operator<<(ILink &out, const Plazza::Command &cmd)
+{
+	std::stringstream oss;
+	oss << cmd;
+	out.output() << oss.str() << std::endl;
+	return out;
+}
 
 // std::ostream& operator<<(std::ostream& os, ILink &link)
 // {

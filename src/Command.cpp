@@ -7,20 +7,22 @@
 
 #include <iostream>
 #include <vector>
+#include <sstream>
 #include "Command.hpp"
 
 std::ostream& operator<<(std::ostream& os, const Plazza::Command &cmd)
 {
-	os << "ramen ";
-	os << cmd.cmdId;
-	os << ",";
+	std::stringstream oss;
+	oss << cmd.cmdId;
+	oss << ",";
 
-	os << cmd.cmdInfoType;
-	os << ",";
+	oss << cmd.cmdInfoType;
+	oss << ",";
 
-	os << cmd.cmdFileName.length();
-	os << ',';
-	os << cmd.cmdFileName;
+	oss << cmd.cmdFileName.length();
+	oss << ',';
+	oss << cmd.cmdFileName;
+	os << oss.str();
 	return os;
 }
 
@@ -30,7 +32,6 @@ std::istream& operator>>(std::istream &in, Plazza::Command &cmd)
 	int tmp;
 	std::string ramen;
 
-	in >> ramen;
 	in >> cmd.cmdId;
 	in >> separator;
 
