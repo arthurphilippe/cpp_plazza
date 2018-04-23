@@ -29,7 +29,7 @@ NamedPipe::NamedPipe(uint id, ILink::Mode mode)
 		_out.open(_nameOut);
 		_in.open(_nameIn, std::ifstream::in);
 	} else {
-		std::this_thread::sleep_for(50us);
+		std::this_thread::sleep_for(1ms);
 		_in.open(_nameOut, std::ifstream::in);
 		_out.open(_nameIn);
 	}
