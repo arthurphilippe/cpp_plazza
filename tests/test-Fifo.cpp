@@ -207,18 +207,11 @@ Test(Fifo, 9_CmdSerial) {
 	Plazza::Command cmd2;
 	std::thread th3(cmd_send, master, &cmd1);
 	std::thread th4(cmd_rcvd, slave, &cmd2);
-	// std::thread th4(cmd_rcvd, slave, &cmd2);
 	th3.join();
 	th4.join();
 	cr_expect_eq(cmd1.cmdId, cmd2.cmdId, "%d != %d\n", cmd1.cmdId, cmd2.cmdId);
-	// cr_expect_str_eq(cmd1.cmdFileName.c_str(), cmd2.cmdFileName.c_str());
+	cr_expect_str_eq(cmd1.cmdFileName.c_str(), cmd2.cmdFileName.c_str());
 	cr_expect_eq(cmd1.cmdInfoType, cmd2.cmdInfoType);
-	// master->output() << cmd2;
-
-	// Plazza::Command cmd3;
-	// slave->input() >> cmd3;
-	// cr_assert_eq(cmd1.cmdId, cmd3.cmdId);
-	// cr_assert_str_eq(cmd1.cmdFileName.c_str(), cmd3.cmdFileName.c_str());
-	// cr_assert_str_eq(cmd1.cmdFileName.c_str(), cmd3.cmdFileName.c_str());
-	// cr_assert_eq(cmd1.cmdInfoType, cmd3.cmdInfoType);
+	delete master;
+	delete slave;
 }

@@ -35,6 +35,9 @@ public:
 	LinkExeption(std::string prefix, int err)
 		: _what(prefix + std::strerror(err))
 	{}
+	LinkExeption(std::string prefix)
+		: _what(prefix)
+	{}
 	const char *what() const noexcept
 	{
 		std::cerr << _what << std::endl;

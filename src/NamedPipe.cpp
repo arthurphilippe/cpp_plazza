@@ -34,7 +34,7 @@ NamedPipe::NamedPipe(uint id, ILink::Mode mode)
 		_out.open(_nameIn, std::ofstream::binary);
 	}
 	if (!_in || !_out) {
-		throw LinkExeption("Not open ", 0);
+		throw LinkExeption("Pipe wasn't opened...");
 	}
 }
 
