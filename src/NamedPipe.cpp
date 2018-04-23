@@ -28,10 +28,12 @@ NamedPipe::NamedPipe(uint id, ILink::Mode mode)
 		_createFifos();
 		_out.open(_nameOut, std::ofstream::binary);
 		_in.open(_nameIn, std::ofstream::binary);
-	} else {
+	} else if (mode == Mode::JOIN) {
 		std::this_thread::sleep_for(5ms);
 		_in.open(_nameOut, std::ofstream::binary);
 		_out.open(_nameIn, std::ofstream::binary);
+	} else {
+		throw LinkExeption("No mode specified.");
 	}
 	if (!_in || !_out) {
 		throw LinkExeption("Pipe wasn't opened...");

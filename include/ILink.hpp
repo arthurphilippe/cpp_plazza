@@ -32,17 +32,9 @@ public:
 
 class Plazza::LinkExeption : std::exception {
 public:
-	LinkExeption(std::string prefix, int err)
-		: _what(prefix + std::strerror(err))
-	{}
-	LinkExeption(std::string prefix)
-		: _what(prefix)
-	{}
-	const char *what() const noexcept
-	{
-		std::cerr << _what << std::endl;
-		return _what.c_str();
-	}
+	LinkExeption(std::string prefix, int err);
+	LinkExeption(std::string prefix);
+	const char *what() const noexcept;
 public:
 	std::string _what;
 };

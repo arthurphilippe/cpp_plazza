@@ -7,6 +7,7 @@
 
 #include <criterion/criterion.h>
 #include <criterion/assert.h>
+#include <criterion/redirect.h>
 #include <thread>
 #include <iostream>
 #include "NamedPipe.hpp"
@@ -146,10 +147,31 @@ Test(Fifo, 6_TwoWayCreationErr) {
 	delete master;
 	cr_assert(slave);
 
-	cr_expect_throw(fifo_master_create(&master, 6), Plazza::LinkExeption);
+	cr_expect_throw(master = new Plazza::NamedPipe(6, Plazza::ILink::NONE), Plazza::LinkExeption);
 
 	delete slave;
 }
+
+Test(Fifo, LinkErr) {
+	cr_redirect_stderr();
+	cr_redirect_stdout();
+	int count(0);
+	try {
+		throw Plazza::LinkExeption("Patate");
+	} catch (const Plazza::LinkExeption &exep) {
+		cr_assert_str_eq(exep.what(), "Patate");
+		count += 1;
+	}
+	try {
+		throw Plazza::LinkExeption("Patate ", 2);
+	} catch (const Plazza::LinkExeption &exep) {
+		cr_assert_str_eq(exep.what(), "Patate No such file or directory");
+		count += 1;
+	}
+	Plazza::LinkExeption test("Patate");
+	cr_assert_eq(count, 2);
+}
+
 
 static void cmd_send(Plazza::ILink *link, Plazza::Command *cmd)
 {
