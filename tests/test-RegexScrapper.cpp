@@ -2,23 +2,26 @@
 ** EPITECH PROJECT, 2018
 ** cpp_plazza
 ** File description:
-** test-RegexScrapper
+** test-Regex
 */
 
 #include <criterion/criterion.h>
 #include <criterion/assert.h>
-#include "RegexScrapper.hpp"
+#include "scrapping/Regex.hpp"
+#include "scrapping/PhoneNumber.hpp"
 
-Test(RegexScrapper, 1_match) {
-	Plazza::RegexScrapper scrapper("([0-9]{10})");
+using Plazza::scrapping::Regex;
+
+Test(Regex, 1_match) {
+	Regex scrapper("([0-9]{10})");
 
 	scrapper.processLine("Je mange un portavion au 0142424242 j'aimes les plantes.");
 	auto result = scrapper.results().front();
 	cr_assert_str_eq(result.c_str(), "0142424242");
 }
 
-Test(RegexScrapper, 2_matchNoSpacing) {
-	Plazza::RegexScrapper scrapper("([0-9]{10})");
+Test(Regex, 2_matchNoSpacing) {
+	Regex scrapper("([0-9]{10})");
 
 	scrapper.processLine("Je mange un portavion au0142424242j'aimes les plantes.");
 	auto results = scrapper.results();
@@ -28,8 +31,8 @@ Test(RegexScrapper, 2_matchNoSpacing) {
 	cr_assert_eq(results.size(), 0);
 }
 
-Test(RegexScrapper, 3_matchEOL) {
-	Plazza::RegexScrapper scrapper("([0-9]{10})");
+Test(Regex, 3_matchEOL) {
+	Regex scrapper("([0-9]{10})");
 
 	scrapper.processLine("Je mange un portavion au0142424242");
 	auto results = scrapper.results();
@@ -39,8 +42,8 @@ Test(RegexScrapper, 3_matchEOL) {
 	cr_assert_eq(results.size(), 0);
 }
 
-Test(RegexScrapper, 4_2matches) {
-	Plazza::RegexScrapper scrapper("([0-9]{10})");
+Test(Regex, 4_2matches) {
+	Regex scrapper("([0-9]{10})");
 
 	scrapper.processLine("Je mange un portavion au0142424242 kappa 0632361153");
 	auto results = scrapper.results();
@@ -54,7 +57,7 @@ Test(RegexScrapper, 4_2matches) {
 }
 
 Test(RegexScapper, 5_multiplesMatches) {
-	Plazza::RegexScrapper scrapper("([0-9]{10})");
+	Regex scrapper("([0-9]{10})");
 
 	scrapper.processLine("Je mange un portavion au 0142424242 j'aimes les plantes.");
 	auto result = scrapper.results().front();
@@ -77,8 +80,8 @@ Test(RegexScapper, 5_multiplesMatches) {
 }
 
 Test(RegexScapper, 6_fileMatches) {
-	auto *scrapper = new Plazza::RegexScrapper("([0-9]{10})");
-	Plazza::IScrapper *interfacedScrapper = scrapper;
+	auto *scrapper = new Plazza::scrapping::PhoneNumber();
+	Plazza::scrapping::IScrapper *interfacedScrapper = scrapper;
 	Plazza::Command cmd;
 
 	cmd.cmdFileName = "tests/phone_numbers.txt";

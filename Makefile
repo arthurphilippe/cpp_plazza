@@ -16,7 +16,7 @@ MAIN		=	src/main.cpp
 SRCS		=	src/Command.cpp		\
 			src/NamedPipe.cpp	\
 			src/ILink.cpp		\
-			src/RegexScrapper.cpp
+			src/scrapping/Regex.cpp
 
 OBJ_MAIN	=	$(MAIN:.cpp=.o)
 

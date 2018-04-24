@@ -2,24 +2,24 @@
 ** EPITECH PROJECT, 2018
 ** cpp_plazza
 ** File description:
-** RegexScrapper
+** Regex
 */
 
-#ifndef RegexScrapper_HPP_
-	#define RegexScrapper_HPP_
+#ifndef Regex_HPP_
+	#define Regex_HPP_
 
 	#include <regex>
 	#include <queue>
 	#include "IScrapper.hpp"
 
-namespace Plazza {
-	class RegexScrapper;
+namespace Plazza::scrapping {
+	class Regex;
 }
 
-class Plazza::RegexScrapper : public IScrapper {
+class Plazza::scrapping::Regex : public IScrapper {
 public:
-	RegexScrapper(const std::string &partern);
-	virtual ~RegexScrapper() noexcept = default;
+	Regex(const std::string &partern);
+	virtual ~Regex() noexcept = default;
 	virtual void run(const Command &) override;
 	virtual std::ostream &serialise(std::ostream &) override;
 	void processLine(const std::string &line) noexcept;
@@ -33,4 +33,4 @@ protected:
 	std::queue<std::string>	_results;
 };
 
-#endif /* !RegexScrapper_HPP_ */
+#endif /* !Regex_HPP_ */
