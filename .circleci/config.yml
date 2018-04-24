@@ -22,9 +22,9 @@ jobs:
       - run:
           name: Code Coverage - Processing
           command: ./tests/coverage.sh
-      - run:
-          name: Code Coverage - Output
-          command: cat coverage.log
+      - store_artifacts:
+          path: coverage.log
+          destination: coverage.log
 
   build_clang:
     docker:
