@@ -17,15 +17,20 @@ namespace Plazza {
 }
 
 class Plazza::RegexScrapper : public IScrapper {
-	public:
-		RegexScrapper(const std::string &partern);
-		virtual ~RegexScrapper() noexcept = default;
-		virtual void run(const Command &) override;
-		virtual std::ostream &serialise(std::ostream &) override;
-	protected:
-		std::regex		_regex;
-		Command			_cmd;
-		std::queue<std::string>	_results;
+public:
+	RegexScrapper(const std::string &partern);
+	virtual ~RegexScrapper() noexcept = default;
+	virtual void run(const Command &) override;
+	virtual std::ostream &serialise(std::ostream &) override;
+	void processLine(const std::string &line) noexcept;
+	const std::queue<std::string> &results() const noexcept
+	{
+		return _results;
+	}
+protected:
+	std::regex		_regex;
+	Command			_cmd;
+	std::queue<std::string>	_results;
 };
 
 #endif /* !RegexScrapper_HPP_ */

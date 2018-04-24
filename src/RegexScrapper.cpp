@@ -5,6 +5,9 @@
 ** RegexScrapper
 */
 
+#include <fstream>
+#include <regex>
+#include <iostream>
 #include "RegexScrapper.hpp"
 
 using Plazza::RegexScrapper;
@@ -13,8 +16,32 @@ RegexScrapper::RegexScrapper(const std::string &patnern)
 	: _regex(patnern)
 {}
 
-void RegexScrapper::run(const Command &)
-{}
+void RegexScrapper::run(const Command &cmd)
+{
+	_cmd = cmd;
+	std::ifstream file(cmd.cmdFileName);
+	std::string line;
 
-std::ostream &RegexScrapper::serialise(std::ostream &)
-{}
+	if (!file)
+		return;
+	while (std::getline(file, line))
+		processLine(line);
+}
+
+std::ostream &RegexScrapper::serialise(std::ostream &os)
+{
+	return os;
+}
+
+void RegexScrapper::processLine(const std::string &line) noexcept
+{
+	auto matches_begin =
+		std::sregex_iterator(line.begin(), line.end(), _regex);
+	auto end = std::sregex_iterator();
+
+	for (std::sregex_iterator i = matches_begin; i != end; ++i) {
+		std::smatch match = *i;
+		std::string match_str = match.str();
+		_results.push(match_str);
+	}
+}
