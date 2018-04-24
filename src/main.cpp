@@ -16,20 +16,16 @@
 #include "Information.hpp"
 #include "ScopedLock.hpp"
 #include "NamedPipe.hpp"
+#include "CommandParser.hpp"
 
-int main()
+int main(int ac, char **av)
 {
-	std::regex r("([0-9]{10})");
-
-	std::string file("1234567890");
-	std::smatch sm;
-
-	if (regex_search(file, sm, r))
+	std::queue<Plazza::Command> kek;
+	if (ac > 1)
 	{
-		std::cout << "match" << std::endl;
-		for (uint i=1; i<sm.size(); i++)
-		{
-			std::cout << sm[i] << std::endl;
-		}
-	}
+		std::string line(av[1]);
+		Plazza::CommandParser kappa(kek);
+		kappa.ParseLine(line);
+	} else
+		std::cout << "KEKVATEFAIR" << std::endl;
 }
