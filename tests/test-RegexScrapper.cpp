@@ -77,11 +77,13 @@ Test(RegexScapper, 5_multiplesMatches) {
 }
 
 Test(RegexScapper, 6_fileMatches) {
-	Plazza::RegexScrapper scrapper("([0-9]{10})");
+	auto *scrapper = new Plazza::RegexScrapper("([0-9]{10})");
+	Plazza::IScrapper *interfacedScrapper = scrapper;
 	Plazza::Command cmd;
 
 	cmd.cmdFileName = "tests/phone_numbers.txt";
-	scrapper.run(cmd);
-	auto results = scrapper.results();
+	interfacedScrapper->run(cmd);
+	auto results = scrapper->results();
 	cr_expect_eq(results.size(), 4);
+	delete interfacedScrapper;
 }
