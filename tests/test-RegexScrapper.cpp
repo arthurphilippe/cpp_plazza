@@ -101,7 +101,8 @@ Test(Regex, 7_serialise) {
 	cmd.cmdFileName = "tests/phone_numbers.txt";
 	cmd.cmdId = 42;
 	cmd.cmdInfoType = plazza::PHONE_NUMBER;
-	interfacedScrapper->run(cmd);
+	cmd >> *interfacedScrapper;
+	// interfacedScrapper->run(cmd);
 	auto results = scrapper->results();
 	cr_expect_eq(results.size(), 4);
 	std::stringstream oss;

@@ -21,7 +21,7 @@ struct plazza::Command {
 	uint cmdId;
 };
 
-std::ostream& operator<<(std::ostream& os, const plazza::Command &cmd);
-std::istream& operator>>(std::istream &in, plazza::Command &cmd);
+std::ostream &operator<<(std::ostream &os, const plazza::Command &cmd);
+std::istream &operator>>(std::istream &in, plazza::Command &cmd);
 
 #endif /* !COMMAND_HPP_ */
