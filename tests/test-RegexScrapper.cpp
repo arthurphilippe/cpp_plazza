@@ -10,7 +10,7 @@
 #include "scrapping/Regex.hpp"
 #include "scrapping/PhoneNumber.hpp"
 
-using Plazza::scrapping::Regex;
+using plazza::scrapping::Regex;
 
 Test(Regex, 1_match) {
 	Regex scrapper("([0-9]{10})");
@@ -80,9 +80,9 @@ Test(RegexScapper, 5_multiplesMatches) {
 }
 
 Test(RegexScapper, 6_fileMatches) {
-	auto *scrapper = new Plazza::scrapping::PhoneNumber();
-	Plazza::scrapping::IScrapper *interfacedScrapper = scrapper;
-	Plazza::Command cmd;
+	auto *scrapper = new plazza::scrapping::PhoneNumber();
+	plazza::scrapping::IScrapper *interfacedScrapper = scrapper;
+	plazza::Command cmd;
 
 	cmd.cmdFileName = "tests/phone_numbers.txt";
 	interfacedScrapper->run(cmd);

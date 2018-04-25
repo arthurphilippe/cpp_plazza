@@ -13,29 +13,29 @@
 #include "NamedPipe.hpp"
 #include "Command.hpp"
 
-static void fifo_master_create(Plazza::ILink **master, uint id)
+static void fifo_master_create(plazza::ILink **master, uint id)
 {
 	try {
-		*master = new Plazza::NamedPipe(id, Plazza::NamedPipe::CREATE);
-	} catch (Plazza::LinkExeption &exept) {
+		*master = new plazza::NamedPipe(id, plazza::NamedPipe::CREATE);
+	} catch (plazza::LinkExeption &exept) {
 		exept.what();
 		*master = nullptr;
 	}
 }
 
-static void fifo_slave_join(Plazza::ILink **slave, uint id)
+static void fifo_slave_join(plazza::ILink **slave, uint id)
 {
 	try {
-		*slave = new Plazza::NamedPipe(id, Plazza::NamedPipe::JOIN);
-	} catch (Plazza::LinkExeption &exept) {
+		*slave = new plazza::NamedPipe(id, plazza::NamedPipe::JOIN);
+	} catch (plazza::LinkExeption &exept) {
 		exept.what();
 		*slave = nullptr;
 	}
 }
 
 Test(Fifo, 1_TwoWayCreation) {
-	Plazza::ILink *master = nullptr;
-	Plazza::ILink *slave = nullptr;
+	plazza::ILink *master = nullptr;
+	plazza::ILink *slave = nullptr;
 	std::thread th1(fifo_master_create, &master, 1);
 	std::thread th2(fifo_slave_join, &slave, 1);
 
@@ -47,12 +47,12 @@ Test(Fifo, 1_TwoWayCreation) {
 	delete slave;
 }
 
-static void fifo_send_test_msg(Plazza::ILink *pipe, const char *str)
+static void fifo_send_test_msg(plazza::ILink *pipe, const char *str)
 {
 	pipe->output() << str << std::endl;
 }
 
-static void fifo_rvc_test_msg(Plazza::ILink *pipe, const char *str)
+static void fifo_rvc_test_msg(plazza::ILink *pipe, const char *str)
 {
 	std::string toto;
 	pipe->input() >> toto;
@@ -60,8 +60,8 @@ static void fifo_rvc_test_msg(Plazza::ILink *pipe, const char *str)
 }
 
 Test(Fifo, 2_SlaveBound) {
-	Plazza::ILink *master = nullptr;
-	Plazza::ILink *slave = nullptr;
+	plazza::ILink *master = nullptr;
+	plazza::ILink *slave = nullptr;
 	std::thread th1(fifo_master_create, &master, 2);
 	std::thread th2(fifo_slave_join, &slave, 2);
 
@@ -78,8 +78,8 @@ Test(Fifo, 2_SlaveBound) {
 }
 
 Test(Fifo, 3_MasterBound) {
-	Plazza::ILink *master = nullptr;
-	Plazza::ILink *slave = nullptr;
+	plazza::ILink *master = nullptr;
+	plazza::ILink *slave = nullptr;
 	std::thread th1(fifo_master_create, &master, 3);
 	std::thread th2(fifo_slave_join, &slave, 3);
 
@@ -96,8 +96,8 @@ Test(Fifo, 3_MasterBound) {
 }
 
 Test(Fifo, 4_MasterBound) {
-	Plazza::ILink *master = nullptr;
-	Plazza::ILink *slave = nullptr;
+	plazza::ILink *master = nullptr;
+	plazza::ILink *slave = nullptr;
 	std::thread th1(fifo_master_create, &master, 4);
 	std::thread th2(fifo_slave_join, &slave, 4);
 
@@ -114,8 +114,8 @@ Test(Fifo, 4_MasterBound) {
 }
 
 Test(Fifo, 5_MasterAndSlaveBound) {
-	Plazza::ILink *master = nullptr;
-	Plazza::ILink *slave = nullptr;
+	plazza::ILink *master = nullptr;
+	plazza::ILink *slave = nullptr;
 	std::thread th1(fifo_master_create, &master, 5);
 	std::thread th2(fifo_slave_join, &slave, 5);
 
@@ -136,8 +136,8 @@ Test(Fifo, 5_MasterAndSlaveBound) {
 }
 
 Test(Fifo, 6_TwoWayCreationErr) {
-	Plazza::ILink *master = nullptr;
-	Plazza::ILink *slave = nullptr;
+	plazza::ILink *master = nullptr;
+	plazza::ILink *slave = nullptr;
 	std::thread th1(fifo_master_create, &master, 6);
 	std::thread th2(fifo_slave_join, &slave, 6);
 
@@ -147,7 +147,7 @@ Test(Fifo, 6_TwoWayCreationErr) {
 	delete master;
 	cr_assert(slave);
 
-	cr_expect_throw(master = new Plazza::NamedPipe(6, Plazza::ILink::NONE), Plazza::LinkExeption);
+	cr_expect_throw(master = new plazza::NamedPipe(6, plazza::ILink::NONE), plazza::LinkExeption);
 
 	delete slave;
 }
@@ -157,35 +157,35 @@ Test(Fifo, LinkErr) {
 	cr_redirect_stdout();
 	int count(0);
 	try {
-		throw Plazza::LinkExeption("Patate");
-	} catch (const Plazza::LinkExeption &exep) {
+		throw plazza::LinkExeption("Patate");
+	} catch (const plazza::LinkExeption &exep) {
 		cr_assert_str_eq(exep.what(), "Patate");
 		count += 1;
 	}
 	try {
-		throw Plazza::LinkExeption("Patate ", 2);
-	} catch (const Plazza::LinkExeption &exep) {
+		throw plazza::LinkExeption("Patate ", 2);
+	} catch (const plazza::LinkExeption &exep) {
 		cr_assert_str_eq(exep.what(), "Patate No such file or directory");
 		count += 1;
 	}
-	Plazza::LinkExeption test("Patate");
+	plazza::LinkExeption test("Patate");
 	cr_assert_eq(count, 2);
 }
 
 
-static void cmd_send(Plazza::ILink *link, Plazza::Command *cmd)
+static void cmd_send(plazza::ILink *link, plazza::Command *cmd)
 {
 	*link << *cmd;
 }
 
-static void cmd_rcvd(Plazza::ILink *link, Plazza::Command *cmd)
+static void cmd_rcvd(plazza::ILink *link, plazza::Command *cmd)
 {
 	link->input() >> *cmd;
 }
 
 Test(Fifo, 8_SlaveBound) {
-	Plazza::ILink *master = nullptr;
-	Plazza::ILink *slave = nullptr;
+	plazza::ILink *master = nullptr;
+	plazza::ILink *slave = nullptr;
 	std::thread th1(fifo_master_create, &master, 8);
 	std::thread th2(fifo_slave_join, &slave, 8);
 
@@ -194,10 +194,10 @@ Test(Fifo, 8_SlaveBound) {
 	cr_assert(master);
 	cr_assert(slave);
 
-	Plazza::Command cmd1;
+	plazza::Command cmd1;
 	cmd1.cmdFileName = "toto";
 	cmd1.cmdId = 42;
-	cmd1.cmdInfoType = Plazza::Information::EMAIL_ADDRESS;
+	cmd1.cmdInfoType = plazza::Information::EMAIL_ADDRESS;
 
 	std::stringstream ioss;
 	ioss << cmd1;
@@ -212,8 +212,8 @@ Test(Fifo, 8_SlaveBound) {
 
 
 Test(Fifo, 9_CmdSerial) {
-	Plazza::ILink *master = nullptr;
-	Plazza::ILink *slave = nullptr;
+	plazza::ILink *master = nullptr;
+	plazza::ILink *slave = nullptr;
 	std::thread th1(fifo_master_create, &master, 9);
 	std::thread th2(fifo_slave_join, &slave, 9);
 	th1.join();
@@ -221,12 +221,12 @@ Test(Fifo, 9_CmdSerial) {
 	cr_assert(master);
 	cr_assert(slave);
 
-	Plazza::Command cmd1;
+	plazza::Command cmd1;
 	cmd1.cmdFileName = "toto";
 	cmd1.cmdId = 42;
-	cmd1.cmdInfoType = Plazza::Information::EMAIL_ADDRESS;
+	cmd1.cmdInfoType = plazza::Information::EMAIL_ADDRESS;
 
-	Plazza::Command cmd2;
+	plazza::Command cmd2;
 	std::thread th3(cmd_send, master, &cmd1);
 	std::thread th4(cmd_rcvd, slave, &cmd2);
 	th3.join();
