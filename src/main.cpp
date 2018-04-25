@@ -26,6 +26,7 @@ int main(int ac, char **av)
 		std::string line(av[1]);
 		Plazza::CommandParser kappa(kek);
 		kappa.ParseLine(line);
+		kappa.dump();
 	} else
 		std::cout << "KEKVATEFAIR" << std::endl;
 }

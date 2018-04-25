@@ -5,6 +5,8 @@
 ** CommandParser
 */
 
+#include <fstream>
+#include <cstring>
 #include <iostream>
 #include <algorithm>
 #include "CommandParser.hpp"
@@ -38,12 +40,24 @@ void Plazza::CommandParser::_CleanStringSpace(std::string &_line)
 	}
 }
 
+bool Plazza::CommandParser::_checkFileAccess(std::string &filename)
+{
+	std::ifstream istm(filename);
+	return istm.good();
+}
+
 void Plazza::CommandParser::_CreateCommand(
 					std::string &cmdFileName,
-					const std::string &infoType) noexcept
+					const std::string &infoType)
 {
 	Plazza::Command cmd;
 
+	if (!_checkFileAccess(cmdFileName))
+	{
+		std::cerr << "\033[1m" + cmdFileName + "\033[m"
+		<< ERR_FILE_NAME << std::endl;
+		return;
+	}
 	cmd.cmdFileName = cmdFileName;
 	cmd.cmdId = _cmdId++;
 	cmd.cmdInfoType = _getInfoType(infoType);
@@ -70,10 +84,14 @@ void Plazza::CommandParser::_SetCommandType(std::string &_line)
 	size_t space_place = _line.find_last_of(' ', _line.length());
 
 	if (space_place == std::string::npos)
-		throw ("Kappa");
+		throw (CommandParserError(
+			"\033[1m" + _line + "\033[m" + ERR_CMD_TYPE));
 	_cmdType = _line.substr(space_place + 1, _line.length());
 	_line = _line.substr(0, space_place);
 	_ChangeToUpperCase(_cmdType);
+	if (_getInfoType(_cmdType) == Information::NONE)
+		throw (CommandParserError(
+			"\033[1m" + _line + "\033[m" + ERR_CMD_TYPE));
 }
 
 void Plazza::CommandParser::_extractAllFileName(std::string &_line)
@@ -83,22 +101,69 @@ void Plazza::CommandParser::_extractAllFileName(std::string &_line)
 
 	while (i != std::string::npos) {
 		i = _line.find(' ');
-		tmp = _line.substr(0, _line.find(' '));
+		tmp = _line.substr(0, i);
 		_CreateCommand(tmp, _cmdType);
-		_line = _line.substr(_line.find(' ') + 1);
+		_line = _line.substr(i + 1);
 	}
+}
+
+void Plazza::CommandParser::_extractInstruction(std::string &line)
+{
+	size_t i = 0;
+	std::string tmp;
+	std::string _line = line;
+
+	while (i != std::string::npos) {
+		i = _line.find(';');
+		tmp = _line.substr(0, i);
+		_CleanStringSpace(tmp);
+		_instructionqueue.push(tmp);
+		_line = _line.substr(i + 1);
+	}
+}
+
+void Plazza::CommandParser::ParseInstruction(std::string &instruction)
+{
+	try {
+		_CleanStringSpace(instruction);
+		_SetCommandType(instruction);
+		_extractAllFileName(instruction);
+	} catch (const CommandParserError &error) {
+		error.what();
+	}
+	_cmdType.clear();
 }
 
 void Plazza::CommandParser::ParseLine(std::string &line)
 {
 	_CleanStringSpace(line);
-	_SetCommandType(line);
-	_extractAllFileName(line);
-	while (!_cmdqueue.empty()) {
-		std::cout << "Nom du fichier: " << _cmdqueue.front().cmdFileName;
-		std::cout << " | Type: " << _cmdqueue.front().cmdInfoType;
-		std::cout << " | ID: " << _cmdqueue.front().cmdId << std::endl;
-		_cmdqueue.pop();
+	_extractInstruction(line);
+	while (!_instructionqueue.empty()) {
+		ParseInstruction(_instructionqueue.front());
+		_instructionqueue.pop();
 	}
-	_cmdType.clear();
+}
+
+void Plazza::CommandParser::dump() noexcept
+{
+	while (!_cmdqueue.empty()) {
+	std::cout << "Nom du fichier: " << _cmdqueue.front().cmdFileName;
+	std::cout << " | Type: " << _cmdqueue.front().cmdInfoType;
+	std::cout << " | ID: " << _cmdqueue.front().cmdId << std::endl;
+	_cmdqueue.pop();
+	}
+}
+
+Plazza::CommandParserError::CommandParserError(std::string prefix, int err)
+	: _what(prefix + std::strerror(err))
+{}
+
+Plazza::CommandParserError::CommandParserError(std::string prefix)
+	: _what(prefix)
+{}
+
+const char *Plazza::CommandParserError::what() const noexcept
+{
+	std::cerr << _what << std::endl;
+	return _what.c_str();
 }

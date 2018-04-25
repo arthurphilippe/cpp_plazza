@@ -22,12 +22,16 @@
 // 	cr_assert(true);
 // }
 
-// Test(CommandParser, StringCleanning) {
-// 	bool ret = false;
-// 	std::queue<Plazza::Command> ke;
-// 	std::string line("     PO      TA       TO         ");
+Test(CommandParser, Real_IPAddress) {
+	bool ret = false;
+	std::queue<Plazza::Command> cmd;
+	std::string line1("README.md ip_address");
 
-// 	Plazza::CommandParser kappa(ke);
-// 	line = kappa.ParseLine(line);
-// 	cr_assert_str_eq(line.c_str(), "PO TA TO");
-// }
+	Plazza::CommandParser kappa(cmd);
+	kappa.ParseLine(line1);
+	if (cmd.front().cmdFileName == "README.md")
+		ret = true;
+//	kappa.dump();
+	std::cerr << cmd.front().cmdFileName << std::endl;
+	cr_assert(ret);
+}
