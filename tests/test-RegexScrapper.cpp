@@ -10,6 +10,7 @@
 #include "scrap/Regex.hpp"
 #include "scrap/PhoneNumber.hpp"
 #include "scrap/IpAddr.hpp"
+#include "scrap/EmailAddress.hpp"
 
 using plazza::scrap::Regex;
 
@@ -99,4 +100,40 @@ Test(IpAddr, 1_stringMatch) {
 	auto results = scrapper.results();
 	cr_expect_eq(results.size(), 1);
 	cr_expect_str_eq(results.front().c_str(), "216.58.198.195");
+}
+
+Test(IpAddr, 2_stringMatches) {
+	plazza::scrap::IpAddr scrapper;
+
+	scrapper.processLine("run ssh admin@216.58.198.195 to access the machine but try to ping it before 216.51.198.195");
+	auto results = scrapper.results();
+	cr_expect_eq(results.size(), 2);
+	cr_expect_str_eq(results.front().c_str(), "216.58.198.195");
+	results.pop();
+	cr_expect_eq(results.size(), 1);
+	cr_expect_str_eq(results.front().c_str(), "216.51.198.195");
+	results.pop();
+}
+
+Test(EmailAddress, 1_stringMatch) {
+	plazza::scrap::EmailAddress scrapper;
+
+	scrapper.processLine("send a mail at paris-tech2@epitech.eu kek");
+	auto results = scrapper.results();
+	cr_expect_eq(results.size(), 1);
+	cr_expect_str_eq(results.front().c_str(), "paris-tech2@epitech.eu");
+}
+
+Test(EmailAddress, 2_stringMatches) {
+	plazza::scrap::EmailAddress scrapper;
+
+	scrapper.processLine("send a mail at paris-tech2@epitech.eu kek\
+or at pere-noel@epita.net");
+	auto results = scrapper.results();
+	cr_expect_eq(results.size(), 2);
+	cr_expect_str_eq(results.front().c_str(), "paris-tech2@epitech.eu");
+	results.pop();
+	cr_expect_eq(results.size(), 1);
+	cr_expect_str_eq(results.front().c_str(), "pere-noel@epita.net");
+	results.pop();
 }
