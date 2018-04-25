@@ -16,7 +16,10 @@ MAIN		=	src/main.cpp
 SRCS		=	src/Command.cpp		\
 			src/NamedPipe.cpp	\
 			src/ILink.cpp		\
-			src/CommandParser.cpp
+			src/CommandParser.cpp	\
+			src/scrap/Regex.cpp	\
+			src/scrap/IScrapper.cpp	\
+			src/scrap/Result.cpp
 
 OBJ_MAIN	=	$(MAIN:.cpp=.o)
 
@@ -27,7 +30,9 @@ TEST		=	unit_tests.out
 SRCS_TEST	=	tests/test-Command.cpp		\
 			tests/test-ScopedLock.cpp	\
 			tests/test-Fifo.cpp		\
-			tests/test-CommandParser.cpp
+			tests/test-CommandParser.cpp	\
+			tests/test-RegexScrapper.cpp	\
+			tests/test-Result.cpp
 
 SRCS_TEST	+=	$(OBJS)
 
@@ -74,7 +79,7 @@ fclean: clean
 	@printf "[\033[0;31mdeletion\033[0m][binary]% 32s\n" $(NAME) | tr " " "."
 
 artifacts_clean:
-	@printf "[\033[0;31mdeletion\033[0m][artifacts]% 29s\n" `find -type f \( -name "*.gcno" -o -name "*.gc*" -o -name "*.html" \) -delete -print | wc -l | tr -d '\n'` | tr " " "."
+	@printf "[\033[0;31mdeletion\033[0m][artifacts]% 29s\n" `find -type f \( -name "*.gcno" -o -name "*.gc*" \) -delete -print | wc -l | tr -d '\n'` | tr " " "."
 
 re: fclean all
 

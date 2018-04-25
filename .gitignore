@@ -32,3 +32,5 @@ plazza
 *.exe
 *.out
 *.app
+
+coverage/
