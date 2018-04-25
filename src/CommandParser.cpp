@@ -72,29 +72,18 @@ void Plazza::CommandParser::_SetCommandType(std::string &_line)
 	if (space_place == std::string::npos)
 		throw ("Kappa");
 	_cmdType = _line.substr(space_place + 1, _line.length());
+	_line = _line.substr(0, space_place);
 	_ChangeToUpperCase(_cmdType);
 }
 
-/*
-**	PK JE DOIS METTRE UN IF POUR BREAK CETTE BOUCLE EXPLIQUE
-*/
 void Plazza::CommandParser::_extractAllFileName(std::string &_line)
 {
-	size_t z = 0;
 	size_t i = 0;
-	size_t last_space = _line.find_last_of(' ', _line.length());
 	std::string tmp;
-	std::string first_info = _line.substr(0, _line.find(' '));
 
-	_CreateCommand(first_info, _cmdType);
-	std::cout << "Actual string: " << _line << std::endl;
-	while (z < last_space) {
-		if ((i = _line.find(' ')) == std::string::npos)
-			break;
-		z += i + 1;
-		if (z >= last_space)
-			break;
-		tmp = _line.substr(i + 1, _line.find(' '));
+	while (i != std::string::npos) {
+		i = _line.find(' ');
+		tmp = _line.substr(0, _line.find(' '));
 		_CreateCommand(tmp, _cmdType);
 		_line = _line.substr(_line.find(' ') + 1);
 	}
@@ -102,11 +91,9 @@ void Plazza::CommandParser::_extractAllFileName(std::string &_line)
 
 void Plazza::CommandParser::ParseLine(std::string &line)
 {
-	std::string _line = line;
-
-	_CleanStringSpace(_line);
-	_SetCommandType(_line);
-	_extractAllFileName(_line);
+	_CleanStringSpace(line);
+	_SetCommandType(line);
+	_extractAllFileName(line);
 	while (!_cmdqueue.empty()) {
 		std::cout << "Nom du fichier: " << _cmdqueue.front().cmdFileName;
 		std::cout << " | Type: " << _cmdqueue.front().cmdInfoType;

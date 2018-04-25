@@ -14,6 +14,7 @@
 
 namespace Plazza {
 	class CommandParser;
+	class CommandParserError;
 };
 
 class Plazza::CommandParser {
@@ -36,10 +37,13 @@ class Plazza::CommandParser {
 		enum Information _getInfoType(std::string _stringInfo);
 
 
-
 		std::queue<Plazza::Command> _cmdqueue;
 		int _cmdId;
 		std::string _cmdType;
+};
+
+class Plazza::CommandParserError {
+
 };
 
 #endif /* !COMMANDPARSER_HPP_ */
