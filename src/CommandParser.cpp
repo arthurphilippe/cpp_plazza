@@ -147,10 +147,11 @@ void plazza::CommandParser::ParseLine(std::string &line)
 void plazza::CommandParser::dump() noexcept
 {
 	while (!_cmdqueue.empty()) {
-	std::cout << "Nom du fichier: " << _cmdqueue.front().cmdFileName;
-	std::cout << " | Type: " << _cmdqueue.front().cmdInfoType;
-	std::cout << " | ID: " << _cmdqueue.front().cmdId << std::endl;
-	_cmdqueue.pop();
+		std::cout << "Nom du fichier: ";
+		std::cout << _cmdqueue.front().cmdFileName;
+		std::cout << " | Type: " << _cmdqueue.front().cmdInfoType;
+		std::cout << " | ID: " << _cmdqueue.front().cmdId << std::endl;
+		_cmdqueue.pop();
 	}
 }
 

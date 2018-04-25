@@ -24,14 +24,10 @@
 
 Test(CommandParser, Real_IPAddress) {
 	bool ret = false;
-	std::queue<plazza::Command> cmd;
+	std::queue<plazza::Command> cmdq;
 	std::string line1("README.md ip_address");
 
-	plazza::CommandParser kappa(cmd);
+	plazza::CommandParser kappa(cmdq);
 	kappa.ParseLine(line1);
-	if (cmd.front().cmdFileName == "README.md")
-		ret = true;
-//	kappa.dump();
-	std::cerr << cmd.front().cmdFileName << std::endl;
-	cr_assert(ret);
+	cr_assert_str_eq(cmdq.front().cmdFileName.c_str(), "README.md");
 }
