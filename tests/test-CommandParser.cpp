@@ -29,6 +29,7 @@ Test(CommandParser, OneIPAddress) {
 	plazza::CommandParser parser(cmdq);
 	parser.ParseLine(line1);
 	cr_assert_str_eq(cmdq.front().cmdFileName.c_str(), "README.md");
+	cr_assert_eq(cmdq.front().cmdInfoType, plazza::IP_ADDRESS);
 }
 
 Test(CommandParser, TwoIPAddresses) {
@@ -39,8 +40,10 @@ Test(CommandParser, TwoIPAddresses) {
 	parser.ParseLine(line1);
 	cr_expect_eq(cmdq.size(), 2, "Size was supposed to be %d but is %d", 2, cmdq.size());
 	cr_assert_str_eq(cmdq.front().cmdFileName.c_str(), "README.md");
+	cr_assert_eq(cmdq.front().cmdInfoType, plazza::IP_ADDRESS);
 	cmdq.pop();
 	cr_assert_str_eq(cmdq.front().cmdFileName.c_str(), ".gitignore");
+	cr_assert_eq(cmdq.front().cmdInfoType, plazza::IP_ADDRESS);
 }
 
 Test(CommandParser, TwoIPAddressesAndErr) {
@@ -52,8 +55,10 @@ Test(CommandParser, TwoIPAddressesAndErr) {
 	parser.ParseLine(line1);
 	cr_expect_eq(cmdq.size(), 2, "Size was supposed to be %d but is %d", 2, cmdq.size());
 	cr_assert_str_eq(cmdq.front().cmdFileName.c_str(), "README.md");
+	cr_assert_eq(cmdq.front().cmdInfoType, plazza::IP_ADDRESS);
 	cmdq.pop();
 	cr_assert_str_eq(cmdq.front().cmdFileName.c_str(), ".gitignore");
+	cr_assert_eq(cmdq.front().cmdInfoType, plazza::IP_ADDRESS);
 }
 
 Test(CommandParser, NothingExists) {
@@ -74,4 +79,43 @@ Test(CommandParser, WrongType) {
 	plazza::CommandParser parser(cmdq);
 	parser.ParseLine(line1);
 	cr_expect_eq(cmdq.size(), 0, "Size was supposed to be %d but is %d", 0, cmdq.size());
+}
+
+Test(CommandParser, OnePhoneNumber) {
+	std::queue<plazza::Command> cmdq;
+	std::string line1("README.md phone_number");
+
+	plazza::CommandParser parser(cmdq);
+	parser.ParseLine(line1);
+	cr_assert_str_eq(cmdq.front().cmdFileName.c_str(), "README.md");
+	cr_assert_eq(cmdq.front().cmdInfoType, plazza::PHONE_NUMBER);
+}
+
+Test(CommandParser, TwoPhoneNumbers) {
+	std::queue<plazza::Command> cmdq;
+	std::string line1("README.md .gitignore phone_number");
+
+	plazza::CommandParser parser(cmdq);
+	parser.ParseLine(line1);
+	cr_expect_eq(cmdq.size(), 2, "Size was supposed to be %d but is %d", 2, cmdq.size());
+	cr_assert_str_eq(cmdq.front().cmdFileName.c_str(), "README.md");
+	cr_assert_eq(cmdq.front().cmdInfoType, plazza::PHONE_NUMBER);
+	cmdq.pop();
+	cr_assert_str_eq(cmdq.front().cmdFileName.c_str(), ".gitignore");
+	cr_assert_eq(cmdq.front().cmdInfoType, plazza::PHONE_NUMBER);
+}
+
+Test(CommandParser, TwoPhoneNumbersAndErr) {
+	cr_redirect_stderr();
+	std::queue<plazza::Command> cmdq;
+	std::string line1("README.md IDONOTEXIST .gitignore phone_number");
+
+	plazza::CommandParser parser(cmdq);
+	parser.ParseLine(line1);
+	cr_expect_eq(cmdq.size(), 2, "Size was supposed to be %d but is %d", 2, cmdq.size());
+	cr_assert_str_eq(cmdq.front().cmdFileName.c_str(), "README.md");
+	cr_assert_eq(cmdq.front().cmdInfoType, plazza::PHONE_NUMBER);
+	cmdq.pop();
+	cr_assert_str_eq(cmdq.front().cmdFileName.c_str(), ".gitignore");
+	cr_assert_eq(cmdq.front().cmdInfoType, plazza::PHONE_NUMBER);
 }
