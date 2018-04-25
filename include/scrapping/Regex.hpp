@@ -12,11 +12,11 @@
 	#include <queue>
 	#include "IScrapper.hpp"
 
-namespace Plazza::scrapping {
+namespace plazza::scrapping {
 	class Regex;
 }
 
-class Plazza::scrapping::Regex : public IScrapper {
+class plazza::scrapping::Regex : public IScrapper {
 public:
 	Regex(const std::string &partern);
 	virtual ~Regex() noexcept = default;

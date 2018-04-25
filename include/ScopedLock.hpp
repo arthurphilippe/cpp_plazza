@@ -10,11 +10,11 @@
 
 	#include <mutex>
 
-namespace Plazza {
+namespace plazza {
 	class ScopedLock;
 }
 
-class Plazza::ScopedLock {
+class plazza::ScopedLock {
 public:
 	ScopedLock(std::mutex &mutex)
 		: _mutex(mutex)

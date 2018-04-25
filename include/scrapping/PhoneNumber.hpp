@@ -10,11 +10,11 @@
 
 	#include "scrapping/Regex.hpp"
 
-namespace Plazza::scrapping {
+namespace plazza::scrapping {
 	class PhoneNumber;
 }
 
-class Plazza::scrapping::PhoneNumber : public Regex {
+class plazza::scrapping::PhoneNumber : public Regex {
 public:
 	PhoneNumber()
 		: Regex("([0-9]{10})")

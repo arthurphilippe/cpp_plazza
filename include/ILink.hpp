@@ -12,13 +12,13 @@
 	#include <cstring>
 	#include "Command.hpp"
 
-namespace Plazza {
+namespace plazza {
 	class ILink;
 	class LinkExeption;
 	constexpr auto LINK_PREFIX = "plazza_";
 }
 
-class Plazza::ILink {
+class plazza::ILink {
 public:
 	enum Mode {
 		CREATE,
@@ -30,7 +30,7 @@ public:
 	virtual std::istream &input() = 0;
 };
 
-class Plazza::LinkExeption : std::exception {
+class plazza::LinkExeption : std::exception {
 public:
 	LinkExeption(std::string prefix, int err);
 	LinkExeption(std::string prefix);
@@ -39,8 +39,8 @@ public:
 	std::string _what;
 };
 
-std::ostream& operator<<(std::ostream &os, Plazza::ILink &link);
-std::istream& operator>>(std::istream &in, Plazza::ILink &link);
-Plazza::ILink &operator<<(Plazza::ILink &out, const Plazza::Command &cmd);
+std::ostream& operator<<(std::ostream &os, plazza::ILink &link);
+std::istream& operator>>(std::istream &in, plazza::ILink &link);
+plazza::ILink &operator<<(plazza::ILink &out, const plazza::Command &cmd);
 
 #endif /* !ILINK_HPP_ */

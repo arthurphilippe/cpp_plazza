@@ -10,7 +10,7 @@
 #include <iostream>
 #include "scrapping/Regex.hpp"
 
-using Plazza::scrapping::Regex;
+using plazza::scrapping::Regex;
 
 Regex::Regex(const std::string &patnern)
 	: _regex(patnern)

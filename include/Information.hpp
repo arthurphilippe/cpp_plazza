@@ -8,7 +8,7 @@
 #ifndef INFORMATION_HPP_
 	#define INFORMATION_HPP_
 
-namespace Plazza {
+namespace plazza {
 	enum Information {
 		NONE,
 		PHONE_NUMBER,

@@ -10,11 +10,11 @@
 
 	#include "Command.hpp"
 
-namespace Plazza::scrapping {
+namespace plazza::scrapping {
 	class IScrapper;
 }
 
-class Plazza::scrapping::IScrapper {
+class plazza::scrapping::IScrapper {
 public:
 	virtual ~IScrapper() = default;
 	virtual void run(const Command &) = 0;
