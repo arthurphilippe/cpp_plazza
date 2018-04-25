@@ -20,3 +20,4 @@ IScrapper &operator>>(plazza::Command &command, IScrapper &scrp)
 	scrp.run(command);
 	return scrp;
 }
+

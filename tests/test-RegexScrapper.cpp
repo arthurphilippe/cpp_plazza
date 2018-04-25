@@ -86,7 +86,7 @@ Test(Regex, 6_fileMatches) {
 	plazza::scrap::IScrapper *interfacedScrapper = scrapper;
 	plazza::Command cmd;
 
-	cmd.cmdFileName = "tests/phone_numbers.txt";
+	cmd.cmdFileName = "tests/4phone_numbers.txt";
 	interfacedScrapper->run(cmd);
 	auto results = scrapper->results();
 	cr_expect_eq(results.size(), 4);
@@ -98,11 +98,10 @@ Test(Regex, 7_serialise) {
 	plazza::scrap::IScrapper *interfacedScrapper = scrapper;
 	plazza::Command cmd;
 
-	cmd.cmdFileName = "tests/phone_numbers.txt";
+	cmd.cmdFileName = "tests/4phone_numbers.txt";
 	cmd.cmdId = 42;
 	cmd.cmdInfoType = plazza::PHONE_NUMBER;
 	cmd >> *interfacedScrapper;
-	// interfacedScrapper->run(cmd);
 	auto results = scrapper->results();
 	cr_expect_eq(results.size(), 4);
 	std::stringstream oss;

@@ -17,7 +17,8 @@ SRCS		=	src/Command.cpp		\
 			src/NamedPipe.cpp	\
 			src/ILink.cpp		\
 			src/scrap/Regex.cpp	\
-			src/scrap/IScrapper.cpp
+			src/scrap/IScrapper.cpp	\
+			src/scrap/Result.cpp
 
 OBJ_MAIN	=	$(MAIN:.cpp=.o)
 
@@ -28,7 +29,8 @@ TEST		=	unit_tests.out
 SRCS_TEST	=	tests/test-Command.cpp		\
 			tests/test-ScopedLock.cpp	\
 			tests/test-Fifo.cpp		\
-			tests/test-RegexScrapper.cpp
+			tests/test-RegexScrapper.cpp	\
+			tests/test-Result.cpp
 
 SRCS_TEST	+=	$(OBJS)
 
