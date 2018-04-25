@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2018
-** Plazza
+** plazza
 ** File description:
 ** CommandParser
 */
@@ -12,21 +12,21 @@
 #include "CommandParser.hpp"
 #include "Information.hpp"
 
-static const Plazza::CommandParser::InfoTypeMap _infoTypeMap = {
-	{"PHONE_NUMBER", Plazza::Information::PHONE_NUMBER},
-	{"EMAIL_ADDRESS", Plazza::Information::EMAIL_ADDRESS},
-	{"IP_ADDRESS", Plazza::Information::IP_ADDRESS},
-	{"NONE", Plazza::Information::NONE},
+static const plazza::CommandParser::InfoTypeMap _infoTypeMap = {
+	{"PHONE_NUMBER", plazza::Information::PHONE_NUMBER},
+	{"EMAIL_ADDRESS", plazza::Information::EMAIL_ADDRESS},
+	{"IP_ADDRESS", plazza::Information::IP_ADDRESS},
+	{"NONE", plazza::Information::NONE},
 };
 
-bool Plazza::CommandParser::_CleanSpacers(char a, char b)
+bool plazza::CommandParser::_CleanSpacers(char a, char b)
 {
 	if (a == b && a == ' ')
 		return true;
 	return false;
 }
 
-void Plazza::CommandParser::_CleanStringSpace(std::string &_line)
+void plazza::CommandParser::_CleanStringSpace(std::string &_line)
 {
 	std::string::iterator it;
 
@@ -40,17 +40,17 @@ void Plazza::CommandParser::_CleanStringSpace(std::string &_line)
 	}
 }
 
-bool Plazza::CommandParser::_checkFileAccess(std::string &filename)
+bool plazza::CommandParser::_checkFileAccess(std::string &filename)
 {
 	std::ifstream istm(filename);
 	return istm.good();
 }
 
-void Plazza::CommandParser::_CreateCommand(
+void plazza::CommandParser::_CreateCommand(
 					std::string &cmdFileName,
 					const std::string &infoType)
 {
-	Plazza::Command cmd;
+	plazza::Command cmd;
 
 	if (!_checkFileAccess(cmdFileName))
 	{
@@ -64,12 +64,12 @@ void Plazza::CommandParser::_CreateCommand(
 	_cmdqueue.push(cmd);
 }
 
-void Plazza::CommandParser::_ChangeToUpperCase(std::string &_line)
+void plazza::CommandParser::_ChangeToUpperCase(std::string &_line)
 {
 	std::transform(_line.begin(), _line.end(),_line.begin(), toupper);
 }
 
-enum Plazza::Information Plazza::CommandParser::_getInfoType(
+enum plazza::Information plazza::CommandParser::_getInfoType(
 						std::string _stringInfo)
 {
 	for (auto i = _infoTypeMap.begin(); i != _infoTypeMap.end(); i++) {
@@ -79,7 +79,7 @@ enum Plazza::Information Plazza::CommandParser::_getInfoType(
 	return Information::NONE;
 }
 
-void Plazza::CommandParser::_SetCommandType(std::string &_line)
+void plazza::CommandParser::_SetCommandType(std::string &_line)
 {
 	size_t space_place = _line.find_last_of(' ', _line.length());
 
@@ -94,7 +94,7 @@ void Plazza::CommandParser::_SetCommandType(std::string &_line)
 			"\033[1m" + _line + "\033[m" + ERR_CMD_TYPE));
 }
 
-void Plazza::CommandParser::_extractAllFileName(std::string &_line)
+void plazza::CommandParser::_extractAllFileName(std::string &_line)
 {
 	size_t i = 0;
 	std::string tmp;
@@ -107,7 +107,7 @@ void Plazza::CommandParser::_extractAllFileName(std::string &_line)
 	}
 }
 
-void Plazza::CommandParser::_extractInstruction(std::string &line)
+void plazza::CommandParser::_extractInstruction(std::string &line)
 {
 	size_t i = 0;
 	std::string tmp;
@@ -122,7 +122,7 @@ void Plazza::CommandParser::_extractInstruction(std::string &line)
 	}
 }
 
-void Plazza::CommandParser::ParseInstruction(std::string &instruction)
+void plazza::CommandParser::ParseInstruction(std::string &instruction)
 {
 	try {
 		_CleanStringSpace(instruction);
@@ -134,7 +134,7 @@ void Plazza::CommandParser::ParseInstruction(std::string &instruction)
 	_cmdType.clear();
 }
 
-void Plazza::CommandParser::ParseLine(std::string &line)
+void plazza::CommandParser::ParseLine(std::string &line)
 {
 	_CleanStringSpace(line);
 	_extractInstruction(line);
@@ -144,7 +144,7 @@ void Plazza::CommandParser::ParseLine(std::string &line)
 	}
 }
 
-void Plazza::CommandParser::dump() noexcept
+void plazza::CommandParser::dump() noexcept
 {
 	while (!_cmdqueue.empty()) {
 	std::cout << "Nom du fichier: " << _cmdqueue.front().cmdFileName;
@@ -154,15 +154,15 @@ void Plazza::CommandParser::dump() noexcept
 	}
 }
 
-Plazza::CommandParserError::CommandParserError(std::string prefix, int err)
+plazza::CommandParserError::CommandParserError(std::string prefix, int err)
 	: _what(prefix + std::strerror(err))
 {}
 
-Plazza::CommandParserError::CommandParserError(std::string prefix)
+plazza::CommandParserError::CommandParserError(std::string prefix)
 	: _what(prefix)
 {}
 
-const char *Plazza::CommandParserError::what() const noexcept
+const char *plazza::CommandParserError::what() const noexcept
 {
 	std::cerr << _what << std::endl;
 	return _what.c_str();

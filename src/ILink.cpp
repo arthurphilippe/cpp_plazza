@@ -8,9 +8,9 @@
 #include <sstream>
 #include "ILink.hpp"
 
-using Plazza::ILink;
+using plazza::ILink;
 
-ILink &operator<<(ILink &out, const Plazza::Command &cmd)
+ILink &operator<<(ILink &out, const plazza::Command &cmd)
 {
 	std::stringstream oss;
 	oss << cmd;
@@ -29,15 +29,15 @@ ILink &operator<<(ILink &out, const Plazza::Command &cmd)
 // 	return link.recive(in);
 // }
 
-Plazza::LinkExeption::LinkExeption(std::string prefix, int err)
+plazza::LinkExeption::LinkExeption(std::string prefix, int err)
 	: _what(prefix + std::strerror(err))
 {}
 
-Plazza::LinkExeption::LinkExeption(std::string prefix)
+plazza::LinkExeption::LinkExeption(std::string prefix)
 	: _what(prefix)
 {}
 
-const char *Plazza::LinkExeption::what() const noexcept
+const char *plazza::LinkExeption::what() const noexcept
 {
 	std::cerr << _what << std::endl;
 	return _what.c_str();

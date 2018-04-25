@@ -20,11 +20,11 @@
 
 int main(int ac, char **av)
 {
-	std::queue<Plazza::Command> kek;
+	std::queue<plazza::Command> kek;
 	if (ac > 1)
 	{
 		std::string line(av[1]);
-		Plazza::CommandParser kappa(kek);
+		plazza::CommandParser kappa(kek);
 		kappa.ParseLine(line);
 		kappa.dump();
 	} else

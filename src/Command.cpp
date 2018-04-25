@@ -10,7 +10,7 @@
 #include <sstream>
 #include "Command.hpp"
 
-std::ostream& operator<<(std::ostream& os, const Plazza::Command &cmd)
+std::ostream& operator<<(std::ostream& os, const plazza::Command &cmd)
 {
 	std::stringstream oss;
 	oss << cmd.cmdId;
@@ -26,7 +26,7 @@ std::ostream& operator<<(std::ostream& os, const Plazza::Command &cmd)
 	return os;
 }
 
-std::istream& operator>>(std::istream &in, Plazza::Command &cmd)
+std::istream& operator>>(std::istream &in, plazza::Command &cmd)
 {
 	char separator;
 	int tmp;
@@ -35,7 +35,7 @@ std::istream& operator>>(std::istream &in, Plazza::Command &cmd)
 	in >> separator;
 
 	in >> tmp;
-	cmd.cmdInfoType = static_cast<Plazza::Information>(tmp);
+	cmd.cmdInfoType = static_cast<plazza::Information>(tmp);
 	in >> separator;
 
 	in >> tmp;

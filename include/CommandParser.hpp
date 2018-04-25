@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2018
-** Plazza
+** plazza
 ** File description:
 ** CommandParser
 */
@@ -12,7 +12,7 @@
 	#include <queue>
 	#include "Command.hpp"
 
-namespace Plazza {
+namespace plazza {
 	class CommandParser;
 	class CommandParserError;
 	constexpr auto ERR_CMD_TYPE (
@@ -23,11 +23,11 @@ the \033[1minformation type\033[m to get");
 the \033[1mfilename\033[m");
 }
 
-class Plazza::CommandParser {
+class plazza::CommandParser {
 	public:
 		using InfoTypeMap =
 			std::unordered_map<std::string, enum Information>;
-		CommandParser(std::queue<Plazza::Command> &cmdqueue)
+		CommandParser(std::queue<plazza::Command> &cmdqueue)
 			: _cmdqueue(cmdqueue), _cmdId(0)
 			{}
 		~CommandParser() {}
@@ -47,12 +47,12 @@ class Plazza::CommandParser {
 		bool _checkFileAccess(std::string &filename);
 
 		std::queue<std::string> _instructionqueue;
-		std::queue<Plazza::Command> _cmdqueue;
+		std::queue<plazza::Command> _cmdqueue;
 		int _cmdId;
 		std::string _cmdType;
 };
 
-class Plazza::CommandParserError : std::exception {
+class plazza::CommandParserError : std::exception {
 public:
 	CommandParserError(std::string prefix, int err);
 	CommandParserError(std::string prefix);

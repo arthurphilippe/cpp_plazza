@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2018
-** Plazza
+** plazza
 ** File description:
 ** CommandParser
 */
@@ -13,9 +13,9 @@
 
 // Test(CommandParser, Default) {
 // 	bool ret = false;
-// 	std::queue<Plazza::Command> ke;
+// 	std::queue<plazza::Command> ke;
 
-// 	Plazza::CommandParser kappa(ke);
+// 	plazza::CommandParser kappa(ke);
 // 	if (true) {
 
 // 	}
@@ -24,10 +24,10 @@
 
 Test(CommandParser, Real_IPAddress) {
 	bool ret = false;
-	std::queue<Plazza::Command> cmd;
+	std::queue<plazza::Command> cmd;
 	std::string line1("README.md ip_address");
 
-	Plazza::CommandParser kappa(cmd);
+	plazza::CommandParser kappa(cmd);
 	kappa.ParseLine(line1);
 	if (cmd.front().cmdFileName == "README.md")
 		ret = true;

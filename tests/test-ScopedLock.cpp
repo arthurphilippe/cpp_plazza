@@ -16,7 +16,7 @@ std::mutex mtx;
 
 void callLock(char *str)
 {
-	Plazza::ScopedLock lock(mtx);
+	plazza::ScopedLock lock(mtx);
 	for (char c = '0'; c <= '9'; c++) {
 		strncat(str, &c, 1);
 		std::this_thread::sleep_for(10us);
