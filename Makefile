@@ -16,7 +16,7 @@ MAIN		=	src/main.cpp
 SRCS		=	src/Command.cpp		\
 			src/NamedPipe.cpp	\
 			src/ILink.cpp		\
-			src/scrapping/Regex.cpp
+			src/scrap/Regex.cpp
 
 OBJ_MAIN	=	$(MAIN:.cpp=.o)
 
@@ -74,7 +74,7 @@ fclean: clean
 	@printf "[\033[0;31mdeletion\033[0m][binary]% 32s\n" $(NAME) | tr " " "."
 
 artifacts_clean:
-	@printf "[\033[0;31mdeletion\033[0m][artifacts]% 29s\n" `find -type f \( -name "*.gcno" -o -name "*.gc*" -o -name "*.html" \) -delete -print | wc -l | tr -d '\n'` | tr " " "."
+	@printf "[\033[0;31mdeletion\033[0m][artifacts]% 29s\n" `find -type f \( -name "*.gcno" -o -name "*.gc*" \) -delete -print | wc -l | tr -d '\n'` | tr " " "."
 
 re: fclean all
 

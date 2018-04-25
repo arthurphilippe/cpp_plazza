@@ -8,13 +8,13 @@
 #ifndef PhoneNumber_HPP_
 	#define PhoneNumber_HPP_
 
-	#include "scrapping/Regex.hpp"
+	#include "scrap/Regex.hpp"
 
-namespace plazza::scrapping {
+namespace plazza::scrap {
 	class PhoneNumber;
 }
 
-class plazza::scrapping::PhoneNumber : public Regex {
+class plazza::scrap::PhoneNumber : public Regex {
 public:
 	PhoneNumber()
 		: Regex("([0-9]{10})")

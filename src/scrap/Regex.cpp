@@ -8,9 +8,9 @@
 #include <fstream>
 #include <regex>
 #include <iostream>
-#include "scrapping/Regex.hpp"
+#include "scrap/Regex.hpp"
 
-using plazza::scrapping::Regex;
+using plazza::scrap::Regex;
 
 Regex::Regex(const std::string &patnern)
 	: _regex(patnern)

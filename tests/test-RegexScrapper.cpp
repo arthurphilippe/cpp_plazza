@@ -7,10 +7,11 @@
 
 #include <criterion/criterion.h>
 #include <criterion/assert.h>
-#include "scrapping/Regex.hpp"
-#include "scrapping/PhoneNumber.hpp"
+#include "scrap/Regex.hpp"
+#include "scrap/PhoneNumber.hpp"
+#include "scrap/IpAddr.hpp"
 
-using plazza::scrapping::Regex;
+using plazza::scrap::Regex;
 
 Test(Regex, 1_match) {
 	Regex scrapper("([0-9]{10})");
@@ -56,7 +57,7 @@ Test(Regex, 4_2matches) {
 	cr_assert_eq(results.size(), 0);
 }
 
-Test(RegexScapper, 5_multiplesMatches) {
+Test(Regex, 5_multiplesMatches) {
 	Regex scrapper("([0-9]{10})");
 
 	scrapper.processLine("Je mange un portavion au 0142424242 j'aimes les plantes.");
@@ -79,9 +80,9 @@ Test(RegexScapper, 5_multiplesMatches) {
 	cr_expect_eq(results.size(), 0);
 }
 
-Test(RegexScapper, 6_fileMatches) {
-	auto *scrapper = new plazza::scrapping::PhoneNumber();
-	plazza::scrapping::IScrapper *interfacedScrapper = scrapper;
+Test(Regex, 6_fileMatches) {
+	auto *scrapper = new plazza::scrap::PhoneNumber();
+	plazza::scrap::IScrapper *interfacedScrapper = scrapper;
 	plazza::Command cmd;
 
 	cmd.cmdFileName = "tests/phone_numbers.txt";
@@ -89,4 +90,13 @@ Test(RegexScapper, 6_fileMatches) {
 	auto results = scrapper->results();
 	cr_expect_eq(results.size(), 4);
 	delete interfacedScrapper;
+}
+
+Test(IpAddr, 1_stringMatch) {
+	plazza::scrap::IpAddr scrapper;
+
+	scrapper.processLine("run ssh admin@216.58.198.195 to access the machine");
+	auto results = scrapper.results();
+	cr_expect_eq(results.size(), 1);
+	cr_expect_str_eq(results.front().c_str(), "216.58.198.195");
 }
