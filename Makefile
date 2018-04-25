@@ -16,6 +16,7 @@ MAIN		=	src/main.cpp
 SRCS		=	src/Command.cpp		\
 			src/NamedPipe.cpp	\
 			src/ILink.cpp		\
+			src/CommandParser.cpp	\
 			src/scrap/Regex.cpp	\
 			src/scrap/IScrapper.cpp	\
 			src/scrap/Result.cpp
@@ -29,6 +30,7 @@ TEST		=	unit_tests.out
 SRCS_TEST	=	tests/test-Command.cpp		\
 			tests/test-ScopedLock.cpp	\
 			tests/test-Fifo.cpp		\
+			tests/test-CommandParser.cpp	\
 			tests/test-RegexScrapper.cpp	\
 			tests/test-Result.cpp
 
