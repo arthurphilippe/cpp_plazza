@@ -93,6 +93,32 @@ Test(Regex, 6_fileMatches) {
 	delete interfacedScrapper;
 }
 
+Test(Regex, 7_serialise) {
+	auto *scrapper = new plazza::scrap::PhoneNumber();
+	plazza::scrap::IScrapper *interfacedScrapper = scrapper;
+	plazza::Command cmd;
+
+	cmd.cmdFileName = "tests/phone_numbers.txt";
+	cmd.cmdId = 42;
+	cmd.cmdInfoType = plazza::PHONE_NUMBER;
+	interfacedScrapper->run(cmd);
+	auto results = scrapper->results();
+	cr_expect_eq(results.size(), 4);
+	std::stringstream oss;
+	interfacedScrapper->serialise(oss);
+
+	uint id;
+	int tmp;
+
+	oss >> id;
+	cr_assert_eq(id, cmd.cmdId);
+	oss >> tmp;
+	cr_assert_eq(tmp, results.size());
+	oss >> tmp;
+	cr_assert_eq(tmp, 10);
+	delete interfacedScrapper;
+}
+
 Test(IpAddr, 1_stringMatch) {
 	plazza::scrap::IpAddr scrapper;
 

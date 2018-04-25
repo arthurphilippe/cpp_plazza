@@ -8,6 +8,7 @@
 #include <fstream>
 #include <regex>
 #include <iostream>
+#include <sstream>
 #include "scrap/Regex.hpp"
 
 using plazza::scrap::Regex;
@@ -30,6 +31,20 @@ void Regex::run(const Command &cmd)
 
 std::ostream &Regex::serialise(std::ostream &os)
 {
+	std::stringstream oss;
+	oss << _cmd.cmdId;
+	oss << " ";
+	oss << _results.size();
+	while (_results.size()) {
+		oss << " ";
+		auto &entry = _results.front();
+		oss << entry.size();
+		oss << ":";
+		oss << entry;
+		_results.pop();
+	}
+	// std::cout << oss.str() << std::endl;
+	os << oss.str();
 	return os;
 }
 
