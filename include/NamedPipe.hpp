@@ -14,13 +14,13 @@
 
 using namespace std::chrono_literals;
 
-namespace Plazza {
+namespace plazza {
 	class NamedPipe;
 	constexpr auto FIFO_MODE = 0666;
 	constexpr auto MKFIFO_ERR = -1;
 }
 
-class Plazza::NamedPipe : public ILink {
+class plazza::NamedPipe : public ILink {
 public:
 	NamedPipe(uint id, ILink::Mode mode);
 	~NamedPipe();

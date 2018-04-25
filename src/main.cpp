@@ -27,7 +27,7 @@ int main()
 	if (regex_search(file, sm, r))
 	{
 		std::cout << "match" << std::endl;
-		for (uint i=1; i<sm.size(); i++)
+		for (uint i=0; i<sm.size(); i++)
 		{
 			std::cout << sm[i] << std::endl;
 		}

@@ -11,17 +11,17 @@
 	#include <string>
 	#include "Information.hpp"
 
-namespace Plazza {
+namespace plazza {
 	struct Command;
 }
 
-struct Plazza::Command {
+struct plazza::Command {
 	std::string cmdFileName;
 	enum Information cmdInfoType;
 	uint cmdId;
 };
 
-std::ostream& operator<<(std::ostream& os, const Plazza::Command &cmd);
-std::istream& operator>>(std::istream &in, Plazza::Command &cmd);
+std::ostream &operator<<(std::ostream &os, const plazza::Command &cmd);
+std::istream &operator>>(std::istream &in, plazza::Command &cmd);
 
 #endif /* !COMMAND_HPP_ */

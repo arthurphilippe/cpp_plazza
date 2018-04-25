@@ -14,7 +14,7 @@
 #include <cstdio>
 #include "NamedPipe.hpp"
 
-using Plazza::NamedPipe;
+using plazza::NamedPipe;
 using namespace std::chrono_literals;
 
 NamedPipe::NamedPipe(uint id, ILink::Mode mode)
