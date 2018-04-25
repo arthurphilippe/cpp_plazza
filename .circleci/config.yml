@@ -21,10 +21,9 @@ jobs:
           path: .
       - run:
           name: Code Coverage - Processing
-          command: ./tests/coverage.sh
+          command: ./tests/coverage.sh html
       - store_artifacts:
-          path: coverage.log
-          destination: coverage.log
+          path: coverage
 
   build_clang:
     docker:
