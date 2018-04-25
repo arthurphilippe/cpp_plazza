@@ -39,5 +39,19 @@ std::istream &Result::fill(std::istream &is) noexcept
 
 std::ostream &Result::dump(std::ostream &os) noexcept
 {
+	while (_contents.size()) {
+		os << _contents.front() << std::endl;
+		_contents.pop();
+	}
 	return os;
+}
+
+std::istream &operator>>(std::istream &is, Result &res)
+{
+	return res.fill(is);
+}
+
+std::ostream &operator<<(std::ostream &os, Result &res)
+{
+	return res.dump(os);
 }

@@ -35,4 +35,7 @@ private:
 	uint _id;
 };
 
+std::istream &operator>>(std::istream &is, plazza::scrap::Result &res);
+std::ostream &operator<<(std::ostream &os, plazza::scrap::Result &res);
+
 #endif /* !RESULT_HPP_ */
