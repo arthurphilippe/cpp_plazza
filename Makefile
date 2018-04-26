@@ -19,7 +19,10 @@ SRCS		=	src/Command.cpp		\
 			src/CommandParser.cpp	\
 			src/scrap/Regex.cpp	\
 			src/scrap/IScrapper.cpp	\
-			src/scrap/Result.cpp
+			src/scrap/Result.cpp	\
+			src/master/Worker.cpp	\
+			src/slave/Launch.cpp	\
+			src/slave/Worker.cpp	\
 
 OBJ_MAIN	=	$(MAIN:.cpp=.o)
 
