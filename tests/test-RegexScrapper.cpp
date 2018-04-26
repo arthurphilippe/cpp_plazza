@@ -189,8 +189,8 @@ static void fifo_slave_join(plazza::ILink **slave, uint id)
 Test(Regex, 8_sendOnPipe, .timeout = 2) {
 	plazza::ILink *master = nullptr;
 	plazza::ILink *slave = nullptr;
-	std::thread th1(fifo_master_create, &master, 9);
-	std::thread th2(fifo_slave_join, &slave, 9);
+	std::thread th1(fifo_master_create, &master, 41);
+	std::thread th2(fifo_slave_join, &slave, 41);
 	th1.join();
 	th2.join();
 	cr_assert(master);
@@ -219,5 +219,6 @@ Test(Regex, 8_sendOnPipe, .timeout = 2) {
 	slave->input() >> tmp;
 	cr_assert_eq(tmp, 10);
 	delete interfacedScrapper;
-
+	delete master;
+	delete slave;
 }

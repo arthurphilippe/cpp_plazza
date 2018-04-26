@@ -16,6 +16,12 @@ ILink &operator<<(ILink &out, const plazza::Command &cmd)
 	return out;
 }
 
+ILink &operator>>(ILink &in, plazza::Command &cmd)
+{
+	in.input() >> cmd;
+	return in;
+}
+
 ILink &operator<<(ILink &out, plazza::scrap::IScrapper &scrp)
 {
 	out.output() << scrp << std::endl;

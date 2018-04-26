@@ -172,17 +172,6 @@ Test(Fifo, LinkErr, .timeout = 2) {
 	cr_assert_eq(count, 2);
 }
 
-
-static void cmd_send(plazza::ILink *link, plazza::Command *cmd)
-{
-	*link << *cmd;
-}
-
-static void cmd_rcvd(plazza::ILink *link, plazza::Command *cmd)
-{
-	link->input() >> *cmd;
-}
-
 Test(Fifo, 8_SlaveBound, .timeout = 2) {
 	plazza::ILink *master = nullptr;
 	plazza::ILink *slave = nullptr;
@@ -210,7 +199,6 @@ Test(Fifo, 8_SlaveBound, .timeout = 2) {
 	delete slave;
 }
 
-
 Test(Fifo, 9_CmdSerial, .timeout = 2) {
 	plazza::ILink *master = nullptr;
 	plazza::ILink *slave = nullptr;
@@ -227,10 +215,8 @@ Test(Fifo, 9_CmdSerial, .timeout = 2) {
 	cmd1.cmdInfoType = plazza::Information::EMAIL_ADDRESS;
 
 	plazza::Command cmd2;
-	std::thread th3(cmd_send, master, &cmd1);
-	std::thread th4(cmd_rcvd, slave, &cmd2);
-	th3.join();
-	th4.join();
+	*master << cmd1;
+	*slave >> cmd2;
 	cr_expect_eq(cmd1.cmdId, cmd2.cmdId, "%d != %d\n", cmd1.cmdId, cmd2.cmdId);
 	cr_expect_str_eq(cmd1.cmdFileName.c_str(), cmd2.cmdFileName.c_str());
 	cr_expect_eq(cmd1.cmdInfoType, cmd2.cmdInfoType);
