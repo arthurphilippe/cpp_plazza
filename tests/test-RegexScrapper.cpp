@@ -7,10 +7,12 @@
 
 #include <criterion/criterion.h>
 #include <criterion/assert.h>
+#include <thread>
 #include "scrap/Regex.hpp"
 #include "scrap/PhoneNumber.hpp"
 #include "scrap/IpAddr.hpp"
 #include "scrap/EmailAddress.hpp"
+#include "NamedPipe.hpp"
 
 using plazza::scrap::Regex;
 
@@ -162,4 +164,60 @@ or at pere-noel@epita.net");
 	cr_expect_eq(results.size(), 1);
 	cr_expect_str_eq(results.front().c_str(), "pere-noel@epita.net");
 	results.pop();
+}
+
+static void fifo_master_create(plazza::ILink **master, uint id)
+{
+	try {
+		*master = new plazza::NamedPipe(id, plazza::NamedPipe::CREATE);
+	} catch (plazza::LinkExeption &exept) {
+		exept.what();
+		*master = nullptr;
+	}
+}
+
+static void fifo_slave_join(plazza::ILink **slave, uint id)
+{
+	try {
+		*slave = new plazza::NamedPipe(id, plazza::NamedPipe::JOIN);
+	} catch (plazza::LinkExeption &exept) {
+		exept.what();
+		*slave = nullptr;
+	}
+}
+
+Test(Regex, 8_sendOnPipe) {
+	plazza::ILink *master = nullptr;
+	plazza::ILink *slave = nullptr;
+	std::thread th1(fifo_master_create, &master, 9);
+	std::thread th2(fifo_slave_join, &slave, 9);
+	th1.join();
+	th2.join();
+	cr_assert(master);
+	cr_assert(slave);
+
+	auto *scrapper = new plazza::scrap::PhoneNumber();
+	plazza::scrap::IScrapper *interfacedScrapper = scrapper;
+	plazza::Command cmd;
+
+	cmd.cmdFileName = "tests/4phone_numbers.txt";
+	cmd.cmdId = 42;
+	cmd.cmdInfoType = plazza::PHONE_NUMBER;
+	cmd >> *interfacedScrapper;
+	auto results = scrapper->results();
+	cr_expect_eq(results.size(), 4);
+	*master << *interfacedScrapper;
+	// interfacedScrapper->serialise(oss);
+
+	uint id;
+	int tmp;
+
+	slave->input() >> id;
+	cr_assert_eq(id, cmd.cmdId);
+	slave->input() >> tmp;
+	cr_assert_eq(tmp, results.size());
+	slave->input() >> tmp;
+	cr_assert_eq(tmp, 10);
+	delete interfacedScrapper;
+
 }
