@@ -186,7 +186,7 @@ static void fifo_slave_join(plazza::ILink **slave, uint id)
 	}
 }
 
-Test(Regex, 8_sendOnPipe) {
+Test(Regex, 8_sendOnPipe, .timeout = 2) {
 	plazza::ILink *master = nullptr;
 	plazza::ILink *slave = nullptr;
 	std::thread th1(fifo_master_create, &master, 9);

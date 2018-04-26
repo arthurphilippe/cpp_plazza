@@ -33,7 +33,7 @@ static void fifo_slave_join(plazza::ILink **slave, uint id)
 	}
 }
 
-Test(Fifo, 1_TwoWayCreation) {
+Test(Fifo, 1_TwoWayCreation, .timeout = 2) {
 	plazza::ILink *master = nullptr;
 	plazza::ILink *slave = nullptr;
 	std::thread th1(fifo_master_create, &master, 1);
@@ -59,7 +59,7 @@ static void fifo_rvc_test_msg(plazza::ILink *pipe, const char *str)
 	cr_expect_str_eq(toto.c_str(), str);
 }
 
-Test(Fifo, 2_SlaveBound) {
+Test(Fifo, 2_SlaveBound, .timeout = 2) {
 	plazza::ILink *master = nullptr;
 	plazza::ILink *slave = nullptr;
 	std::thread th1(fifo_master_create, &master, 2);
@@ -77,7 +77,7 @@ Test(Fifo, 2_SlaveBound) {
 	delete slave;
 }
 
-Test(Fifo, 3_MasterBound) {
+Test(Fifo, 3_MasterBound, .timeout = 2) {
 	plazza::ILink *master = nullptr;
 	plazza::ILink *slave = nullptr;
 	std::thread th1(fifo_master_create, &master, 3);
@@ -95,7 +95,7 @@ Test(Fifo, 3_MasterBound) {
 	delete slave;
 }
 
-Test(Fifo, 4_MasterBound) {
+Test(Fifo, 4_MasterBound, .timeout = 2) {
 	plazza::ILink *master = nullptr;
 	plazza::ILink *slave = nullptr;
 	std::thread th1(fifo_master_create, &master, 4);
@@ -113,7 +113,7 @@ Test(Fifo, 4_MasterBound) {
 	delete slave;
 }
 
-Test(Fifo, 5_MasterAndSlaveBound) {
+Test(Fifo, 5_MasterAndSlaveBound, .timeout = 2) {
 	plazza::ILink *master = nullptr;
 	plazza::ILink *slave = nullptr;
 	std::thread th1(fifo_master_create, &master, 5);
@@ -135,7 +135,7 @@ Test(Fifo, 5_MasterAndSlaveBound) {
 	delete slave;
 }
 
-Test(Fifo, 6_TwoWayCreationErr) {
+Test(Fifo, 6_TwoWayCreationErr, .timeout = 2) {
 	plazza::ILink *master = nullptr;
 	plazza::ILink *slave = nullptr;
 	std::thread th1(fifo_master_create, &master, 6);
@@ -152,7 +152,7 @@ Test(Fifo, 6_TwoWayCreationErr) {
 	delete slave;
 }
 
-Test(Fifo, LinkErr) {
+Test(Fifo, LinkErr, .timeout = 2) {
 	cr_redirect_stderr();
 	cr_redirect_stdout();
 	int count(0);
@@ -183,7 +183,7 @@ static void cmd_rcvd(plazza::ILink *link, plazza::Command *cmd)
 	link->input() >> *cmd;
 }
 
-Test(Fifo, 8_SlaveBound) {
+Test(Fifo, 8_SlaveBound, .timeout = 2) {
 	plazza::ILink *master = nullptr;
 	plazza::ILink *slave = nullptr;
 	std::thread th1(fifo_master_create, &master, 8);
@@ -211,7 +211,7 @@ Test(Fifo, 8_SlaveBound) {
 }
 
 
-Test(Fifo, 9_CmdSerial) {
+Test(Fifo, 9_CmdSerial, .timeout = 2) {
 	plazza::ILink *master = nullptr;
 	plazza::ILink *slave = nullptr;
 	std::thread th1(fifo_master_create, &master, 9);
