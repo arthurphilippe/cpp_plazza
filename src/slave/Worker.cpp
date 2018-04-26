@@ -14,10 +14,7 @@ Worker::Worker(unsigned int id, unsigned int threadNb)
 {}
 
 Worker::~Worker()
-{
-}
+{}
 
 void Worker::loop()
-{
-
-}
+{}

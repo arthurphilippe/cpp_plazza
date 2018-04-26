@@ -10,7 +10,6 @@
 
 	#include <string>
 	#include <fstream>
-	#include <thread>
 	#include "ILink.hpp"
 
 using namespace std::chrono_literals;
@@ -31,7 +30,6 @@ public:
 	}
 	std::istream &input() override
 	{
-		std::this_thread::sleep_for(10ms);
 		return _in;
 	}
 private:
