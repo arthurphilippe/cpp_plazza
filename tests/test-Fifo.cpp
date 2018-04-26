@@ -69,10 +69,18 @@ Test(Fifo, 2_SlaveBound, .timeout = 2) {
 	th2.join();
 	cr_assert(master);
 	cr_assert(slave);
-	std::thread th3(fifo_send_test_msg, master, "hey-there");
-	std::thread th4(fifo_rvc_test_msg, slave, "hey-there");
-	th3.join();
-	th4.join();
+	cr_log_info("Sending...");
+	master->output() << 12 << std::endl;
+	cr_log_info("Sent.");
+	uint test;
+	cr_log_info("Recieving...");
+	slave->input() >> test;
+	cr_log_info("Recieved.");
+	cr_assert_eq(test, 12);
+	// std::thread th3(fifo_send_test_msg, master, "hey-there");
+	// std::thread th4(fifo_rvc_test_msg, slave, "hey-there");
+	// th3.join();
+	// th4.join();
 	delete master;
 	delete slave;
 }
