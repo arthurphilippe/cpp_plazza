@@ -19,7 +19,13 @@ Worker::Worker(std::pair<std::queue<Command> &, std::mutex &> &despatchQ,
 	_threadNb(threadNb),
 	_id(workerId),
 	_link(new NamedPipe(_id, NamedPipe::CREATE))
-{}
+{
+	Command test;
+
+	test.cmdId = 0;
+	test.cmdInfoType = NONE;
+	*_link << test;
+}
 
 Worker::~Worker()
 {}
@@ -28,7 +34,6 @@ void Worker::_threadEntry()
 {
 	if (_sentCommands.size() < _threadNb)
 		_pullDespatch();
-
 }
 
 void Worker::_pullDespatch()

@@ -40,7 +40,6 @@ public:
 	std::string _what;
 };
 
-
 std::ostream& operator<<(std::ostream &os, plazza::ILink &link);
 std::istream& operator>>(std::istream &in, plazza::ILink &link);
 
