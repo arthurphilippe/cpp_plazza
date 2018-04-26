@@ -40,11 +40,29 @@ public:
 	std::string _what;
 };
 
+
 std::ostream& operator<<(std::ostream &os, plazza::ILink &link);
 std::istream& operator>>(std::istream &in, plazza::ILink &link);
-plazza::ILink &operator<<(plazza::ILink &out, const plazza::Command &cmd);
-plazza::ILink &operator>>(plazza::ILink &in, plazza::Command &cmd);
-plazza::ILink
-&operator<<(plazza::ILink &out, plazza::scrap::IScrapper &scrp);
+
+template<typename T>
+plazza::ILink &operator<<(plazza::ILink &out, const T &var)
+{
+	out.output() << var << std::endl;
+	return out;
+}
+
+template<typename T>
+plazza::ILink &operator<<(plazza::ILink &out, T &var)
+{
+	out.output() << var << std::endl;
+	return out;
+}
+
+template<typename T>
+plazza::ILink &operator>>(plazza::ILink &in, T &var)
+{
+	in.input() >> var;
+	return in;
+}
 
 #endif /* !ILINK_HPP_ */
