@@ -10,35 +10,6 @@
 
 using plazza::ILink;
 
-ILink &operator<<(ILink &out, const plazza::Command &cmd)
-{
-	out.output() << cmd << std::endl;
-	return out;
-}
-
-ILink &operator>>(ILink &in, plazza::Command &cmd)
-{
-	in.input() >> cmd;
-	return in;
-}
-
-ILink &operator<<(ILink &out, plazza::scrap::IScrapper &scrp)
-{
-	out.output() << scrp << std::endl;
-	return out;
-}
-
-// std::ostream& operator<<(std::ostream& os, ILink &link)
-// {
-// 	link.send(os);
-// 	return os;
-// }
-
-// std::istream& operator>>(std::istream &in, ILink &link)
-// {
-// 	return link.recive(in);
-// }
-
 plazza::LinkExeption::LinkExeption(std::string prefix, int err)
 	: _what(prefix + std::strerror(err))
 {}
