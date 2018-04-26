@@ -6,12 +6,16 @@
 */
 
 #include "slave/Worker.hpp"
+#include "NamedPipe.hpp"
 
 using plazza::slave::Worker;
 
 Worker::Worker(unsigned int id, unsigned int threadNb)
-	: _id(id), _threadNb(threadNb)
-{}
+	: _id(id), _threadNb(threadNb),
+	_link(new plazza::NamedPipe(_id, NamedPipe::JOIN))
+{
+	(void) _threadNb;
+}
 
 Worker::~Worker()
 {}

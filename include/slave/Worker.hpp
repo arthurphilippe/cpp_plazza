@@ -8,6 +8,9 @@
 #ifndef WORKER_HPP_
 	#define WORKER_HPP_
 
+	#include <memory>
+	#include "ILink.hpp"
+
 namespace plazza::slave {
 	class Worker;
 }
@@ -18,8 +21,9 @@ public:
 	~Worker();
 	void loop();
 private:
-	unsigned int _id;
-	unsigned int _threadNb;
+	unsigned int		_id;
+	unsigned int		_threadNb;
+	std::unique_ptr<ILink>	_link;
 };
 
 #endif /* !WORKER_HPP_ */

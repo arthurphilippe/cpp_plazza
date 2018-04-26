@@ -12,8 +12,6 @@
 	#include <fstream>
 	#include "ILink.hpp"
 
-using namespace std::chrono_literals;
-
 namespace plazza {
 	class NamedPipe;
 	constexpr auto FIFO_MODE = 0666;

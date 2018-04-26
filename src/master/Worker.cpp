@@ -18,7 +18,7 @@ Worker::Worker(std::pair<std::queue<Command> &, std::mutex &> &despatchQ,
 	_sentCommands(),
 	_threadNb(threadNb),
 	_id(workerId),
-	_link(new NamedPipe(workerId, NamedPipe::CREATE))
+	_link(new NamedPipe(_id, NamedPipe::CREATE))
 {}
 
 Worker::~Worker()
