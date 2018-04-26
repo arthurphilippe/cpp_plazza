@@ -12,17 +12,17 @@
 
 std::ostream& operator<<(std::ostream& os, const plazza::Command &cmd)
 {
-	std::stringstream oss;
-	oss << cmd.cmdId;
-	oss << ",";
+	// std::stringstream oss;
+	os << cmd.cmdId;
+	os << ",";
 
-	oss << cmd.cmdInfoType;
-	oss << ",";
+	os << cmd.cmdInfoType;
+	os << ",";
 
-	oss << cmd.cmdFileName.length();
-	oss << ',';
-	oss << cmd.cmdFileName;
-	os << oss.str();
+	os << cmd.cmdFileName.length();
+	os << ',';
+	os << cmd.cmdFileName;
+	// os << oss.str();
 	return os;
 }
 

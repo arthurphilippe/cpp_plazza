@@ -12,9 +12,9 @@ using plazza::ILink;
 
 ILink &operator<<(ILink &out, const plazza::Command &cmd)
 {
-	std::stringstream oss;
-	oss << cmd;
-	out.output() << oss.str() << std::endl;
+	// std::stringstream oss;
+	// oss << cmd;
+	out.output() << cmd << std::endl;
 	return out;
 }
 
