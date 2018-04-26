@@ -21,4 +21,8 @@ Worker::~Worker()
 {}
 
 void Worker::loop()
-{}
+{
+	std::string test;
+
+	_link->input() >> test;
+}

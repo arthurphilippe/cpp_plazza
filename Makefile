@@ -35,7 +35,8 @@ SRCS_TEST	=	tests/test-Command.cpp		\
 			tests/test-Fifo.cpp		\
 			tests/test-CommandParser.cpp	\
 			tests/test-RegexScrapper.cpp	\
-			tests/test-Result.cpp
+			tests/test-Result.cpp		\
+			tests/master/test-Worker.cpp
 
 SRCS_TEST	+=	$(OBJS)
 
