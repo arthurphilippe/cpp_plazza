@@ -185,38 +185,11 @@ Test(Fifo, LinkErr, .timeout = 2) {
 	cr_assert_eq(count, 2);
 }
 
-Test(Fifo, 8_SlaveBound, .timeout = 2) {
+Test(Fifo, 8_CmdSerial, .timeout = 2) {
 	plazza::ILink *master = nullptr;
 	plazza::ILink *slave = nullptr;
 	std::thread th1(fifo_master_create, &master, 8);
 	std::thread th2(fifo_slave_join, &slave, 8);
-
-	th1.join();
-	th2.join();
-	cr_assert(master);
-	cr_assert(slave);
-
-	plazza::Command cmd1;
-	cmd1.cmdFileName = "toto";
-	cmd1.cmdId = 42;
-	cmd1.cmdInfoType = plazza::Information::EMAIL_ADDRESS;
-
-	std::stringstream ioss;
-	ioss << cmd1;
-
-	std::thread th3(fifo_send_test_msg, master, ioss.str().c_str());
-	std::thread th4(fifo_rvc_test_msg, slave, ioss.str().c_str());
-	th3.join();
-	th4.join();
-	delete master;
-	delete slave;
-}
-
-Test(Fifo, 9_CmdSerial, .timeout = 2) {
-	plazza::ILink *master = nullptr;
-	plazza::ILink *slave = nullptr;
-	std::thread th1(fifo_master_create, &master, 9);
-	std::thread th2(fifo_slave_join, &slave, 9);
 	th1.join();
 	th2.join();
 	cr_assert(master);
