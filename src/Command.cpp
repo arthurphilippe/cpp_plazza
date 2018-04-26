@@ -21,6 +21,7 @@ std::ostream& operator<<(std::ostream& os, const plazza::Command &cmd)
 	os << cmd.cmdFileName.length();
 	os << ',';
 	os << cmd.cmdFileName;
+	os << std::endl;
 	return os;
 }
 

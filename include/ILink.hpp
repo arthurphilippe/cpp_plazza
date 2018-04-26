@@ -47,14 +47,14 @@ std::istream& operator>>(std::istream &in, plazza::ILink &link);
 template<typename T>
 plazza::ILink &operator<<(plazza::ILink &out, const T &var)
 {
-	out.output() << var << std::endl;
+	out.output() << var;
 	return out;
 }
 
 template<typename T>
 plazza::ILink &operator<<(plazza::ILink &out, T &var)
 {
-	out.output() << var << std::endl;
+	out.output() << var;
 	return out;
 }
 
