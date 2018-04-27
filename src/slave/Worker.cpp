@@ -31,7 +31,7 @@ void Worker::loop() noexcept
 {
 	while (_live) {
 		Command cmd;
-		if (_pull(cmd) && cmd.cmdInfoType != NONE) {
+		if (_pull(cmd)) {
 			_run(cmd);
 		}
 	}
@@ -44,7 +44,7 @@ bool Worker::_pull(Command &cmd) noexcept
 		return false;
 	*_link >> cmd;
 	std::cout << "Pulled " << cmd;
-	if (cmd.cmdId == 0) {
+	if (cmd.cmdId == 0 || cmd.cmdInfoType == NONE) {
 		_live = false;
 		return false;
 	}
@@ -57,7 +57,7 @@ void Worker::_run(Command &cmd)
 	if (scrapper == nullptr)
 		return;
 	scrapper->run(cmd);
-	std::cout << *scrapper;
+	*_link << *scrapper;
 }
 
 void Worker::_wait()

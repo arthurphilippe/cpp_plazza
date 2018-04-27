@@ -31,20 +31,21 @@ void Regex::run(const Command &cmd)
 
 std::ostream &Regex::serialise(std::ostream &os)
 {
-	std::stringstream oss;
-	oss << _cmd.cmdId;
-	oss << " ";
-	oss << _results.size();
+	// std::stringstream oss;
+	os << _cmd.cmdId;
+	os << " ";
+	os << _results.size();
 	while (_results.size()) {
-		oss << " ";
+		os << " ";
 		auto &entry = _results.front();
-		oss << entry.size();
-		oss << ":";
-		oss << entry;
+		os << entry.size();
+		os << ":";
+		os << entry;
 		_results.pop();
 	}
 	// std::cout << oss.str() << std::endl;
-	os << oss.str() << std::endl;
+	// os << oss.str() << std::endl;
+	os << std::endl;
 	return os;
 }
 
