@@ -24,7 +24,7 @@ public:
 	~NamedPipe();
 	std::ostream &output() override;
 	std::istream &input() override;
-	bool eof() const noexcept;
+	bool eof() const noexcept override;
 private:
 	void _createFifos();
 	std::string _nameIn;
