@@ -8,6 +8,7 @@
 #include "ScopedLock.hpp"
 #include "slave/Worker.hpp"
 #include "NamedPipe.hpp"
+#include "scrap/Factory.hpp"
 
 using plazza::slave::Worker;
 
@@ -29,10 +30,14 @@ void Worker::loop() noexcept
 {
 	while (_live) {
 		Command cmd;
-		_pull(cmd);
-		// if (_pull(cmd)) {
-
-		// }
+		if (_pull(cmd)) {
+			auto *scrpr = scrap::Factory::create(cmd.cmdInfoType);
+			if (scrpr == nullptr)
+				continue;
+			scrpr->run(cmd);
+			std::cout << *scrpr;
+			delete scrpr;
+		}
 	}
 }
 

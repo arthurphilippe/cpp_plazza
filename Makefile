@@ -20,6 +20,7 @@ SRCS		=	src/Command.cpp		\
 			src/scrap/Regex.cpp	\
 			src/scrap/IScrapper.cpp	\
 			src/scrap/Result.cpp	\
+			src/scrap/Factory.cpp	\
 			src/master/Worker.cpp	\
 			src/slave/Launch.cpp	\
 			src/slave/Worker.cpp	\

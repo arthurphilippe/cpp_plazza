@@ -38,6 +38,7 @@ int main()
 		exept.what();
 		return 1;
 	}
+	std::this_thread::sleep_for(std::chrono::minutes(5));
 	std::cout << "master exited" << std::endl;
 	return 0;
 }
