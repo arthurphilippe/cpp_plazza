@@ -5,10 +5,13 @@
 ** Worker
 */
 
-#ifndef WORKER_HPP_
-	#define WORKER_HPP_
+#ifndef SLAVE_WORKER_HPP_
+	#define SLAVE_WORKER_HPP_
 
 	#include <memory>
+	#include <vector>
+	#include <thread>
+	#include <mutex>
 	#include "ILink.hpp"
 
 namespace plazza::slave {
@@ -21,9 +24,15 @@ public:
 	~Worker();
 	void loop();
 private:
-	unsigned int		_id;
-	unsigned int		_threadNb;
-	std::unique_ptr<ILink>	_link;
+	void _wait();
+
+	unsigned int			_id;
+	unsigned int			_threadNb;
+	std::unique_ptr<ILink>		_link;
+	std::vector<std::thread>	_threads;
+	std::mutex			_mutex;
+	unsigned int			_tester;
+	bool				_live;
 };
 
-#endif /* !WORKER_HPP_ */
+#endif /* !SLAVE_WORKER_HPP_ */

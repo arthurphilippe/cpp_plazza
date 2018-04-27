@@ -21,19 +21,22 @@
 #include "slave/Worker.hpp"
 #include "slave/Launch.hpp"
 
-int main(int ac, char **av)
+int main()
 {
 	std::queue<plazza::Command> commandQ;
 	std::mutex mutex;
 	std::pair<std::queue<plazza::Command> &, std::mutex &> queue(commandQ, mutex);
 
 	try {
-		plazza::master::Worker(queue, 4, 1);
-	} catch (plazza::slave::Launch &slaveWorker) {
+		plazza::master::Worker worker(queue, 4, 1);
+	} catch (plazza::slave::Launch &slaveLauncher) {
 		std::cout << "catched" << std::endl;
-		slaveWorker.enter();
+		slaveLauncher.enter();
 		std::cout << "slave exited" << std::endl;
 		return 0;
+	} catch (const std::exception &exept) {
+		exept.what();
+		return 1;
 	}
 	std::cout << "master exited" << std::endl;
 	return 0;

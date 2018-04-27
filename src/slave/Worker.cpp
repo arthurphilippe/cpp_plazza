@@ -5,6 +5,7 @@
 ** Worker
 */
 
+#include "ScopedLock.hpp"
 #include "slave/Worker.hpp"
 #include "NamedPipe.hpp"
 
@@ -12,9 +13,13 @@ using plazza::slave::Worker;
 
 Worker::Worker(unsigned int id, unsigned int threadNb)
 	: _id(id), _threadNb(threadNb),
-	_link(new plazza::NamedPipe(_id, NamedPipe::JOIN))
+	_link(new plazza::NamedPipe(_id, NamedPipe::JOIN)),
+	_threads(), _mutex(), _tester(0)
 {
-	(void) _threadNb;
+	for (uint i = 0; i < _threadNb; i++) {
+		_threads.emplace_back([&] { this->loop(); });
+	}
+	_wait();
 }
 
 Worker::~Worker()
@@ -22,8 +27,17 @@ Worker::~Worker()
 
 void Worker::loop()
 {
-	Command test;
+	plazza::ScopedLock guard(_mutex);
 
-	_link->input() >> test;
-	std::cout << test << std::endl << "Worker exiting" << std::endl;
+	_tester += 1;
+	std::cout << "tester: " << _tester << std::endl;
+}
+
+void Worker::_wait()
+{
+	for (std::thread &th : _threads) {
+		th.join();
+		plazza::ScopedLock guard(_mutex);
+		std::cout << "One more joined" << std::endl;
+	}
 }

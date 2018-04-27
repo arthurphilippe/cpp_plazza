@@ -19,6 +19,4 @@ Launch::~Launch()
 void Launch::enter()
 {
 	plazza::slave::Worker worker(_workerId, _threadNb);
-
-	worker.loop();
 }
