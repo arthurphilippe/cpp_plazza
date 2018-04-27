@@ -48,6 +48,8 @@ Test(slaveWorker, 1_creation, .timeout = 2) {
 	*master << test;
 
 	th2.join();
+	delete master;
+	delete worker;
 }
 
 Test(slaveWorker, 2_actualResults, .timeout = 2) {
