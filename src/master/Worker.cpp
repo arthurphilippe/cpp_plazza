@@ -6,6 +6,8 @@
 */
 
 #include "master/Worker.hpp"
+#include "slave/Launch.hpp"
+#include <cstring>
 #include "ScopedLock.hpp"
 #include "NamedPipe.hpp"
 
@@ -18,16 +20,33 @@ Worker::Worker(std::pair<std::queue<Command> &, std::mutex &> &despatchQ,
 	_sentCommands(),
 	_threadNb(threadNb),
 	_id(workerId),
+	_child(workerId, threadNb),
 	_link(new NamedPipe(_id, NamedPipe::CREATE))
 {
 	Command test;
 
 	test.cmdId = 0;
 	test.cmdInfoType = NONE;
+	test.cmdFileName = "j'aime les pates";
 	*_link << test;
 }
 
 Worker::~Worker()
+{}
+
+Worker::Child::Child(uint workerId, uint threadNb)
+	: _pid(fork())
+{
+	if (_pid == 0)
+		throw plazza::slave::Launch(workerId, threadNb);
+	else if (_pid == -1) {
+		std::string error("fork: ");
+		error = error + strerror(errno);
+		throw std::runtime_error(error.c_str());
+	}
+}
+
+Worker::Child::~Child()
 {}
 
 void Worker::_threadEntry()

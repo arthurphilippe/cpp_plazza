@@ -22,7 +22,8 @@ Worker::~Worker()
 
 void Worker::loop()
 {
-	std::string test;
+	Command test;
 
 	_link->input() >> test;
+	std::cout << test << std::endl << "Worker exiting" << std::endl;
 }

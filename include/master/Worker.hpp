@@ -13,6 +13,7 @@
 	#include <vector>
 	#include <mutex>
 	#include <memory>
+	#include <unistd.h>
 	#include "Command.hpp"
 	#include "ILink.hpp"
 
@@ -26,11 +27,20 @@ public:
 		uint threadNb, uint workerId);
 	~Worker();
 private:
+	class Child {
+	public:
+		Child(uint workerId, uint threadNb);
+		~Child();
+	private:
+		pid_t _pid;
+	};
+
 	std::mutex		&_despatchQMtx;
 	std::queue<Command>	&_despachQ;
 	std::vector<Command>	_sentCommands;
 	uint			_threadNb;
 	uint			_id;
+	Child			_child;
 	std::unique_ptr<ILink>	_link;
 
 	void _threadEntry();

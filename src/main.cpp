@@ -17,16 +17,37 @@
 #include "ScopedLock.hpp"
 #include "NamedPipe.hpp"
 #include "CommandParser.hpp"
+#include "master/Worker.hpp"
+#include "slave/Worker.hpp"
+#include "slave/Launch.hpp"
 
 int main(int ac, char **av)
 {
-	std::queue<plazza::Command> kek;
-	if (ac > 1)
-	{
-		std::string line(av[1]);
-		plazza::CommandParser kappa(kek);
-		kappa.ParseLine(line);
-		kappa.dump();
-	} else
-		std::cout << "KEKVATEFAIR" << std::endl;
+	std::queue<plazza::Command> commandQ;
+	std::mutex mutex;
+	std::pair<std::queue<plazza::Command> &, std::mutex &> queue(commandQ, mutex);
+
+	try {
+		plazza::master::Worker(queue, 4, 1);
+	} catch (plazza::slave::Launch &slaveWorker) {
+		std::cout << "catched" << std::endl;
+		slaveWorker.enter();
+		std::cout << "slave exited" << std::endl;
+		return 0;
+	}
+	std::cout << "master exited" << std::endl;
+	return 0;
 }
+
+// int main(int ac, char **av)
+// {
+// 	std::queue<plazza::Command> kek;
+// 	if (ac > 1)
+// 	{
+// 		std::string line(av[1]);
+// 		plazza::CommandParser kappa(kek);
+// 		kappa.ParseLine(line);
+// 		kappa.dump();
+// 	} else
+// 		std::cout << "KEKVATEFAIR" << std::endl;
+// }
