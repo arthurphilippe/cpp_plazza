@@ -51,6 +51,21 @@ NamedPipe::~NamedPipe()
 	}
 }
 
+std::ostream &NamedPipe::output()
+{
+	return _out;
+}
+
+std::istream &NamedPipe::input()
+{
+	return _in;
+}
+
+bool NamedPipe::eof() const noexcept
+{
+	return _in.eof();
+}
+
 void NamedPipe::_createFifos()
 {
 	if (mkfifo(_nameIn.c_str(), FIFO_MODE) == MKFIFO_ERR && errno != 17) {

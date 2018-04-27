@@ -25,7 +25,8 @@ int main()
 {
 	std::queue<plazza::Command> commandQ;
 	std::mutex mutex;
-	std::pair<std::queue<plazza::Command> &, std::mutex &> queue(commandQ, mutex);
+	std::pair<std::queue<plazza::Command> &, std::mutex &>
+	queue(commandQ, mutex);
 
 	try {
 		plazza::master::Worker worker(queue, 4, 1);

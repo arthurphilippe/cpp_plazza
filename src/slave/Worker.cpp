@@ -11,6 +11,7 @@
 #include "scrap/Factory.hpp"
 
 using plazza::slave::Worker;
+using scrapperptr = std::unique_ptr<plazza::scrap::IScrapper>;
 
 Worker::Worker(unsigned int id, unsigned int threadNb)
 	: _id(id), _threadNb(threadNb),
@@ -30,13 +31,8 @@ void Worker::loop() noexcept
 {
 	while (_live) {
 		Command cmd;
-		if (_pull(cmd)) {
-			auto *scrpr = scrap::Factory::create(cmd.cmdInfoType);
-			if (scrpr == nullptr)
-				continue;
-			scrpr->run(cmd);
-			std::cout << *scrpr;
-			delete scrpr;
+		if (_pull(cmd) && cmd.cmdInfoType != NONE) {
+			_run(cmd);
 		}
 	}
 }
@@ -55,11 +51,19 @@ bool Worker::_pull(Command &cmd) noexcept
 	return true;
 }
 
+void Worker::_run(Command &cmd)
+{
+	scrapperptr scrapper(scrap::Factory::create(cmd.cmdInfoType));
+	if (scrapper == nullptr)
+		return;
+	scrapper->run(cmd);
+	std::cout << *scrapper;
+}
+
 void Worker::_wait()
 {
 	for (std::thread &th : _threads) {
 		th.join();
 		plazza::ScopedLock guard(_mutex);
-		std::cout << "One more joined" << std::endl;
 	}
 }

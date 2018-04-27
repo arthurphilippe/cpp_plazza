@@ -22,14 +22,9 @@ class plazza::NamedPipe : public ILink {
 public:
 	NamedPipe(uint id, ILink::Mode mode);
 	~NamedPipe();
-	std::ostream &output() override
-	{
-		return _out;
-	}
-	std::istream &input() override
-	{
-		return _in;
-	}
+	std::ostream &output() override;
+	std::istream &input() override;
+	bool eof() const noexcept;
 private:
 	void _createFifos();
 	std::string _nameIn;

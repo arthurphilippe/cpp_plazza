@@ -26,6 +26,7 @@ public:
 private:
 	void _wait();
 	bool _pull(Command &cmd) noexcept;
+	void _run(Command &cmd);
 
 	unsigned int			_id;
 	unsigned int			_threadNb;
