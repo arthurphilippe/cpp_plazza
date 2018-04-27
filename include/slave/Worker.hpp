@@ -22,16 +22,16 @@ class plazza::slave::Worker {
 public:
 	Worker(unsigned int id, unsigned int threadNb);
 	~Worker();
-	void loop();
+	void loop() noexcept;
 private:
 	void _wait();
+	bool _pull(Command &cmd) noexcept;
 
 	unsigned int			_id;
 	unsigned int			_threadNb;
 	std::unique_ptr<ILink>		_link;
 	std::vector<std::thread>	_threads;
 	std::mutex			_mutex;
-	unsigned int			_tester;
 	bool				_live;
 };
 

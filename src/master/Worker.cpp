@@ -25,7 +25,7 @@ Worker::Worker(std::pair<std::queue<Command> &, std::mutex &> &despatchQ,
 {
 	Command test;
 
-	test.cmdId = 0;
+	test.cmdId = 1;
 	test.cmdInfoType = NONE;
 	test.cmdFileName = "j'aime les pates";
 	*_link << test;

@@ -14,7 +14,7 @@ using plazza::slave::Worker;
 Worker::Worker(unsigned int id, unsigned int threadNb)
 	: _id(id), _threadNb(threadNb),
 	_link(new plazza::NamedPipe(_id, NamedPipe::JOIN)),
-	_threads(), _mutex(), _tester(0)
+	_threads(), _mutex(), _live(true)
 {
 	for (uint i = 0; i < _threadNb; i++) {
 		_threads.emplace_back([&] { this->loop(); });
@@ -25,12 +25,29 @@ Worker::Worker(unsigned int id, unsigned int threadNb)
 Worker::~Worker()
 {}
 
-void Worker::loop()
+void Worker::loop() noexcept
+{
+	while (_live) {
+		Command cmd;
+		_pull(cmd);
+		// if (_pull(cmd)) {
+
+		// }
+	}
+}
+
+bool Worker::_pull(Command &cmd) noexcept
 {
 	plazza::ScopedLock guard(_mutex);
-
-	_tester += 1;
-	std::cout << "tester: " << _tester << std::endl;
+	if (!_live)
+		return false;
+	*_link >> cmd;
+	std::cout << "Pulled " << cmd;
+	if (cmd.cmdId == 0) {
+		_live = false;
+		return false;
+	}
+	return true;
 }
 
 void Worker::_wait()
