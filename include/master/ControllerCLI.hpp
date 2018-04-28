@@ -12,6 +12,7 @@
 	#include <memory>
 	#include <future>
 	#include <queue>
+	#include <iostream>
 	#include "Command.hpp"
 
 namespace plazza::master {

@@ -22,11 +22,13 @@ ControllerCLI::~ControllerCLI()
 
 bool ControllerCLI::poll(std::queue<Command> &cmdQ)
 {
+	bool ret(false);
 	while (_nextLineReady()) {
 		auto line = _getNextLine();
 		if (line == CMD_EXIT)
-			return false;
+			return ret;
 		std::cout << line << std::endl;
+		ret = true;
 	}
 	return true;
 }
