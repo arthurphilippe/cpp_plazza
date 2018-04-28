@@ -42,7 +42,15 @@ bool Worker::_pull(Command &cmd) noexcept
 	plazza::ScopedLock guard(_mutex);
 	if (!_live)
 		return false;
+	if (_link->eof()) {
+		_live = false;
+		return false;
+	}
 	*_link >> cmd;
+	if (_link->eof()) {
+		_live = false;
+		return false;
+	}
 	std::cout << "Pulled " << cmd;
 	if (cmd.cmdId == 0 || cmd.cmdInfoType == NONE) {
 		_live = false;

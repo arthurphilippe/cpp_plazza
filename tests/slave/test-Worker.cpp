@@ -87,3 +87,42 @@ Test(slaveWorker, 2_actualResults, .timeout = 2) {
 	delete master;
 	delete worker;
 }
+
+Test(slaveWorker, 3_eof, .timeout = 2) {
+	plazza::ILink *master = nullptr;
+	plazza::slave::Worker *worker = nullptr;
+	std::thread th1(fifo_master_create, &master, 13);
+	std::thread th2(worker_slave_create, &worker, 13);
+
+	th1.join();
+	cr_assert(master);
+
+	plazza::Command test;
+	test.cmdFileName = "tests/4phone_numbers.txt";
+	test.cmdInfoType = plazza::Information::PHONE_NUMBER;
+	test.cmdId = 1;
+
+	cr_log_info("sending first command...");
+	*master << test;
+	cr_log_info("sent!");
+
+	plazza::scrap::Result res;
+	cr_log_info("recovering results...");
+	*master >> res;
+	cr_log_info("recovered!");
+	cr_assert_eq(res.contents().size(), 4);
+
+	// test.cmdFileName = "this is an stoping command.";
+	// test.cmdInfoType = plazza::Information::NONE;
+	// test.cmdId = 0;
+
+	// cr_log_info("sending terminating command...");
+	// *master << test;
+	// cr_log_info("sent!");
+	cr_log_info("deleting master to send eof.");
+	delete master;
+	cr_log_info("joining threads...");
+	th2.join();
+	cr_log_info("joined!");
+	delete worker;
+}
