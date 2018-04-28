@@ -42,6 +42,7 @@
 		"algorithm": "cpp",
 		"queue": "cpp",
 		"functional": "cpp",
-		"atomic": "cpp"
+		"atomic": "cpp",
+		"future": "cpp"
 	}
 }

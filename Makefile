@@ -21,9 +21,10 @@ SRCS		=	src/Command.cpp		\
 			src/scrap/IScrapper.cpp	\
 			src/scrap/Result.cpp	\
 			src/scrap/Factory.cpp	\
-			src/master/Worker.cpp	\
 			src/slave/Launch.cpp	\
 			src/slave/Worker.cpp	\
+			src/master/Worker.cpp	\
+			src/master/ControllerCLI.cpp	\
 
 OBJ_MAIN	=	$(MAIN:.cpp=.o)
 
