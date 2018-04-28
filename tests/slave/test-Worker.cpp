@@ -112,14 +112,7 @@ Test(slaveWorker, 3_eof, .timeout = 2) {
 	cr_log_info("recovered!");
 	cr_assert_eq(res.contents().size(), 4);
 
-	// test.cmdFileName = "this is an stoping command.";
-	// test.cmdInfoType = plazza::Information::NONE;
-	// test.cmdId = 0;
-
-	// cr_log_info("sending terminating command...");
-	// *master << test;
-	// cr_log_info("sent!");
-	cr_log_info("deleting master to send eof.");
+	cr_log_info("terminating master link in order to send eof.");
 	delete master;
 	cr_log_info("joining threads...");
 	th2.join();

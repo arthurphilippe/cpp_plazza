@@ -10,7 +10,7 @@ echo " --> Test and build complete!"
 
 if [ "$1" == "html" ] || [ "$2" == "html" ]; then
 	echo -e "\n:: Proccessing coverage artefacts..."
-	gcovr -r . --html -o coverage.html --html-details --delete -s
+	gcovr -r . --html -o coverage.html --html-details --exclude-directories=tests/ --delete -s
 
 	mkdir -p coverage
 	mv *.html coverage/
