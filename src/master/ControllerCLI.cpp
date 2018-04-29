@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include "master/ControllerCLI.hpp"
+#include "CommandParser.hpp"
 
 using plazza::master::ControllerCLI;
 
@@ -22,13 +23,15 @@ ControllerCLI::~ControllerCLI()
 
 bool ControllerCLI::poll(std::queue<Command> &cmdQ)
 {
-	(void) cmdQ;
+	CommandParser parser(cmdQ);
 	bool ret(false);
+
 	while (_nextLineReady()) {
 		auto line = _getNextLine();
 		if (line == CMD_EXIT)
 			return ret;
-		std::cout << line << std::endl;
+		std::cout << "Processing: \"" << line << "\"" << std::endl;
+		parser.ParseLine(line);
 		ret = true;
 	}
 	return true;
