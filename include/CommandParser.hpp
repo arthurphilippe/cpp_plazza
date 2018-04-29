@@ -12,7 +12,7 @@
 	#include <queue>
 	#include "Command.hpp"
 
-namespace plazza {
+namespace plazza::master {
 	class CommandParser;
 	class CommandParserError;
 	constexpr auto ERR_CMD_TYPE (
@@ -23,7 +23,7 @@ the \033[1minformation type\033[m to get");
 the \033[1mfilename\033[m");
 }
 
-class plazza::CommandParser {
+class plazza::master::CommandParser {
 public:
 	using InfoTypeMap =
 		std::unordered_map<std::string, enum Information>;
@@ -52,7 +52,7 @@ private:
 	std::string _cmdType;
 };
 
-class plazza::CommandParserError : std::exception {
+class plazza::master::CommandParserError : std::exception {
 public:
 	CommandParserError(std::string prefix, int err);
 	CommandParserError(std::string prefix);

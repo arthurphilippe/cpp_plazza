@@ -16,7 +16,7 @@ MAIN		=	src/main.cpp
 SRCS		=	src/Command.cpp		\
 			src/NamedPipe.cpp	\
 			src/ILink.cpp		\
-			src/CommandParser.cpp	\
+			src/master/CommandParser.cpp	\
 			src/scrap/Regex.cpp	\
 			src/scrap/IScrapper.cpp	\
 			src/scrap/Result.cpp	\
