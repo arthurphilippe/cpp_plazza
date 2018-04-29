@@ -11,16 +11,15 @@
 	#include <string>
 	#include <memory>
 	#include <future>
-	#include <queue>
 	#include <iostream>
-	#include "Command.hpp"
+	#include "IUserController.hpp"
 
 namespace plazza::master {
 	class ControllerCLI;
 	constexpr auto CMD_EXIT("exit");
 }
 
-class plazza::master::ControllerCLI {
+class plazza::master::ControllerCLI : public IUserController {
 public:
 	ControllerCLI(std::istream &input = std::cin);
 	~ControllerCLI();
@@ -28,13 +27,12 @@ public:
 	bool poll(std::queue<Command> &cmdQ);
 private:
 	static std::string	__getLine(std::istream *input);
-	// static std::mutex	__mutex;
 
-	bool		_nextLineReady();
-	std::string	_getNextLine();
+	bool			_nextLineReady();
+	std::string		_getNextLine();
 
+	std::istream		&_input;
 	std::unique_ptr<std::future<std::string>>	_nextLine;
-	std::istream &_input;
 };
 
 #endif /* !CONTROLLERCLI_HPP_ */

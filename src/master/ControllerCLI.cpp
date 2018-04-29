@@ -11,8 +11,8 @@
 using plazza::master::ControllerCLI;
 
 ControllerCLI::ControllerCLI(std::istream &input)
-	: _nextLine(new std::future<std::string>),
-	_input(input)
+	: _input(input),
+	_nextLine(new std::future<std::string>)
 {
 	*_nextLine = std::async(__getLine, &_input);
 }
@@ -22,6 +22,7 @@ ControllerCLI::~ControllerCLI()
 
 bool ControllerCLI::poll(std::queue<Command> &cmdQ)
 {
+	(void) cmdQ;
 	bool ret(false);
 	while (_nextLineReady()) {
 		auto line = _getNextLine();
