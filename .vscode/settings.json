@@ -41,6 +41,8 @@
 		"typeinfo": "cpp",
 		"algorithm": "cpp",
 		"queue": "cpp",
-		"functional": "cpp"
+		"functional": "cpp",
+		"atomic": "cpp",
+		"future": "cpp"
 	}
 }
