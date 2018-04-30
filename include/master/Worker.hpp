@@ -28,7 +28,16 @@ class plazza::master::Worker {
 public:
 	Worker(uint threadNb, uint workerId);
 	~Worker();
+	void send(const Command &);
 	void fillResults(std::vector<scrap::Result> &);
+	uint load() const noexcept
+	{
+		return _load;
+	}
+	uint id() const noexcept
+	{
+		return _id;
+	}
 private:
 	class Child {
 	public:
@@ -45,6 +54,7 @@ private:
 	std::unique_ptr<ILink>	_link;
 	std::thread		_thread;
 	bool			_live;
+	uint			_load;
 
 	std::list<scrap::Result>	_results;
 	std::mutex			_lock;

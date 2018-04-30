@@ -15,26 +15,27 @@
 using plazza::master::Worker;
 
 Worker::Worker(uint threadNb, uint workerId)
-	// : _sentCommands(),
 	: _threadNb(threadNb),
 	_id(workerId),
 	_child(_id, _threadNb),
 	_link(new NamedPipe(_id, NamedPipe::CREATE)),
 	_thread([&] (){ _threadEntry(); }),
-	_live(true)
-{
-	// Command test;
-
-	// test.cmdId = 1;
-	// test.cmdInfoType = NONE;
-	// test.cmdFileName = "j'aime les pates";
-	// *_link << test;
-}
+	_live(true),
+	_load(0)
+{}
 
 Worker::~Worker()
 {
 	_live = false;
+	_link->closeUpstream();
 	_thread.join();
+}
+
+void Worker::send(const Command &cmd)
+{
+	plazza::ScopedLock guard(_lock);
+	_load += 1;
+	*_link << cmd;
 }
 
 void Worker::fillResults(std::vector<scrap::Result> &results)
@@ -70,7 +71,7 @@ void Worker::_threadEntry()
 	while (_live && !_link->eof()) {
 		scrap::Result result;
 		*_link >> result;
-		if (result.contents().size())
+		if (result.id())
 			_register(result);
 	}
 }
@@ -80,4 +81,6 @@ void Worker::_register(scrap::Result &res)
 	plazza::ScopedLock guard(_lock);
 
 	_results.push_back(res);
+	std::cout << "result: " << res << std::endl;
+	_load -= 1;
 }

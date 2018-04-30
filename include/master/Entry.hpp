@@ -9,6 +9,7 @@
 	#define ENTRY_HPP_
 
 	#include <queue>
+	#include <memory>
 	#include "master/Worker.hpp"
 	#include "master/ControllerCLI.hpp"
 	#include "Command.hpp"
@@ -23,11 +24,17 @@ public:
 	~Entry();
 	void loop();
 private:
+	using workerptr = std::unique_ptr<Worker>;
+	void _despatchTasks();
+	void _sendCmd(Worker &);
+	void _spawnWorker();
+
 	unsigned int			_threadNb;
 	std::queue<Command>		_despatchQ;
 	std::vector<Command>		_sentCommands;
-	std::vector<Worker>		_workers;
+	std::vector<workerptr>		_workers;
 	plazza::master::ControllerCLI	_controller;
+	unsigned int			_workerIdBase;
 };
 
 #endif /* !ENTRY_HPP_ */

@@ -26,9 +26,13 @@
 
 int main()
 {
-	plazza::master::Entry toto(12);
+	plazza::master::Entry toto(5);
 
-	toto.loop();
+	try {
+		toto.loop();
+	} catch (plazza::slave::Launch &slaveLauncher) {
+		slaveLauncher.enter();
+	}
 	// std::queue<plazza::Command> cmdQ;
 	// plazza::master::ControllerCLI kappa;
 
