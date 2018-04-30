@@ -15,7 +15,7 @@
 
 int main(int argc, char *argv[])
 {
-	QApplication a(argc, argv);
+	QApplication *a = new QApplication(argc, argv);
 	QWidget *wind = new QWidget();
 	QHBoxLayout *layout = new QHBoxLayout;
 	QPushButton *yay = new QPushButton("OK", wind);
@@ -24,14 +24,10 @@ int main(int argc, char *argv[])
 	QRadioButton *ip_address = new QRadioButton("IP_ADDRESS", t);
 	QRadioButton *phone_number = new QRadioButton("PHONE_NUMBER", t);
 	QRadioButton *email_address = new QRadioButton("EMAIL_ADDRESS", t);
-	Counter *b = new Counter(t, a);
+	QPlainTextEdit *Text = new QPlainTextEdit("file choosen", wind);
+	Counter *b = new Counter(t, a, Text);
 	QPushButton *ChooseFolder = new QPushButton("Choose", wind);
-	// QPlainTextEdit *Text = new QPlainTextEdit("file choosen", wind);
 
-	// Text->move(100, 200);
-	// Text->setReadOnly(true);
-	// Text->setGeometry(100, 200, 300, 30);
-	// Text->setPlainText("AERFG");
 	QObject::connect(ChooseFolder, SIGNAL(clicked()), b, SLOT(files()));
 	wind->setFixedSize(1280, 720);
 	ChooseFolder->move(600, 200);
@@ -46,5 +42,5 @@ int main(int argc, char *argv[])
 	t->move(100, 40);
 	QObject::connect(yay, SIGNAL(clicked()), b, SLOT(setValue()));
 	wind->show();
-	return a.exec();
+	return a->exec();
 }

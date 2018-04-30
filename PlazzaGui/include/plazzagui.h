@@ -22,14 +22,12 @@ class Counter : public QWidget
 {
 	Q_OBJECT
 public:
-	Counter(QWidget *p, QApplication &a) { m_value = 0; _p = p;
+	Counter(QWidget *p, QApplication *&a, QPlainTextEdit *&Text) :_text(Text) { m_value = 0; _p = p;
 
-	Text = new QPlainTextEdit("file choosen", p);
-
-	Text->move(100, 200);
-	Text->setReadOnly(true);
-	Text->setGeometry(100, 200, 300, 30);
-	Text->setPlainText("AERFG");
+	_text->move(100, 200);
+	_text->setReadOnly(true);
+	_text->setGeometry(100, 200, 600, 30);
+	_text->setPlainText("AERFG");
 	}
 	~Counter() {}
 	int value() const { return m_value; }
@@ -48,13 +46,11 @@ public slots:
 	void files() {
 		auto file = QFileDialog::getOpenFileName(this, tr("Plazza: Choose File", "."));
 		std::cout << file.toStdString() << std::endl;
+		_text->setPlainText(file);
 	}
 private:
-	QPlainTextEdit *Text;
-
-
-
 	QWidget *_p;
+	QPlainTextEdit *_text;
 	std::string _status;
 };
 
