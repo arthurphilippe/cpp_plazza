@@ -13,13 +13,13 @@ using plazza::master::ControllerCLI;
 
 ControllerCLI::ControllerCLI(std::istream &input)
 	: _input(input),
-	_nextLine(new std::future<std::string>)
-{
-	*_nextLine = std::async(__getLine, &_input);
-}
+	_nextLine(std::async(__getLine, &_input))
+{}
 
 ControllerCLI::~ControllerCLI()
-{}
+{
+	_nextLine.get();
+}
 
 bool ControllerCLI::poll(std::queue<Command> &cmdQ)
 {
@@ -39,17 +39,16 @@ bool ControllerCLI::poll(std::queue<Command> &cmdQ)
 
 bool ControllerCLI::_nextLineReady()
 {
-	auto ret = _nextLine->wait_for(std::chrono::milliseconds(10));
+	auto ret = _nextLine.wait_for(std::chrono::milliseconds(10));
 
 	return ret == std::future_status::ready;
 }
 
 std::string ControllerCLI::_getNextLine()
 {
-	std::string line = _nextLine->get();
+	std::string line = _nextLine.get();
 
-	_nextLine.reset(new std::future<std::string>);
-	*_nextLine = std::async(__getLine, &_input);
+	_nextLine = std::async(__getLine, &_input);
 	return line;
 }
 
@@ -57,7 +56,8 @@ std::string ControllerCLI::__getLine(std::istream *input)
 {
 	std::string str;
 
-	if (std::getline(*input, str))
+	if (std::getline(*input, str)) {
 		return str;
+	}
 	return CMD_EXIT;
 }

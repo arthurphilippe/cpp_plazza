@@ -59,7 +59,7 @@ LDFLAGS		=	 -lpthread
 all: $(NAME)
 
 debug: CPPFLAGS += -ggdb
-debug: fclean
+# debug: fclean
 debug: $(NAME)
 
 tests: CXX=g++

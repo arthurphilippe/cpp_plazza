@@ -19,8 +19,8 @@ Worker::Worker(uint threadNb, uint workerId)
 	_id(workerId),
 	_child(_id, _threadNb),
 	_link(new NamedPipe(_id, NamedPipe::CREATE)),
-	_thread([&] (){ _threadEntry(); }),
 	_live(true),
+	_thread([&] (){ _threadEntry(); }),
 	_load(0)
 {}
 

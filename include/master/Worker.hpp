@@ -52,8 +52,8 @@ private:
 	uint			_id;
 	Child			_child;
 	std::unique_ptr<ILink>	_link;
-	std::thread		_thread;
 	bool			_live;
+	std::thread		_thread;
 	uint			_load;
 
 	std::list<scrap::Result>	_results;

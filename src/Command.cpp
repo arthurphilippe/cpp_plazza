@@ -39,7 +39,7 @@ std::istream& operator>>(std::istream &in, plazza::Command &cmd)
 
 	in >> tmp;
 	in >> separator;
-	if (tmp) {
+	if (!in.eof() && tmp) {
 		std::vector<char> arr(tmp);
 		in.read(arr.data() , tmp);
 		cmd.cmdFileName.assign(arr.data(), tmp);
