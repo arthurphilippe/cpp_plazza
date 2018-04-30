@@ -10,6 +10,7 @@
 #include <QPushButton>
 #include <QWidget>
 #include <QApplication>
+#include <QListWidget>
 #include "include/plazzagui.h"
 
 
@@ -27,6 +28,17 @@ int main(int argc, char *argv[])
 	QPlainTextEdit *Text = new QPlainTextEdit("file choosen", wind);
 	Counter *b = new Counter(t, a, Text);
 	QPushButton *ChooseFolder = new QPushButton("Choose", wind);
+
+	QGroupBox *titleFilesList = new QGroupBox("Parsed file(s) :", wind);
+	QListWidget *winFilesList = new QListWidget(wind);
+	QStringList *filesList = new QStringList("");
+	filesList->append("test");
+	filesList->append("test2");
+	filesList->append("test3");
+	winFilesList->move(800, 200);
+	titleFilesList->move(800, 150);
+	for (int i = filesList->size() - 1; i > 0; i--)
+		winFilesList->insertItem(0, filesList->at(i));
 
 	QObject::connect(ChooseFolder, SIGNAL(clicked()), b, SLOT(files()));
 	wind->setFixedSize(1280, 720);
