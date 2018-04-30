@@ -25,6 +25,7 @@ SRCS		=	src/Command.cpp		\
 			src/slave/Worker.cpp	\
 			src/master/Worker.cpp	\
 			src/master/ControllerCLI.cpp	\
+			src/master/Entry.cpp	\
 
 OBJ_MAIN	=	$(MAIN:.cpp=.o)
 

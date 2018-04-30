@@ -22,13 +22,18 @@
 #include "slave/Launch.hpp"
 
 #include "master/ControllerCLI.hpp"
+#include "master/Entry.hpp"
 
 int main()
 {
-	std::queue<plazza::Command> cmdQ;
-	plazza::master::ControllerCLI kappa;
+	plazza::master::Entry toto(12);
 
-	kappa.poll(cmdQ);
+	toto.loop();
+	// std::queue<plazza::Command> cmdQ;
+	// plazza::master::ControllerCLI kappa;
+
+	// kappa.poll(cmdQ);
+
 }
 
 // int main()
