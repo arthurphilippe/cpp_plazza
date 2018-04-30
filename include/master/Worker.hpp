@@ -16,9 +16,9 @@
 	#include <unistd.h>
 	#include <thread>
 	#include "Command.hpp"
-	#include "ILink.hpp"
 	#include "scrap/Result.hpp"
 	#include "ScopedLock.hpp"
+	#include "ILink.hpp"
 
 namespace plazza::master {
 	class Worker;

@@ -5,9 +5,10 @@
 ** Worker
 */
 
+#include <cstring>
+#include <iostream>
 #include "master/Worker.hpp"
 #include "slave/Launch.hpp"
-#include <cstring>
 #include "ScopedLock.hpp"
 #include "NamedPipe.hpp"
 
@@ -17,7 +18,7 @@ Worker::Worker(uint threadNb, uint workerId)
 	// : _sentCommands(),
 	: _threadNb(threadNb),
 	_id(workerId),
-	_child(workerId, threadNb),
+	_child(_id, _threadNb),
 	_link(new NamedPipe(_id, NamedPipe::CREATE)),
 	_thread([&] (){ _threadEntry(); }),
 	_live(true)
