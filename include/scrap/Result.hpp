@@ -8,7 +8,7 @@
 #ifndef RESULT_HPP_
 	#define RESULT_HPP_
 
-	#include <queue>
+	#include <vector>
 	#include "IScrapper.hpp"
 
 namespace plazza::scrap {
@@ -21,7 +21,7 @@ public:
 	~Result();
 	std::istream &fill(std::istream &) noexcept;
 	std::ostream &dump(std::ostream &) noexcept;
-	const std::queue<std::string> &contents() const noexcept
+	const std::vector<std::string> &contents() const noexcept
 	{
 		return _contents;
 	}
@@ -31,8 +31,8 @@ public:
 	}
 
 private:
-	std::queue<std::string> _contents;
-	uint _id;
+	std::vector<std::string>		_contents;
+	uint				_id;
 };
 
 std::istream &operator>>(std::istream &is, plazza::scrap::Result &res);

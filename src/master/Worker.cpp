@@ -13,30 +13,45 @@
 
 using plazza::master::Worker;
 
-Worker::Worker(std::pair<std::queue<Command> &, std::mutex &> &despatchQ,
-		uint threadNb, uint workerId)
-	: _despatchQMtx(despatchQ.second),
-	_despachQ(despatchQ.first),
-	_sentCommands(),
-	_threadNb(threadNb),
+Worker::Worker(uint threadNb, uint workerId)
+	// : _sentCommands(),
+	: _threadNb(threadNb),
 	_id(workerId),
 	_child(workerId, threadNb),
-	_link(new NamedPipe(_id, NamedPipe::CREATE))
+	_link(new NamedPipe(_id, NamedPipe::CREATE)),
+	_thread([&] (){ _threadEntry(); }),
+	_live(true)
 {
-	Command test;
+	// Command test;
 
-	test.cmdId = 1;
-	test.cmdInfoType = NONE;
-	test.cmdFileName = "j'aime les pates";
-	*_link << test;
+	// test.cmdId = 1;
+	// test.cmdInfoType = NONE;
+	// test.cmdFileName = "j'aime les pates";
+	// *_link << test;
 }
 
 Worker::~Worker()
-{}
+{
+	_live = false;
+	_thread.join();
+}
+
+void Worker::fillResults(std::vector<scrap::Result> &results)
+{
+	plazza::ScopedLock guard(_lock);
+
+	while (_results.size()) {
+		results.push_back(_results.front());
+		_results.pop_front();
+	}
+}
 
 Worker::Child::Child(uint workerId, uint threadNb)
-	: _pid(fork())
+	: _pid()
 {
+	if (!workerId || !threadNb)
+		return;
+	_pid = fork();
 	if (_pid == 0)
 		throw plazza::slave::Launch(workerId, threadNb);
 	else if (_pid == -1) {
@@ -51,16 +66,17 @@ Worker::Child::~Child()
 
 void Worker::_threadEntry()
 {
-	if (_sentCommands.size() < _threadNb)
-		_pullDespatch();
+	while (_live && !_link->eof()) {
+		scrap::Result result;
+		*_link >> result;
+		if (result.contents().size())
+			_register(result);
+	}
 }
 
-void Worker::_pullDespatch()
+void Worker::_register(scrap::Result &res)
 {
-	plazza::ScopedLock guard(_despatchQMtx);
+	plazza::ScopedLock guard(_lock);
 
-	while (_despachQ.size() && _sentCommands.size() < _threadNb) {
-		_sentCommands.push_back(std::move(_despachQ.front()));
-		_despachQ.pop();
-	}
+	_results.push_back(res);
 }

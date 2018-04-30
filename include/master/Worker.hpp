@@ -10,12 +10,15 @@
 
 	#include <utility>
 	#include <queue>
-	#include <vector>
+	#include <list>
 	#include <mutex>
 	#include <memory>
 	#include <unistd.h>
+	#include <thread>
 	#include "Command.hpp"
 	#include "ILink.hpp"
+	#include "scrap/Result.hpp"
+	#include "ScopedLock.hpp"
 
 namespace plazza::master {
 	class Worker;
@@ -23,9 +26,9 @@ namespace plazza::master {
 
 class plazza::master::Worker {
 public:
-	Worker(std::pair<std::queue<Command> &, std::mutex &> &,
-		uint threadNb, uint workerId);
+	Worker(uint threadNb, uint workerId);
 	~Worker();
+	void fillResults(std::vector<scrap::Result> &);
 private:
 	class Child {
 	public:
@@ -35,16 +38,18 @@ private:
 		pid_t _pid;
 	};
 
-	std::mutex		&_despatchQMtx;
-	std::queue<Command>	&_despachQ;
-	std::vector<Command>	_sentCommands;
+	// std::list<Command>	_sentCommands;
 	uint			_threadNb;
 	uint			_id;
 	Child			_child;
 	std::unique_ptr<ILink>	_link;
+	std::thread		_thread;
+	bool			_live;
 
+	std::list<scrap::Result>	_results;
+	std::mutex			_lock;
 	void _threadEntry();
-	void _pullDespatch();
+	void _register(scrap::Result &);
 };
 
 #endif /* !WORKER_HPP_ */
