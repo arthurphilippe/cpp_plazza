@@ -54,8 +54,9 @@ Worker::Child::Child(uint workerId, uint threadNb)
 	if (!workerId || !threadNb)
 		return;
 	_pid = fork();
-	if (_pid == 0)
+	if (_pid == 0) {
 		throw plazza::slave::Launch(workerId, threadNb);
+	}
 	else if (_pid == -1) {
 		std::string error("fork: ");
 		error = error + strerror(errno);

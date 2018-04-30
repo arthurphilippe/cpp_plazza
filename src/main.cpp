@@ -24,20 +24,26 @@
 #include "master/ControllerCLI.hpp"
 #include "master/Entry.hpp"
 
-int main()
+
+int main(int ac, char **av)
 {
-	plazza::master::Entry toto(5);
+	if (ac >= 3 && strcmp(plazza::slave::SLAVE_BIN_NAME, av[0]) == 0) {
+		plazza::slave::Launch launcher(std::stoi(av[1]),
+						std::stoi(av[2]));
+		launcher.enter();
+	} else if (ac == 2) {
+		plazza::master::Entry toto(5);
 
-	try {
-		toto.loop();
-	} catch (plazza::slave::Launch &slaveLauncher) {
-		slaveLauncher.enter();
+		try {
+			toto.loop();
+		} catch (plazza::slave::Launch &slaveLauncher) {
+			slaveLauncher.exec(av[0]);
+		}
+	} else {
+		std::cerr << av[0] << ": no arguments provided." << std::endl;
+		return 84;
 	}
-	// std::queue<plazza::Command> cmdQ;
-	// plazza::master::ControllerCLI kappa;
-
-	// kappa.poll(cmdQ);
-
+	return 0;
 }
 
 // int main()
