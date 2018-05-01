@@ -24,8 +24,10 @@ std::istream &Result::fill(std::istream &is) noexcept
 
 	is >> _id;
 	is >> count;
-	if (is.eof())
+	if (is.eof()) {
+		_id = 0;
 		return is;
+	}
 	for (uint i = 0; i < count; i++) {
 		uint size;
 		is >> size;

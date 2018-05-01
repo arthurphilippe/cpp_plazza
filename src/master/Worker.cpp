@@ -27,6 +27,7 @@ Worker::Worker(uint threadNb, uint workerId)
 Worker::~Worker()
 {
 	_live = false;
+	*_link << plazza::Command{"stop", NONE, 0};
 	_link->closeUpstream();
 	_thread.join();
 }
@@ -46,6 +47,15 @@ void Worker::fillResults(std::vector<scrap::Result> &results)
 		results.push_back(_results.front());
 		_results.pop_front();
 	}
+}
+
+bool Worker::timedout() const noexcept
+{
+	auto now = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> duration(now - _idleSince);
+
+	return (_load == 0 && _results.size() == 0
+		&& duration > std::chrono::seconds(5));
 }
 
 Worker::Child::Child(uint workerId, uint threadNb)
@@ -72,7 +82,7 @@ void Worker::_threadEntry()
 	while (_live && !_link->eof()) {
 		scrap::Result result;
 		*_link >> result;
-		if (result.id())
+		if (result.id() != 0)
 			_register(result);
 	}
 }
@@ -82,5 +92,11 @@ void Worker::_register(scrap::Result &res)
 	plazza::ScopedLock guard(_lock);
 
 	_results.push_back(res);
-	_load -= 1;
+	// std::cout << "===================" << std::endl;
+	// std::cout << res;
+
+	if (_load != 0)
+		_load -= 1;
+	if (_load == 0)
+		_idleSince = std::chrono::high_resolution_clock::now();
 }

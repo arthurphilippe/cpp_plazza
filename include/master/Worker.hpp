@@ -38,7 +38,11 @@ public:
 	{
 		return _id;
 	}
+	bool timedout() const noexcept;
 private:
+	using timept =
+		std::chrono::time_point<std::chrono::system_clock>;
+
 	class Child {
 	public:
 		Child(uint workerId, uint threadNb);
@@ -47,7 +51,6 @@ private:
 		pid_t _pid;
 	};
 
-	// std::list<Command>	_sentCommands;
 	uint			_threadNb;
 	uint			_id;
 	Child			_child;
@@ -55,10 +58,11 @@ private:
 	bool			_live;
 	std::thread		_thread;
 	uint			_load;
+	timept			_idleSince;
 
 	std::list<scrap::Result>	_results;
-	std::mutex			_lock;
 	void _threadEntry();
+	std::mutex			_lock;
 	void _register(scrap::Result &);
 };
 

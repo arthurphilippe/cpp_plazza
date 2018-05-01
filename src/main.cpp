@@ -10,6 +10,8 @@
 #include <fstream>
 #include <thread>
 
+#include <csignal>
+
 #include "Command.hpp"
 #include "Information.hpp"
 #include "ScopedLock.hpp"
@@ -25,6 +27,7 @@
 
 int main(int ac, char **av)
 {
+	signal(SIGCHLD, SIG_IGN);
 	if (ac >= 4 && strcmp(plazza::slave::SLAVE_MAGIC, av[3]) == 0) {
 		plazza::slave::Launch
 			launcher(std::stoi(av[1]), std::stoi(av[2]));
