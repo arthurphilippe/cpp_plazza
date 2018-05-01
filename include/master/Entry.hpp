@@ -16,6 +16,8 @@
 
 namespace plazza::master {
 	class Entry;
+	constexpr auto MAX_WORKER_COUNT(10);
+	constexpr auto MAX_PENDING_CMD(200);
 }
 
 class plazza::master::Entry {

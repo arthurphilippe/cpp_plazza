@@ -28,7 +28,7 @@ void Entry::loop()
 		_despatchTasks();
 		_recieveResults();
 		_stopIdleWorkers();
-		std::this_thread::sleep_for(std::chrono::microseconds(20));
+		std::this_thread::sleep_for(std::chrono::milliseconds(20));
 	}
 }
 
@@ -37,13 +37,15 @@ void Entry::_despatchTasks()
 	for (auto &worker : _workers) {
 		if (!_despatchQ.size())
 			break;
-		while (worker->load() < _threadNb && _despatchQ.size()) {
+		while (worker->load() < _threadNb && _despatchQ.size()
+			&& _sentCommands.size() < 200) {
 			std::this_thread::sleep_for(
-				std::chrono::milliseconds(10));
+				std::chrono::microseconds(100));
 			_sendCmd(*worker);
 		}
 	}
-	if (_despatchQ.size() > (_threadNb * _workers.size())) {
+	if (_workers.size() < MAX_WORKER_COUNT
+		&& _despatchQ.size() > (_threadNb * _workers.size())) {
 		_spawnWorker();
 		_despatchTasks();
 	}
@@ -61,7 +63,8 @@ void Entry::_sendCmd(Worker &worker)
 void Entry::_spawnWorker()
 {
 	_workers.emplace_back(new Worker(_threadNb, _workerIdBase++));
-	std::cout << "spawned worker no: " << _workers.back()->id() << std::endl;
+	std::cout << "spawned worker no: " << _workers.back()->id();
+	std::cout << std::endl;
 }
 
 void Entry::_recieveResults()
