@@ -10,13 +10,13 @@ jobs:
           command: make
       - run:
           name: Build Unit Tests Suites
-          command: make tests -j 4
+          command: make tests
       - run:
           name: Tidy up
           command: make clean
       - run:
           name: Unit Tests Execution
-          command: ./unit_tests.out -j 1 --xml=tests/results.xml --always-succeed
+          command: ./unit_tests.out -j 1 --verbose --xml=tests/results.xml --always-succeed
       - store_test_results:
           path: .
       - run:

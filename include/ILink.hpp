@@ -29,6 +29,7 @@ public:
 	virtual ~ILink() = default;
 	virtual std::ostream &output() = 0;
 	virtual std::istream &input() = 0;
+	virtual bool eof() const noexcept = 0;
 };
 
 class plazza::LinkExeption : std::exception {
@@ -39,7 +40,6 @@ public:
 public:
 	std::string _what;
 };
-
 
 std::ostream& operator<<(std::ostream &os, plazza::ILink &link);
 std::istream& operator>>(std::istream &in, plazza::ILink &link);

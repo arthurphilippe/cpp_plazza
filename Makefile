@@ -16,10 +16,15 @@ MAIN		=	src/main.cpp
 SRCS		=	src/Command.cpp		\
 			src/NamedPipe.cpp	\
 			src/ILink.cpp		\
-			src/CommandParser.cpp	\
+			src/master/CommandParser.cpp	\
 			src/scrap/Regex.cpp	\
 			src/scrap/IScrapper.cpp	\
-			src/scrap/Result.cpp
+			src/scrap/Result.cpp	\
+			src/scrap/Factory.cpp	\
+			src/slave/Launch.cpp	\
+			src/slave/Worker.cpp	\
+			src/master/Worker.cpp	\
+			src/master/ControllerCLI.cpp	\
 
 OBJ_MAIN	=	$(MAIN:.cpp=.o)
 
@@ -32,7 +37,10 @@ SRCS_TEST	=	tests/test-Command.cpp		\
 			tests/test-Fifo.cpp		\
 			tests/test-CommandParser.cpp	\
 			tests/test-RegexScrapper.cpp	\
-			tests/test-Result.cpp
+			tests/test-Result.cpp		\
+			tests/master/test-Worker.cpp	\
+			tests/master/test-ControllerCLI.cpp	\
+			tests/slave/test-Worker.cpp	\
 
 SRCS_TEST	+=	$(OBJS)
 
@@ -56,10 +64,12 @@ debug: $(NAME)
 tests: CXX=g++
 tests: $(TEST)
 
-tests_run: CXX=g++ --coverage
+tests_run: CXX=g++
+tests_run: CPPFLAGS += --coverage
+tests_run: LDFLAGS += -lgcov
 tests_run: $(TEST)
 	@./$(TEST) --verbose -j 1 --always-succeed
-	@cd tests/ && find -name "*.gcda" -delete -o -name "*.gcno" -delete
+#	@cd tests/ && find -name "*.gcda" -delete -o -name "*.gcno" -delete
 	@cd src/ && rm -f main.gcda main.gcno
 
 $(NAME): $(OBJ_MAIN) $(OBJS)

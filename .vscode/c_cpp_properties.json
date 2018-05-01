@@ -33,7 +33,13 @@
                 "/usr/local/include",
                 "/usr/lib/clang/6.0.0/include",
                 "/usr/include",
-                "${workspaceFolder}/include"
+                "${workspaceFolder}/include",
+                "${workspaceFolder}/include/master",
+                "${workspaceFolder}/PlazzaGui/include",
+                "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+                "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+                "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+                "/usr/include/x86_64-linux-gnu/qt5"
             ],
             "defines": [],
             "intelliSenseMode": "clang-x64",
