@@ -43,17 +43,6 @@
 		"queue": "cpp",
 		"functional": "cpp",
 		"atomic": "cpp",
-		"future": "cpp",
-		"qradiobutton": "cpp",
-		"string": "cpp",
-		"dlfcn.h": "c",
-		"qpushbutton": "cpp",
-		"codecvt": "cpp",
-		"filesystem": "cpp",
-		"iterator": "cpp",
-		"memory_resource": "cpp",
-		"random": "cpp",
-		"unordered_map": "cpp",
-		"vector": "cpp"
+		"future": "cpp"
 	}
 }

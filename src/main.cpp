@@ -6,11 +6,11 @@
 */
 
 #include <iostream>
-
-#include <iostream>
 #include <regex>
 #include <fstream>
 #include <thread>
+
+#include <csignal>
 
 #include "Command.hpp"
 #include "Information.hpp"
@@ -22,13 +22,28 @@
 #include "slave/Launch.hpp"
 
 #include "master/ControllerCLI.hpp"
+#include "master/Entry.hpp"
 
-int main()
+
+int main(int ac, char **av)
 {
-	std::queue<plazza::Command> cmdQ;
-	plazza::master::ControllerCLI kappa;
-
-	kappa.poll(cmdQ);
+	signal(SIGCHLD, SIG_IGN);
+	if (ac >= 4 && strcmp(plazza::slave::SLAVE_MAGIC, av[3]) == 0) {
+		plazza::slave::Launch
+			launcher(std::stoi(av[1]), std::stoi(av[2]));
+		launcher.enter();
+	} else if (ac == 2) {
+		plazza::master::Entry toto(5);
+		try {
+			toto.loop();
+		} catch (plazza::slave::Launch &slaveLauncher) {
+			slaveLauncher.exec(av[0]);
+		}
+	} else {
+		std::cerr << av[0] << ": arguments are invalid." << std::endl;
+		return 84;
+	}
+	return 0;
 }
 
 // int main()

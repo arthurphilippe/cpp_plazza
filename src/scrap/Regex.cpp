@@ -43,8 +43,8 @@ std::ostream &Regex::serialise(std::ostream &os)
 		os << entry;
 		_results.pop();
 	}
-	// std::cout << oss.str() << std::endl;
-	// os << oss.str() << std::endl;
+	// std::cout << os.str() << std::endl;
+	// os << os.str() << std::endl;
 	os << std::endl;
 	return os;
 }

@@ -10,11 +10,14 @@
 
 	#include <utility>
 	#include <queue>
-	#include <vector>
+	#include <list>
 	#include <mutex>
 	#include <memory>
 	#include <unistd.h>
+	#include <thread>
 	#include "Command.hpp"
+	#include "scrap/Result.hpp"
+	#include "ScopedLock.hpp"
 	#include "ILink.hpp"
 
 namespace plazza::master {
@@ -23,10 +26,23 @@ namespace plazza::master {
 
 class plazza::master::Worker {
 public:
-	Worker(std::pair<std::queue<Command> &, std::mutex &> &,
-		uint threadNb, uint workerId);
+	Worker(uint threadNb, uint workerId);
 	~Worker();
+	void send(const Command &);
+	void fillResults(std::vector<scrap::Result> &);
+	uint load() const noexcept
+	{
+		return _load;
+	}
+	uint id() const noexcept
+	{
+		return _id;
+	}
+	bool timedout() const noexcept;
 private:
+	using timept =
+		std::chrono::time_point<std::chrono::system_clock>;
+
 	class Child {
 	public:
 		Child(uint workerId, uint threadNb);
@@ -35,16 +51,19 @@ private:
 		pid_t _pid;
 	};
 
-	std::mutex		&_despatchQMtx;
-	std::queue<Command>	&_despachQ;
-	std::vector<Command>	_sentCommands;
 	uint			_threadNb;
 	uint			_id;
 	Child			_child;
 	std::unique_ptr<ILink>	_link;
+	bool			_live;
+	std::thread		_thread;
+	uint			_load;
+	timept			_idleSince;
 
+	std::list<scrap::Result>	_results;
 	void _threadEntry();
-	void _pullDespatch();
+	std::mutex			_lock;
+	void _register(scrap::Result &);
 };
 
 #endif /* !WORKER_HPP_ */

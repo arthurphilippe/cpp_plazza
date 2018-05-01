@@ -5,40 +5,68 @@
 ** Worker
 */
 
+#include <cstring>
+#include <iostream>
 #include "master/Worker.hpp"
 #include "slave/Launch.hpp"
-#include <cstring>
 #include "ScopedLock.hpp"
 #include "NamedPipe.hpp"
 
 using plazza::master::Worker;
 
-Worker::Worker(std::pair<std::queue<Command> &, std::mutex &> &despatchQ,
-		uint threadNb, uint workerId)
-	: _despatchQMtx(despatchQ.second),
-	_despachQ(despatchQ.first),
-	_sentCommands(),
-	_threadNb(threadNb),
+Worker::Worker(uint threadNb, uint workerId)
+	: _threadNb(threadNb),
 	_id(workerId),
-	_child(workerId, threadNb),
-	_link(new NamedPipe(_id, NamedPipe::CREATE))
-{
-	Command test;
-
-	test.cmdId = 1;
-	test.cmdInfoType = NONE;
-	test.cmdFileName = "j'aime les pates";
-	*_link << test;
-}
-
-Worker::~Worker()
+	_child(_id, _threadNb),
+	_link(new NamedPipe(_id, NamedPipe::CREATE)),
+	_live(true),
+	_thread([&] (){ _threadEntry(); }),
+	_load(0)
 {}
 
-Worker::Child::Child(uint workerId, uint threadNb)
-	: _pid(fork())
+Worker::~Worker()
 {
-	if (_pid == 0)
+	_live = false;
+	*_link << plazza::Command{"stop", NONE, 0};
+	_link->closeUpstream();
+	_thread.join();
+}
+
+void Worker::send(const Command &cmd)
+{
+	plazza::ScopedLock guard(_lock);
+	_load += 1;
+	*_link << cmd;
+}
+
+void Worker::fillResults(std::vector<scrap::Result> &results)
+{
+	plazza::ScopedLock guard(_lock);
+
+	while (_results.size()) {
+		results.push_back(_results.front());
+		_results.pop_front();
+	}
+}
+
+bool Worker::timedout() const noexcept
+{
+	auto now = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> duration(now - _idleSince);
+
+	return (_load == 0 && _results.size() == 0
+		&& duration > std::chrono::seconds(5));
+}
+
+Worker::Child::Child(uint workerId, uint threadNb)
+	: _pid()
+{
+	if (!workerId || !threadNb)
+		return;
+	_pid = fork();
+	if (_pid == 0) {
 		throw plazza::slave::Launch(workerId, threadNb);
+	}
 	else if (_pid == -1) {
 		std::string error("fork: ");
 		error = error + strerror(errno);
@@ -51,16 +79,24 @@ Worker::Child::~Child()
 
 void Worker::_threadEntry()
 {
-	if (_sentCommands.size() < _threadNb)
-		_pullDespatch();
+	while (_live && !_link->eof()) {
+		scrap::Result result;
+		*_link >> result;
+		if (result.id() != 0)
+			_register(result);
+	}
 }
 
-void Worker::_pullDespatch()
+void Worker::_register(scrap::Result &res)
 {
-	plazza::ScopedLock guard(_despatchQMtx);
+	plazza::ScopedLock guard(_lock);
 
-	while (_despachQ.size() && _sentCommands.size() < _threadNb) {
-		_sentCommands.push_back(std::move(_despachQ.front()));
-		_despachQ.pop();
-	}
+	_results.push_back(res);
+	// std::cout << "===================" << std::endl;
+	// std::cout << res;
+
+	if (_load != 0)
+		_load -= 1;
+	if (_load == 0)
+		_idleSince = std::chrono::high_resolution_clock::now();
 }

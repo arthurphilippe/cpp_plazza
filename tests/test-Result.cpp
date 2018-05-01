@@ -34,18 +34,15 @@ Test(Result, 1_completeTest) {
 	Result res;
 	res.fill(ioss);
 	auto resultqueue = res.contents();
-	cr_assert_eq(resultqueue.size(), 4);
-	cr_assert_str_eq(resultqueue.front().c_str(), "0123232425");
-	resultqueue.pop();
-	cr_assert_eq(resultqueue.size(), 3);
-	cr_assert_str_eq(resultqueue.front().c_str(), "0942424242");
-	resultqueue.pop();
-	cr_assert_eq(resultqueue.size(), 2);
-	cr_assert_str_eq(resultqueue.front().c_str(), "0838383838");
-	resultqueue.pop();
-	cr_assert_eq(resultqueue.size(), 1);
-	cr_assert_str_eq(resultqueue.front().c_str(), "0484545812");
-	resultqueue.pop();
+	auto copieres = resultqueue;
+	cr_assert_str_eq(resultqueue[0].c_str(), "0123232425");
+	cr_assert_str_eq(resultqueue[1].c_str(), "0942424242");
+	cr_assert_str_eq(resultqueue[2].c_str(), "0838383838");
+	cr_assert_str_eq(resultqueue[3].c_str(), "0484545812");
+	cr_assert_str_eq(copieres[0].c_str(), "0123232425");
+	cr_assert_str_eq(copieres[1].c_str(), "0942424242");
+	cr_assert_str_eq(copieres[2].c_str(), "0838383838");
+	cr_assert_str_eq(copieres[3].c_str(), "0484545812");
 }
 
 Test(Result, 2_serialisation) {
