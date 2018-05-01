@@ -14,6 +14,7 @@ plazza::master::PlazzaGui::PlazzaGui()
 	_window(new QWidget()),
 	_layout(new QHBoxLayout),
 	_bOk(new QPushButton("OK", _window)),
+	_bCompute(new QPushButton("Compute", _window)),
 	_groupBox(new QGroupBox("Choose Type", _window)),
 	_bIp_address(new QRadioButton("IP_ADDRESS", _groupBox)),
 	_bPhone_number(new QRadioButton("PHONE_NUMBER", _groupBox)),
@@ -22,12 +23,19 @@ plazza::master::PlazzaGui::PlazzaGui()
 	_bChoose(new QPushButton("Choose", _window)),
 	_filelistbox(new QGroupBox("Parsing Queue:", _window)),
 	_filelistwid(new QListWidget(_window)),
+	_PBpending(new QProgressBar(_window)),
+	_PBsent(new QProgressBar(_window)),
+	_PBcompleted(new QProgressBar(_window)),
+	_TxtPending(new QLabel(_window)),
+	_TxtSent(new QLabel(_window)),
+	_TxtCmplt(new QLabel(_window)),
 	_info(Information::IP_ADDRESS),
 	_cmdQIdx(1)
 {
 	_window->setFixedSize(1680, 720);
 	_bChoose->move(600, 200);
-	_bOk->move(600, 600);
+	_bOk->move(470, 330);
+	_bCompute->move(600, 330);
 	_layout->addWidget(_bIp_address);
 	_layout->addWidget(_bEmail_address);
 	_layout->addWidget(_bPhone_number);
@@ -52,6 +60,23 @@ plazza::master::PlazzaGui::PlazzaGui()
 				this, SLOT(checkedPhoneNbr()));
 	QObject::connect(_bOk, SIGNAL(clicked()),
 				this, SLOT(validateFile()));
+	QObject::connect(_bCompute, SIGNAL(clicked()),
+				this, SLOT(_compute()));
+	_TxtPending->move(850, 455);
+	_TxtPending->setText(QString("Pending"));
+	_TxtPending->adjustSize();
+	_PBpending->setValue(0);
+	_PBpending->setGeometry(900, 450, 350, 30);
+	_TxtSent->move(869, 495);
+	_TxtSent->setText(QString("Sent"));
+	_TxtSent->adjustSize();
+	_PBsent->setValue(0);
+	_PBsent->setGeometry(900, 490, 350, 30);
+	_TxtCmplt->move(837, 535);
+	_TxtCmplt->setText(QString("Completed"));
+	_TxtCmplt->adjustSize();
+	_PBcompleted->setValue(0);
+	_PBcompleted->setGeometry(900, 530, 350, 30);
 }
 
 plazza::master::PlazzaGui::~PlazzaGui()
@@ -79,7 +104,7 @@ void plazza::master::PlazzaGui::validateFile()
 	std::ifstream istm(filename);
 	if (istm.good()) {
 		auto newcmd = Command {filename, _info, _cmdQIdx};
-		_cmdQ.push(newcmd);
+		_cmdQStack.push(newcmd);
 		_filelist.append(_createCommandQString(newcmd));
 		_updateList();
 		_cmdQIdx += 1;
@@ -135,11 +160,29 @@ void plazza::master::PlazzaGui::askFile()
 		_text->setPlainText(file);
 }
 
+void plazza::master::PlazzaGui::update(Progress info)
+{
+	_PBcompleted->setValue(info.completed);
+	_PBsent->setValue(info.sent);
+	_PBpending->setValue(info.pending);
+}
+
+void plazza::master::PlazzaGui::_compute()
+{
+	while (!_cmdQStack.empty()) {
+		_cmdQ.push(_cmdQStack.front());
+		_filelist.pop_front();
+		_filelistwid->takeItem(0);
+		_cmdQStack.pop();
+	}
+}
+
 bool plazza::master::PlazzaGui::poll(std::queue<plazza::Command> &cmdQ)
 {
 	while (!_cmdQ.empty()) {
 		cmdQ.push(_cmdQ.front());
 		_filelist.pop_front();
+		_filelistwid->takeItem(0);
 		_cmdQ.pop();
 	}
 	return true;

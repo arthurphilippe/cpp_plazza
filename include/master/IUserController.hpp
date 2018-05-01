@@ -11,8 +11,10 @@
 	#include <queue>
 	#include "Command.hpp"
 
-namespace plazza::master {
+namespace plazza {
+	namespace master {
 	class IUserController;
+	}
 }
 
 class plazza::master::IUserController {

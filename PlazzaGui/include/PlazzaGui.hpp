@@ -10,6 +10,8 @@
 
 #include <QtCore/QtGlobal>
 
+	#include <QLabel>
+	#include <QProgressBar>
 	#include <QFileDialog>
 	#include <QListWidget>
 	#include <QPlainTextEdit>
@@ -47,6 +49,7 @@ public plazza::master::IUserController {
 		QWidget *_window;
 		QHBoxLayout *_layout;
 		QPushButton *_bOk;
+		QPushButton *_bCompute;
 		QGroupBox *_groupBox;
 		QRadioButton *_bIp_address;
 		QRadioButton *_bPhone_number;
@@ -56,14 +59,25 @@ public plazza::master::IUserController {
 		QGroupBox *_filelistbox;
 		QListWidget *_filelistwid;
 		QStringList _filelist;
+		QProgressBar *_PBpending;
+		QProgressBar *_PBsent;
+		QProgressBar *_PBcompleted;
+		QLabel *_TxtPending;
+		QLabel *_TxtSent;
+		QLabel *_TxtCmplt;
+
 		plazza::Information _info;
 		std::queue<Command> _cmdQ;
+		std::queue<Command> _cmdQStack;
 		uint _cmdQIdx;
+
 
 		QString _createCommandQString(plazza::Command &cmd);
 		void _updateList();
+		void update(Progress);
 
 	public slots:
+		void _compute();
 		void checkedPhoneNbr();
 		void checkedEAddress();
 		void checkedIpAddress();
