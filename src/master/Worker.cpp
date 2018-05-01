@@ -82,6 +82,5 @@ void Worker::_register(scrap::Result &res)
 	plazza::ScopedLock guard(_lock);
 
 	_results.push_back(res);
-	std::cout << "result: " << res << std::endl;
 	_load -= 1;
 }

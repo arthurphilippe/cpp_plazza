@@ -28,6 +28,8 @@ private:
 	void _despatchTasks();
 	void _sendCmd(Worker &);
 	void _spawnWorker();
+	void _recieveResults();
+	void _moveCompletedCommand(scrap::Result &);
 
 	unsigned int			_threadNb;
 	std::queue<Command>		_despatchQ;
@@ -35,6 +37,8 @@ private:
 	std::vector<workerptr>		_workers;
 	plazza::master::ControllerCLI	_controller;
 	unsigned int			_workerIdBase;
+	std::vector<scrap::Result>	_results;
+	std::vector<Command>		_completedCommands;
 };
 
 #endif /* !ENTRY_HPP_ */

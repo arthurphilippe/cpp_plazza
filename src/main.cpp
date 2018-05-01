@@ -6,8 +6,6 @@
 */
 
 #include <iostream>
-
-#include <iostream>
 #include <regex>
 #include <fstream>
 #include <thread>
@@ -28,19 +26,18 @@
 int main(int ac, char **av)
 {
 	if (ac >= 4 && strcmp(plazza::slave::SLAVE_MAGIC, av[3]) == 0) {
-		plazza::slave::Launch launcher(std::stoi(av[1]),
-						std::stoi(av[2]));
+		plazza::slave::Launch
+			launcher(std::stoi(av[1]), std::stoi(av[2]));
 		launcher.enter();
 	} else if (ac == 2) {
 		plazza::master::Entry toto(5);
-
 		try {
 			toto.loop();
 		} catch (plazza::slave::Launch &slaveLauncher) {
 			slaveLauncher.exec(av[0]);
 		}
 	} else {
-		std::cerr << av[0] << ": no arguments provided." << std::endl;
+		std::cerr << av[0] << ": arguments are invalid." << std::endl;
 		return 84;
 	}
 	return 0;
