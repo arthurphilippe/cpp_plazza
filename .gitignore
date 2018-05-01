@@ -39,3 +39,9 @@ CMakeLists.txt
 cmake-build-debug/
 
 coverage/
+
+PlazzaGui/libPlazzaGui\.so\.1
+
+PlazzaGui/libPlazzaGui\.so\.1\.0
+
+PlazzaGui/libPlazzaGui\.so\.1\.0\.0
