@@ -17,7 +17,7 @@ namespace plazza::scrap {
 class plazza::scrap::PhoneNumber : public Regex {
 public:
 	PhoneNumber()
-		: Regex("([0-9]{10})")
+		: Regex("(?:(?:\\+|00)33|0)\\s*[1-9](?:[\\s.-]*\\d{2}){4}")
 	{}
 	virtual ~PhoneNumber() override = default;
 };
