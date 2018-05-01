@@ -38,7 +38,8 @@ void Entry::_despatchTasks()
 		if (!_despatchQ.size())
 			break;
 		while (worker->load() < _threadNb && _despatchQ.size()) {
-			std::this_thread::sleep_for(std::chrono::milliseconds(20));
+			std::this_thread::sleep_for(
+				std::chrono::milliseconds(10));
 			_sendCmd(*worker);
 		}
 	}
