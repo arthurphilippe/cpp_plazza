@@ -27,7 +27,7 @@
 
 int main(int ac, char **av)
 {
-	if (ac >= 3 && strcmp(plazza::slave::SLAVE_BIN_NAME, av[0]) == 0) {
+	if (ac >= 4 && strcmp(plazza::slave::SLAVE_MAGIC, av[3]) == 0) {
 		plazza::slave::Launch launcher(std::stoi(av[1]),
 						std::stoi(av[2]));
 		launcher.enter();

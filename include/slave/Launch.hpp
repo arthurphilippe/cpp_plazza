@@ -13,6 +13,7 @@
 namespace plazza::slave {
 	class Launch;
 	constexpr auto SLAVE_BIN_NAME("plazza_slave");
+	constexpr auto SLAVE_MAGIC("0x42ADF");
 }
 
 class plazza::slave::Launch {
