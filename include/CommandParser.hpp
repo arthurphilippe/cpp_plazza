@@ -28,7 +28,7 @@ public:
 	using InfoTypeMap =
 		std::unordered_map<std::string, enum Information>;
 	CommandParser(std::queue<plazza::Command> &cmdqueue)
-		: _cmdqueue(cmdqueue), _cmdId(0)
+		: _cmdqueue(cmdqueue), _cmdId(1)
 		{}
 	~CommandParser() {}
 	void ParseLine(std::string &line);

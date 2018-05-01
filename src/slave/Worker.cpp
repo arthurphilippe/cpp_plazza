@@ -51,7 +51,6 @@ bool Worker::_pull(Command &cmd) noexcept
 		_live = false;
 		return false;
 	}
-	std::cout << "Pulled " << cmd;
 	if (cmd.cmdId == 0 || cmd.cmdInfoType == NONE) {
 		_live = false;
 		return false;

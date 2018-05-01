@@ -31,8 +31,8 @@ private:
 	bool			_nextLineReady();
 	std::string		_getNextLine();
 
-	std::istream		&_input;
-	std::unique_ptr<std::future<std::string>>	_nextLine;
+	std::istream			&_input;
+	std::future<std::string>	_nextLine;
 };
 
 #endif /* !CONTROLLERCLI_HPP_ */

@@ -24,6 +24,10 @@ std::istream &Result::fill(std::istream &is) noexcept
 
 	is >> _id;
 	is >> count;
+	if (is.eof()) {
+		_id = 0;
+		return is;
+	}
 	for (uint i = 0; i < count; i++) {
 		uint size;
 		is >> size;
@@ -32,16 +36,17 @@ std::istream &Result::fill(std::istream &is) noexcept
 		is.read(arr.data(), size);
 
 		std::string tmp(arr.data(), size);
-		_contents.push(tmp);
+		_contents.push_back(tmp);
 	}
 	return is;
 }
 
 std::ostream &Result::dump(std::ostream &os) noexcept
 {
-	while (_contents.size()) {
-		os << _contents.front() << std::endl;
-		_contents.pop();
+	for (const auto &elem : _contents) {
+		if (&os != &std::cout)
+			std::cout << elem << std::endl;
+		os << elem << std::endl;
 	}
 	return os;
 }
