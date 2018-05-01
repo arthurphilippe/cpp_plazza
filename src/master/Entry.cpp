@@ -28,6 +28,10 @@ void Entry::loop()
 		_despatchTasks();
 		_recieveResults();
 		_stopIdleWorkers();
+		_controller.update(IUserController::Progress{
+			_despatchQ.size(),
+			_sentCommands.size(),
+			_completedCommands.size()});
 		std::this_thread::sleep_for(std::chrono::microseconds(20));
 	}
 }

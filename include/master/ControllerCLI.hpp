@@ -25,6 +25,8 @@ public:
 	~ControllerCLI();
 
 	bool poll(std::queue<Command> &cmdQ);
+	void update(Progress)
+	{}
 private:
 	static std::string	__getLine(std::istream *input);
 
