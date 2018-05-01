@@ -15,7 +15,7 @@ extern "C" {
 		int ac = 1;
 		char **av = NULL;
 		QApplication *_app(new QApplication(ac, av));
-		auto gui = new plazza::master::PlazzaGui(ac, av);
+		auto gui = new plazza::master::PlazzaGui();
 
 		_app->exec();
 		return gui;

@@ -9,7 +9,7 @@
 #include <fstream>
 #include "PlazzaGui.hpp"
 
-plazza::master::PlazzaGui::PlazzaGui(int ac, char **av)
+plazza::master::PlazzaGui::PlazzaGui()
 	:
 	_window(new QWidget()),
 	_layout(new QHBoxLayout),

@@ -39,7 +39,7 @@ public QObject,
 public plazza::master::IUserController {
 	Q_OBJECT
 	public:
-		PlazzaGui(int ac, char **av);
+		PlazzaGui();
 		~PlazzaGui();
         bool poll(std::queue<Command> &cmdQ);
 	protected:
