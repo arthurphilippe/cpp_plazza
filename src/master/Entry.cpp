@@ -30,6 +30,10 @@ void Entry::loop()
 		_stopIdleWorkers();
 		std::this_thread::sleep_for(std::chrono::milliseconds(20));
 	}
+	while (_workers.size()) {
+		_stopFinishedWorkers();
+		_recieveResults();
+	}
 }
 
 void Entry::_despatchTasks()
@@ -55,16 +59,12 @@ void Entry::_sendCmd(Worker &worker)
 {
 	worker.send(_despatchQ.front());
 	_sentCommands.push_back(_despatchQ.front());
-	std::cout << "to : "<< worker.id() << " sent: " << _despatchQ.front();
-	std::cout << "\n";
 	_despatchQ.pop();
 }
 
 void Entry::_spawnWorker()
 {
 	_workers.emplace_back(new Worker(_threadNb, _workerIdBase++));
-	std::cout << "spawned worker no: " << _workers.back()->id();
-	std::cout << std::endl;
 }
 
 void Entry::_recieveResults()
@@ -72,10 +72,7 @@ void Entry::_recieveResults()
 	for (auto &worker : _workers) {
 		worker->fillResults(_results);
 	}
-	if (_results.size())
-		std::cout << "handling " << _results.size() << " result(s)\n";
 	for (auto &result : _results) {
-		std::cout << "===================" << std::endl;
 		std::cout << result;
 		_moveCompletedCommand(result);
 	}
@@ -98,10 +95,20 @@ void Entry::_stopIdleWorkers()
 {
 	for (auto it = _workers.begin(); it != _workers.end(); it++) {
 		if ((*it)->timedout()) {
-			std::cout << "Stopped worker " << (*it)->id();
-			std::cout << "\n";
 			_workers.erase(it);
 			_stopIdleWorkers();
+			return;
+		}
+	}
+}
+
+void Entry::_stopFinishedWorkers()
+{
+	for (auto it = _workers.begin(); it != _workers.end(); it++) {
+		if ((*it)->load() == 0) {
+			(*it)->fillResults(_results);
+			_workers.erase(it);
+			_stopFinishedWorkers();
 			return;
 		}
 	}

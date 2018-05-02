@@ -33,6 +33,7 @@ private:
 	void _recieveResults();
 	void _moveCompletedCommand(scrap::Result &);
 	void _stopIdleWorkers();
+	void _stopFinishedWorkers();
 
 	unsigned int			_threadNb;
 	std::queue<Command>		_despatchQ;

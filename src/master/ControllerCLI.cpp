@@ -30,7 +30,7 @@ bool ControllerCLI::poll(std::queue<Command> &cmdQ)
 		auto line = _getNextLine();
 		if (line == CMD_EXIT)
 			return ret;
-		std::cout << "Processing: \"" << line << "\"" << std::endl;
+		// std::cout << "Processing: \"" << line << "\"" << std::endl;
 		parser.ParseLine(line);
 		ret = true;
 	}
