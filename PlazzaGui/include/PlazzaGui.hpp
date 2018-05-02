@@ -65,6 +65,7 @@ public plazza::master::IUserController {
 		QLabel *_TxtPending;
 		QLabel *_TxtSent;
 		QLabel *_TxtCmplt;
+		QPushButton *_bComputeFive;
 
 		plazza::Information _info;
 		std::queue<Command> _cmdQ;
@@ -78,6 +79,7 @@ public plazza::master::IUserController {
 
 	public slots:
 		void _compute();
+		void _computeFive();
 		void checkedPhoneNbr();
 		void checkedEAddress();
 		void checkedIpAddress();

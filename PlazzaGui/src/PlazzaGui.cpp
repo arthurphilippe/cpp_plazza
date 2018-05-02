@@ -29,6 +29,7 @@ plazza::master::PlazzaGui::PlazzaGui()
 	_TxtPending(new QLabel(_window)),
 	_TxtSent(new QLabel(_window)),
 	_TxtCmplt(new QLabel(_window)),
+	_bComputeFive(new QPushButton("Compute 5", _window)),
 	_info(Information::IP_ADDRESS),
 	_cmdQIdx(1)
 {
@@ -36,6 +37,7 @@ plazza::master::PlazzaGui::PlazzaGui()
 	_bChoose->move(600, 200);
 	_bOk->move(470, 330);
 	_bCompute->move(600, 330);
+	_bComputeFive->move(600, 270);
 	_layout->addWidget(_bIp_address);
 	_layout->addWidget(_bEmail_address);
 	_layout->addWidget(_bPhone_number);
@@ -165,6 +167,19 @@ void plazza::master::PlazzaGui::update(Progress info)
 	_PBcompleted->setValue(info.completed);
 	_PBsent->setValue(info.sent);
 	_PBpending->setValue(info.pending);
+}
+
+void plazza::master::PlazzaGui::_computeFive()
+{
+	int i = 5;
+
+	while (!_cmdQStack.empty()) {
+		_cmdQ.push(_cmdQStack.front());
+		if (_filelist.size() > 0)
+			_filelist.pop_front();
+		_filelistwid->takeItem(0);
+		_cmdQStack.pop();
+	}
 }
 
 void plazza::master::PlazzaGui::_compute()
