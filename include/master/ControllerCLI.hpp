@@ -21,7 +21,7 @@ namespace plazza::master {
 	constexpr auto CMD_EXIT("exit");
 }
 
-class plazza::master::ControllerCLI {
+class plazza::master::ControllerCLI : public IUserController {
 public:
 	ControllerCLI(char **av, std::istream &input = std::cin);
 	~ControllerCLI();

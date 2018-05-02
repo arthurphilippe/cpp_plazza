@@ -29,7 +29,6 @@ static void start_controller(char **av)
 	} catch (plazza::slave::Launch &slaveLauncher) {
 		slaveLauncher.exec(av[0]);
 	}
-
 }
 
 int main(int ac, char **av)
