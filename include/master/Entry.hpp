@@ -13,6 +13,7 @@
 	#include "master/Worker.hpp"
 	#include "master/ControllerCLI.hpp"
 	#include "Command.hpp"
+	#include "Logger.hpp"
 
 namespace plazza::master {
 	class Entry;
@@ -43,6 +44,7 @@ private:
 	unsigned int			_workerIdBase;
 	std::vector<scrap::Result>	_results;
 	std::vector<Command>		_completedCommands;
+	Logger				_logger;
 };
 
 #endif /* !ENTRY_HPP_ */

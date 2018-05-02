@@ -84,6 +84,7 @@ void Entry::_completeCommand(scrap::Result &result)
 	for (auto it = _sentCommands.begin();
 		it != _sentCommands.end() ; it++) {
 		if (it->cmdId == result.id()) {
+			_logger.logResult(*it, result);
 			_completedCommands.push_back(*it);
 			_sentCommands.erase(it);
 			return;
