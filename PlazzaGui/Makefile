@@ -11,7 +11,7 @@ MAKEFILE      = Makefile
 ####### Compiler, tools and options
 
 CC            = gcc
-CXX           = g++
+CXX           = g++ -ggdb
 DEFINES       = -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -m64 -pipe -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -m64 -pipe -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
@@ -118,7 +118,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		src/PlazzaGui.cpp
 QMAKE_TARGET  = PlazzaGui
 DESTDIR       = 
-TARGET        = libPlazzaGui.so
+TARGET        = libPlazzaGui.so.1.0.0
 TARGETA       = libPlazzaGui.a
 TARGET0       = libPlazzaGui.so
 TARGETD       = libPlazzaGui.so.1.0.0
@@ -132,6 +132,11 @@ first: all
 $(TARGET):  $(OBJECTS) $(SUBLIBS) $(OBJCOMP)  
 	-$(DEL_FILE) $(TARGET) $(TARGET0) $(TARGET1) $(TARGET2)
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(LIBS) $(OBJCOMP)
+	-ln -s $(TARGET) $(TARGET0)
+	-ln -s $(TARGET) $(TARGET1)
+	-ln -s $(TARGET) $(TARGET2)
+
+
 
 staticlib: $(TARGETA)
 

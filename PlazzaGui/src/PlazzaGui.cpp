@@ -171,7 +171,8 @@ void plazza::master::PlazzaGui::_compute()
 {
 	while (!_cmdQStack.empty()) {
 		_cmdQ.push(_cmdQStack.front());
-		_filelist.pop_front();
+		if (_filelist.size() > 0)
+			_filelist.pop_front();
 		_filelistwid->takeItem(0);
 		_cmdQStack.pop();
 	}
@@ -181,7 +182,8 @@ bool plazza::master::PlazzaGui::poll(std::queue<plazza::Command> &cmdQ)
 {
 	while (!_cmdQ.empty()) {
 		cmdQ.push(_cmdQ.front());
-		_filelist.pop_front();
+		if (_filelist.size() > 0)
+			_filelist.pop_front();
 		_filelistwid->takeItem(0);
 		_cmdQ.pop();
 	}
