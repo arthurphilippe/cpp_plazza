@@ -12,6 +12,7 @@
 	#include <memory>
 	#include "master/Worker.hpp"
 	#include "master/ControllerCLI.hpp"
+	#include "master/ControllerFactory.hpp"
 	#include "Command.hpp"
 
 namespace plazza::master {
@@ -25,6 +26,7 @@ public:
 	void loop();
 private:
 	using workerptr = std::unique_ptr<Worker>;
+	using controllerptr = std::unique_ptr<IUserController>;
 	void _despatchTasks();
 	void _sendCmd(Worker &);
 	void _spawnWorker();
@@ -36,7 +38,7 @@ private:
 	std::queue<Command>		_despatchQ;
 	std::vector<Command>		_sentCommands;
 	std::vector<workerptr>		_workers;
-	plazza::master::ControllerCLI	_controller;
+	controllerptr			_controller;
 	unsigned int			_workerIdBase;
 	std::vector<scrap::Result>	_results;
 	std::vector<Command>		_completedCommands;

@@ -13,22 +13,24 @@ Entry::Entry(unsigned int threadNb)
 	: _threadNb(threadNb),
 	_despatchQ(),
 	_sentCommands(),
-	_controller(),
+	_controller(ControllerFactory::create()),
 	_workerIdBase(1),
 	_results(),
 	_completedCommands()
 {}
 
 Entry::~Entry()
-{}
+{
+	_controller.reset();
+}
 
 void Entry::loop()
 {
-	while (_controller.poll(_despatchQ)) {
+	while (_controller->poll(_despatchQ)) {
 		_despatchTasks();
 		_recieveResults();
 		_stopIdleWorkers();
-		_controller.update(IUserController::Progress{
+		_controller->update(IUserController::Progress{
 			_despatchQ.size(),
 			_sentCommands.size(),
 			_completedCommands.size()});

@@ -25,6 +25,7 @@ SRCS		=	src/Command.cpp		\
 			src/slave/Worker.cpp	\
 			src/master/Worker.cpp	\
 			src/master/ControllerCLI.cpp	\
+			src/master/ControllerFactory.cpp	\
 			src/master/Entry.cpp	\
 
 OBJ_MAIN	=	$(MAIN:.cpp=.o)
@@ -49,7 +50,7 @@ OBJS_TEST	=	$(SRCS_TEST:.cpp=.o)
 
 CPPFLAGS	=	-W -Wextra -Wall -Iinclude/ -std=c++17
 
-LDFLAGS		=	 -lpthread
+LDFLAGS		=	-lpthread -ldl
 
 %.o: %.cpp
 	@printf "[\033[0;36mcompiling\033[0m]% 39s\r" $< | tr " " "."
