@@ -27,6 +27,7 @@
 	#include <QApplication>
 
 	#include "IUserController.hpp"
+	#include "master/Manager.hpp"
 
 namespace plazza {
 	namespace master {
@@ -41,8 +42,8 @@ public QObject,
 public plazza::master::IUserController {
 	Q_OBJECT
 	public:
-		PlazzaGui();
-		~PlazzaGui();
+		PlazzaGui(char *arg);
+		~PlazzaGui() override;
         bool poll(std::queue<Command> &cmdQ);
 	protected:
 	private:
@@ -72,11 +73,13 @@ public plazza::master::IUserController {
 		std::queue<Command> _cmdQ;
 		std::queue<Command> _cmdQStack;
 		uint _cmdQIdx;
+		uint		_threadNb;
+		Manager		_manager;
 
 
 		QString _createCommandQString(plazza::Command &cmd);
 		void _updateList();
-		void update(Progress);
+		void update();
 
 	public slots:
 		void _compute();

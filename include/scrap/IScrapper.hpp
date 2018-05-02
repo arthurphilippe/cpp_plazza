@@ -10,8 +10,10 @@
 
 	#include "Command.hpp"
 
-namespace plazza::scrap {
-	class IScrapper;
+namespace plazza {
+	namespace scrap	{
+		class IScrapper;
+	}
 }
 
 class plazza::scrap::IScrapper {

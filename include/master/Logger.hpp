@@ -14,9 +14,12 @@
 	#include "Information.hpp"
 	#include "scrap/Result.hpp"
 
-namespace plazza::master {
-	class Logger;
-	constexpr auto DEFAULT_FILE_NAME("scrap_unsorted.log");
+
+namespace plazza {
+	namespace master {
+		class Logger;
+		constexpr auto DEFAULT_FILE_NAME("scrap_unsorted.log");
+	}
 }
 
 class plazza::master::Logger {

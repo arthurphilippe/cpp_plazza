@@ -1,5 +1,6 @@
 plazza
 
+*.so*
 # Prerequisites
 *.d
 

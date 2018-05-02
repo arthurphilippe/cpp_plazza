@@ -14,10 +14,12 @@
 	#include "Command.hpp"
 	#include "Logger.hpp"
 
-namespace plazza::master {
-	class Manager;
-	constexpr auto MAX_WORKER_COUNT(10);
-	constexpr auto MAX_PENDING_CMD(200);
+namespace plazza {
+	namespace master {
+		class Manager;
+		constexpr auto MAX_WORKER_COUNT(10);
+		constexpr auto MAX_PENDING_CMD(200);
+	}
 }
 
 class plazza::master::Manager {

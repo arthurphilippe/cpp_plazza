@@ -9,7 +9,7 @@
 #include <fstream>
 #include "PlazzaGui.hpp"
 
-plazza::master::PlazzaGui::PlazzaGui()
+plazza::master::PlazzaGui::PlazzaGui(char *arg)
 	:
 	_window(new QWidget()),
 	_layout(new QHBoxLayout),
@@ -32,7 +32,9 @@ plazza::master::PlazzaGui::PlazzaGui()
 	_bComputeFive(new QPushButton("Compute 5", _window)),
 	_TxtTodo(new QLabel(_window)),
 	_info(Information::IP_ADDRESS),
-	_cmdQIdx(1)
+	_cmdQIdx(1),
+	_threadNb(std::stoi(arg)),
+	_manager(_threadNb, _cmdQ)
 {
 	_window->setFixedSize(1680, 720);
 	_bChoose->move(600, 200);
@@ -89,6 +91,7 @@ plazza::master::PlazzaGui::PlazzaGui()
 
 plazza::master::PlazzaGui::~PlazzaGui()
 {
+	_manager.wait();
 }
 
 void plazza::master::PlazzaGui::checkedIpAddress()
@@ -173,11 +176,8 @@ void plazza::master::PlazzaGui::askFile()
 		_text->setPlainText(file);
 }
 
-void plazza::master::PlazzaGui::update(Progress info)
+void plazza::master::PlazzaGui::update()
 {
-	_PBcompleted->setValue(info.completed);
-	_PBsent->setValue(info.sent);
-	_PBpending->setValue(info.pending);
 }
 
 void plazza::master::PlazzaGui::_computeFive()
@@ -216,5 +216,6 @@ bool plazza::master::PlazzaGui::poll(std::queue<plazza::Command> &cmdQ)
 		_filelistwid->takeItem(0);
 		_cmdQ.pop();
 	}
+	_manager.manage();
 	return true;
 }

@@ -11,8 +11,10 @@
 	#include <vector>
 	#include "IScrapper.hpp"
 
-namespace plazza::scrap {
-	class Result;
+namespace plazza {
+	namespace scrap	{
+		class Result;
+	}
 }
 
 class plazza::scrap::Result {

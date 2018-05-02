@@ -23,9 +23,9 @@ namespace plazza::master {
 		{
 			dlclose(_handle);
 		}
-		T *get() noexcept
+		T *get(char *arg) noexcept
 		{
-			return call();
+			return call(arg);
 		}
 		T *reset(const std::string &dl,
 				const std::string &sym = "Construct")
@@ -36,7 +36,7 @@ namespace plazza::master {
 			return call();
 		}
 	private:
-		T	*(*call)();
+		T	*(*call)(char *);
 		void	*_handle;
 
 		void _init(const std::string &dl, const std::string &sym)
@@ -47,7 +47,7 @@ namespace plazza::master {
 			if (!_handle)
 				throw std::runtime_error(dlerror());
 			dlerror();
-			call = (T *(*)()) dlsym(_handle, sym.c_str());
+			call = (T *(*)(char *)) dlsym(_handle, sym.c_str());
 			const char *dlsym_error(dlerror());
 			if (dlsym_error)
 				throw std::runtime_error(dlsym_error);
