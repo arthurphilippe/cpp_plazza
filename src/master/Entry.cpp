@@ -13,11 +13,20 @@ Entry::Entry(unsigned int threadNb)
 	: _threadNb(threadNb),
 	_despatchQ(),
 	_sentCommands(),
-	_controller(ControllerFactory::create()),
 	_workerIdBase(1),
 	_results(),
-	_completedCommands()
-{}
+	_completedCommands(),
+	_controller(nullptr),
+	_dynobj(nullptr)
+{
+	try {
+		_dynobj.reset(new DynamicObject<IUserController>
+				("PlazzaGui/libPlazzaGui.so.1.0.0"));
+		_controller.reset(_dynobj->get());
+	} catch (std::runtime_error &error) {
+		_controller.reset(new ControllerCLI);
+	}
+}
 
 Entry::~Entry()
 {
