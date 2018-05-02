@@ -11,10 +11,9 @@
 
 using plazza::master::ControllerCLI;
 
-ControllerCLI::ControllerCLI(uint threadNb, const char *binName,
-				std::istream &input)
-	: _threadNb(threadNb),
-	_binName(binName),
+ControllerCLI::ControllerCLI(char **av, std::istream &input)
+	: _threadNb(std::stoi(av[1])),
+	_binName(av[0]),
 	_live(true),
 	_input(input),
 	_nextLine(std::async(__getLine, &_input)),

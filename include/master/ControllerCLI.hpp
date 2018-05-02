@@ -23,8 +23,7 @@ namespace plazza::master {
 
 class plazza::master::ControllerCLI {
 public:
-	ControllerCLI(uint threadNb, const char *binName,
-			std::istream &input = std::cin);
+	ControllerCLI(char **av, std::istream &input = std::cin);
 	~ControllerCLI();
 
 private:
