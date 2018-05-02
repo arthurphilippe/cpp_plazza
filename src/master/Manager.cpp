@@ -2,41 +2,56 @@
 ** EPITECH PROJECT, 2018
 ** cpp_plazza
 ** File description:
-** Entry
+** Manager
 */
 
-#include "master/Entry.hpp"
+#include "master/Manager.hpp"
 
-using plazza::master::Entry;
+using plazza::master::Manager;
 
-Entry::Entry(unsigned int threadNb)
+Manager::Manager(unsigned int threadNb, std::queue<Command> &despatchQ)
 	: _threadNb(threadNb),
-	_despatchQ(),
+	_despatchQ(despatchQ),
 	_sentCommands(),
-	_controller(),
 	_workerIdBase(1),
 	_results(),
 	_completedCommands()
 {}
 
-Entry::~Entry()
+Manager::~Manager()
 {}
 
-void Entry::loop()
+void Manager::manage()
 {
-	while (_controller.poll(_despatchQ)) {
-		_despatchTasks();
-		_recieveResults();
-		_stopIdleWorkers();
-		std::this_thread::sleep_for(std::chrono::milliseconds(20));
-	}
+	_despatchTasks();
+	_recieveResults();
+	_stopIdleWorkers();
+}
+
+void Manager::wait()
+{
+	_despatchTasks();
 	while (_workers.size()) {
 		_stopFinishedWorkers();
 		_recieveResults();
 	}
 }
 
-void Entry::_despatchTasks()
+// void Manager::loop()
+// {
+	// while (_controller.poll(_despatchQ)) {
+	// 	_despatchTasks();
+	// 	_recieveResults();
+	// 	_stopIdleWorkers();
+	// 	std::this_thread::sleep_for(std::chrono::milliseconds(20));
+	// }
+	// while (_workers.size()) {
+	// 	_stopFinishedWorkers();
+	// 	_recieveResults();
+	// }
+// }
+
+void Manager::_despatchTasks()
 {
 	for (auto &worker : _workers) {
 		if (!_despatchQ.size())
@@ -55,19 +70,19 @@ void Entry::_despatchTasks()
 	}
 }
 
-void Entry::_sendCmd(Worker &worker)
+void Manager::_sendCmd(Worker &worker)
 {
 	worker.send(_despatchQ.front());
 	_sentCommands.push_back(_despatchQ.front());
 	_despatchQ.pop();
 }
 
-void Entry::_spawnWorker()
+void Manager::_spawnWorker()
 {
 	_workers.emplace_back(new Worker(_threadNb, _workerIdBase++));
 }
 
-void Entry::_recieveResults()
+void Manager::_recieveResults()
 {
 	for (auto &worker : _workers) {
 		worker->fillResults(_results);
@@ -79,7 +94,7 @@ void Entry::_recieveResults()
 	_results.clear();
 }
 
-void Entry::_completeCommand(scrap::Result &result)
+void Manager::_completeCommand(scrap::Result &result)
 {
 	for (auto it = _sentCommands.begin();
 		it != _sentCommands.end() ; it++) {
@@ -92,7 +107,7 @@ void Entry::_completeCommand(scrap::Result &result)
 	}
 }
 
-void Entry::_stopIdleWorkers()
+void Manager::_stopIdleWorkers()
 {
 	for (auto it = _workers.begin(); it != _workers.end(); it++) {
 		if ((*it)->timedout()) {
@@ -103,7 +118,7 @@ void Entry::_stopIdleWorkers()
 	}
 }
 
-void Entry::_stopFinishedWorkers()
+void Manager::_stopFinishedWorkers()
 {
 	for (auto it = _workers.begin(); it != _workers.end(); it++) {
 		if ((*it)->load() == 0) {

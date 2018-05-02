@@ -22,7 +22,7 @@
 #include "slave/Launch.hpp"
 
 #include "master/ControllerCLI.hpp"
-#include "master/Entry.hpp"
+#include "master/Manager.hpp"
 
 
 int main(int ac, char **av)
@@ -33,9 +33,10 @@ int main(int ac, char **av)
 			launcher(std::stoi(av[1]), std::stoi(av[2]));
 		launcher.enter();
 	} else if (ac == 2) {
-		plazza::master::Entry toto(5);
 		try {
-			toto.loop();
+			auto *controller = new
+			plazza::master::ControllerCLI(std::stoi(av[1]), av[0]);
+			delete controller;
 		} catch (plazza::slave::Launch &slaveLauncher) {
 			slaveLauncher.exec(av[0]);
 		}

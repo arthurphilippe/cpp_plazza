@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2018
 ** cpp_plazza
 ** File description:
-** Entry
+** Manager
 */
 
 #ifndef ENTRY_HPP_
@@ -11,21 +11,21 @@
 	#include <queue>
 	#include <memory>
 	#include "master/Worker.hpp"
-	#include "master/ControllerCLI.hpp"
 	#include "Command.hpp"
 	#include "Logger.hpp"
 
 namespace plazza::master {
-	class Entry;
+	class Manager;
 	constexpr auto MAX_WORKER_COUNT(10);
 	constexpr auto MAX_PENDING_CMD(200);
 }
 
-class plazza::master::Entry {
+class plazza::master::Manager {
 public:
-	Entry(unsigned int threadNb);
-	~Entry();
-	void loop();
+	Manager(unsigned int threadNb, std::queue<Command> &despatchQ);
+	~Manager();
+	void manage();
+	void wait();
 private:
 	using workerptr = std::unique_ptr<Worker>;
 	void _despatchTasks();
@@ -37,10 +37,10 @@ private:
 	void _stopFinishedWorkers();
 
 	unsigned int			_threadNb;
-	std::queue<Command>		_despatchQ;
+	std::queue<Command>		&_despatchQ;
 	std::vector<Command>		_sentCommands;
 	std::vector<workerptr>		_workers;
-	plazza::master::ControllerCLI	_controller;
+	// plazza::master::ControllerCLI	_controller;
 	unsigned int			_workerIdBase;
 	std::vector<scrap::Result>	_results;
 	std::vector<Command>		_completedCommands;

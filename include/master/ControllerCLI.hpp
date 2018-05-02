@@ -13,26 +13,34 @@
 	#include <future>
 	#include <iostream>
 	#include "IUserController.hpp"
+	#include "master/Manager.hpp"
+	#include "CommandParser.hpp"
 
 namespace plazza::master {
 	class ControllerCLI;
 	constexpr auto CMD_EXIT("exit");
 }
 
-class plazza::master::ControllerCLI : public IUserController {
+class plazza::master::ControllerCLI {
 public:
-	ControllerCLI(std::istream &input = std::cin);
+	ControllerCLI(uint threadNb, const char *binName,
+			std::istream &input = std::cin);
 	~ControllerCLI();
 
-	bool poll(std::queue<Command> &cmdQ);
 private:
 	static std::string	__getLine(std::istream *input);
 
 	bool			_nextLineReady();
 	std::string		_getNextLine();
 
+	uint				_threadNb;
+	const std::string		_binName;
+	bool				_live;
 	std::istream			&_input;
 	std::future<std::string>	_nextLine;
+	std::queue<Command>		_cmdQ;
+	CommandParser			_parser;
+	Manager				_manager;
 };
 
 #endif /* !CONTROLLERCLI_HPP_ */
