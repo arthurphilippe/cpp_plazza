@@ -30,6 +30,7 @@ plazza::master::PlazzaGui::PlazzaGui()
 	_TxtSent(new QLabel(_window)),
 	_TxtCmplt(new QLabel(_window)),
 	_bComputeFive(new QPushButton("Compute 5", _window)),
+	_TxtTodo(new QLabel(_window)),
 	_info(Information::IP_ADDRESS),
 	_cmdQIdx(1)
 {
@@ -64,6 +65,8 @@ plazza::master::PlazzaGui::PlazzaGui()
 				this, SLOT(validateFile()));
 	QObject::connect(_bCompute, SIGNAL(clicked()),
 				this, SLOT(_compute()));
+	QObject::connect(_bComputeFive, SIGNAL(clicked()),
+				this, SLOT(_computeFive()));
 	_TxtPending->move(850, 455);
 	_TxtPending->setText(QString("Pending"));
 	_TxtPending->adjustSize();
@@ -77,6 +80,9 @@ plazza::master::PlazzaGui::PlazzaGui()
 	_TxtCmplt->move(837, 535);
 	_TxtCmplt->setText(QString("Completed"));
 	_TxtCmplt->adjustSize();
+	_TxtTodo->move(1000, 400);
+	_TxtTodo->setText("Total Commands: 0");
+	_TxtTodo->adjustSize();
 	_PBcompleted->setValue(0);
 	_PBcompleted->setGeometry(900, 530, 350, 30);
 }
@@ -102,6 +108,7 @@ void plazza::master::PlazzaGui::checkedPhoneNbr()
 
 void plazza::master::PlazzaGui::validateFile()
 {
+	std::string info;
 	std::string filename = _text->toPlainText().toStdString();
 	std::ifstream istm(filename);
 	if (istm.good()) {
@@ -109,6 +116,10 @@ void plazza::master::PlazzaGui::validateFile()
 		_cmdQStack.push(newcmd);
 		_filelist.append(_createCommandQString(newcmd));
 		_updateList();
+		info += "Total Commands: ";
+		info += std::to_string(_cmdQIdx);
+		_TxtTodo->setText(info.c_str());
+		_TxtTodo->adjustSize();
 		_cmdQIdx += 1;
 	} else {
 		QMessageBox error;
@@ -178,7 +189,10 @@ void plazza::master::PlazzaGui::_computeFive()
 		if (_filelist.size() > 0)
 			_filelist.pop_front();
 		_filelistwid->takeItem(0);
+		i -= 1;
 		_cmdQStack.pop();
+		if (i < 1)
+			return;
 	}
 }
 

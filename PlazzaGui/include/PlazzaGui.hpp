@@ -66,6 +66,7 @@ public plazza::master::IUserController {
 		QLabel *_TxtSent;
 		QLabel *_TxtCmplt;
 		QPushButton *_bComputeFive;
+		QLabel *_TxtTodo;
 
 		plazza::Information _info;
 		std::queue<Command> _cmdQ;
