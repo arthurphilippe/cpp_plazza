@@ -37,20 +37,6 @@ void Manager::wait()
 	}
 }
 
-// void Manager::loop()
-// {
-	// while (_controller.poll(_despatchQ)) {
-	// 	_despatchTasks();
-	// 	_recieveResults();
-	// 	_stopIdleWorkers();
-	// 	std::this_thread::sleep_for(std::chrono::milliseconds(20));
-	// }
-	// while (_workers.size()) {
-	// 	_stopFinishedWorkers();
-	// 	_recieveResults();
-	// }
-// }
-
 void Manager::_despatchTasks()
 {
 	for (auto &worker : _workers) {
