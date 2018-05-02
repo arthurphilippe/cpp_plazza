@@ -25,7 +25,8 @@ SRCS		=	src/Command.cpp		\
 			src/slave/Worker.cpp	\
 			src/master/Worker.cpp	\
 			src/master/ControllerCLI.cpp	\
-			src/master/Entry.cpp	\
+			src/master/Manager.cpp	\
+			src/master/Logger.cpp
 
 OBJ_MAIN	=	$(MAIN:.cpp=.o)
 
@@ -40,7 +41,7 @@ SRCS_TEST	=	tests/test-Command.cpp		\
 			tests/test-RegexScrapper.cpp	\
 			tests/test-Result.cpp		\
 			tests/master/test-Worker.cpp	\
-			tests/master/test-ControllerCLI.cpp	\
+#			tests/master/test-ControllerCLI.cpp	\
 			tests/slave/test-Worker.cpp	\
 
 SRCS_TEST	+=	$(OBJS)

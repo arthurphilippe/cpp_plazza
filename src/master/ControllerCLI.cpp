@@ -7,34 +7,45 @@
 
 #include <iostream>
 #include "master/ControllerCLI.hpp"
-#include "CommandParser.hpp"
+#include "slave/Launch.hpp"
 
 using plazza::master::ControllerCLI;
 
-ControllerCLI::ControllerCLI(std::istream &input)
-	: _input(input),
-	_nextLine(std::async(__getLine, &_input))
-{}
+ControllerCLI::ControllerCLI(char **av, std::istream &input)
+	: _threadNb(std::stoi(av[1])),
+	_binName(av[0]),
+	_live(true),
+	_input(input),
+	_nextLine(std::async(__getLine, &_input)),
+	_cmdQ(),
+	_parser(_cmdQ),
+	_manager(_threadNb, _cmdQ)
+{
+	while (_live) {
+		while (_nextLineReady()) {
+			auto line = _getNextLine();
+			if (line == CMD_EXIT) {
+				return;
+			}
+			_parser.ParseLine(line);
+		}
+		try {
+			_manager.manage();
+		} catch (slave::Launch &slaveLauncher) {
+			slaveLauncher.exec(_binName.c_str());
+		}
+		std::this_thread::sleep_for(std::chrono::milliseconds(20));
+	}
+}
 
 ControllerCLI::~ControllerCLI()
 {
-	_nextLine.get();
-}
-
-bool ControllerCLI::poll(std::queue<Command> &cmdQ)
-{
-	CommandParser parser(cmdQ);
-	bool ret(false);
-
-	while (_nextLineReady()) {
-		auto line = _getNextLine();
-		if (line == CMD_EXIT)
-			return ret;
-		std::cout << "Processing: \"" << line << "\"" << std::endl;
-		parser.ParseLine(line);
-		ret = true;
+	try {
+		_manager.wait();
+	} catch (slave::Launch &slaveLauncher) {
+		slaveLauncher.exec(_binName.c_str());
 	}
-	return true;
+	_nextLine.get();
 }
 
 bool ControllerCLI::_nextLineReady()

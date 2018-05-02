@@ -43,15 +43,6 @@
 		"queue": "cpp",
 		"functional": "cpp",
 		"atomic": "cpp",
-		"future": "cpp",
-		"codecvt": "cpp",
-		"csignal": "cpp",
-		"filesystem": "cpp",
-		"iterator": "cpp",
-		"memory_resource": "cpp",
-		"random": "cpp",
-		"string": "cpp",
-		"unordered_map": "cpp",
-		"vector": "cpp"
+		"future": "cpp"
 	}
 }

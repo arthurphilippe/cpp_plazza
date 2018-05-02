@@ -32,6 +32,11 @@ static void create_worker(plazza::master::Worker **worker)
 	*worker = new plazza::master::Worker(0, 0);
 }
 
+static void delete_worker(plazza::master::Worker *worker)
+{
+	delete worker;
+}
+
 Test(masterWorker, results, .timeout = 2) {
 	// plazza::ILink *slave = nullptr;
 	// std::thread th1(fifo_slave_join, &slave, 1);
@@ -76,9 +81,10 @@ Test(masterWorker, results, .timeout = 2) {
 
 	cr_log_info("deleting scapper");
 	delete scrapper;
+	cr_log_info("deleting worker");
+	std::thread th2(delete_worker, work);
 	cr_log_info("deleting slave");
 	delete slave;
-	cr_log_info("deleting worker");
-	delete work;
+	th2.join();
 	cr_log_info("finished");
 }

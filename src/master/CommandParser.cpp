@@ -45,8 +45,8 @@ void CommandParser::_CleanStringSpace(std::string &_line)
 
 bool CommandParser::_checkFileAccess(std::string &filename)
 {
-std::ifstream istm(filename);
-return istm.good();
+	std::ifstream istm(filename);
+	return istm.good();
 }
 
 void CommandParser::_CreateCommand(std::string &cmdFileName,
