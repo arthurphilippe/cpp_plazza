@@ -18,7 +18,6 @@ namespace plazza::master {
 class plazza::master::IUserController {
 public:
 	virtual ~IUserController() = default;
-	virtual bool poll(std::queue<Command> &cmdQ) = 0;
 };
 
 #endif /* !IUSERCONTROLLER_HPP_ */
