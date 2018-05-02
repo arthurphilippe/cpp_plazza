@@ -31,7 +31,7 @@ private:
 	void _sendCmd(Worker &);
 	void _spawnWorker();
 	void _recieveResults();
-	void _moveCompletedCommand(scrap::Result &);
+	void _completeCommand(scrap::Result &);
 	void _stopIdleWorkers();
 	void _stopFinishedWorkers();
 

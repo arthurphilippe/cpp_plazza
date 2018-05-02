@@ -74,12 +74,12 @@ void Entry::_recieveResults()
 	}
 	for (auto &result : _results) {
 		std::cout << result;
-		_moveCompletedCommand(result);
+		_completeCommand(result);
 	}
 	_results.clear();
 }
 
-void Entry::_moveCompletedCommand(scrap::Result &result)
+void Entry::_completeCommand(scrap::Result &result)
 {
 	for (auto it = _sentCommands.begin();
 		it != _sentCommands.end() ; it++) {
