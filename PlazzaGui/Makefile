@@ -12,7 +12,7 @@ MAKEFILE      = Makefile
 
 CC            = gcc
 CXX           = g++ -ggdb
-DEFINES       = -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
+DEFINES       = -DMYSHAREDLIB_LIBRARY -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -m64 -pipe -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -m64 -pipe -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 INCPATH       = -I. -I. -I../include -Iinclude -I../include/master -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64
@@ -49,9 +49,25 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = src/Construct.cpp \
-		src/PlazzaGui.cpp moc_PlazzaGui.cpp
+		src/PlazzaGui.cpp \
+		../src/master/Manager.cpp \
+		../src/master/Logger.cpp \
+		../src/master/Worker.cpp \
+		../src/slave/Launch.cpp \
+		../src/NamedPipe.cpp \
+		../src/ILink.cpp \
+		../src/scrap/Result.cpp \
+		../src/Command.cpp moc_PlazzaGui.cpp
 OBJECTS       = Construct.o \
 		PlazzaGui.o \
+		Manager.o \
+		Logger.o \
+		Worker.o \
+		Launch.o \
+		NamedPipe.o \
+		ILink.o \
+		Result.o \
+		Command.o \
 		moc_PlazzaGui.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -115,7 +131,15 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		PlazzaGui.pro include/PlazzaGui.hpp src/Construct.cpp \
-		src/PlazzaGui.cpp
+		src/PlazzaGui.cpp \
+		../src/master/Manager.cpp \
+		../src/master/Logger.cpp \
+		../src/master/Worker.cpp \
+		../src/slave/Launch.cpp \
+		../src/NamedPipe.cpp \
+		../src/ILink.cpp \
+		../src/scrap/Result.cpp \
+		../src/Command.cpp
 QMAKE_TARGET  = PlazzaGui
 DESTDIR       = 
 TARGET        = libPlazzaGui.so.1.0.0
@@ -290,7 +314,7 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents include/PlazzaGui.hpp $(DISTDIR)/
-	$(COPY_FILE) --parents src/Construct.cpp src/PlazzaGui.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents src/Construct.cpp src/PlazzaGui.cpp ../src/master/Manager.cpp ../src/master/Logger.cpp ../src/master/Worker.cpp ../src/slave/Launch.cpp ../src/NamedPipe.cpp ../src/ILink.cpp ../src/scrap/Result.cpp ../src/Command.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -322,6 +346,13 @@ compiler_moc_header_clean:
 moc_PlazzaGui.cpp: ../include/master/IUserController.hpp \
 		../include/Command.hpp \
 		../include/Information.hpp \
+		../include/master/Manager.hpp \
+		../include/master/Worker.hpp \
+		../include/scrap/Result.hpp \
+		../include/scrap/IScrapper.hpp \
+		../include/ScopedLock.hpp \
+		../include/ILink.hpp \
+		../include/master/Logger.hpp \
 		include/PlazzaGui.hpp
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/cheap/Code_Arena/cpp_plazza/PlazzaGui -I/home/cheap/Code_Arena/cpp_plazza/PlazzaGui -I/home/cheap/Code_Arena/cpp_plazza/include -I/home/cheap/Code_Arena/cpp_plazza/PlazzaGui/include -I/home/cheap/Code_Arena/cpp_plazza/include/master -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/6 -I/usr/include/x86_64-linux-gnu/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/x86_64-linux-gnu/6/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/6/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include include/PlazzaGui.hpp -o moc_PlazzaGui.cpp
 
@@ -342,14 +373,91 @@ compiler_clean: compiler_moc_header_clean
 Construct.o: src/Construct.cpp include/PlazzaGui.hpp \
 		../include/master/IUserController.hpp \
 		../include/Command.hpp \
-		../include/Information.hpp
+		../include/Information.hpp \
+		../include/master/Manager.hpp \
+		../include/master/Worker.hpp \
+		../include/scrap/Result.hpp \
+		../include/scrap/IScrapper.hpp \
+		../include/ScopedLock.hpp \
+		../include/ILink.hpp \
+		../include/master/Logger.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Construct.o src/Construct.cpp
 
-PlazzaGui.o: src/PlazzaGui.cpp include/PlazzaGui.hpp \
+PlazzaGui.o: src/PlazzaGui.cpp ../include/slave/Launch.hpp \
+		../include/slave/Worker.hpp \
+		../include/ILink.hpp \
+		../include/Command.hpp \
+		../include/Information.hpp \
+		../include/scrap/IScrapper.hpp \
+		include/PlazzaGui.hpp \
 		../include/master/IUserController.hpp \
+		../include/master/Manager.hpp \
+		../include/master/Worker.hpp \
+		../include/scrap/Result.hpp \
+		../include/ScopedLock.hpp \
+		../include/master/Logger.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o PlazzaGui.o src/PlazzaGui.cpp
+
+Manager.o: ../src/master/Manager.cpp ../include/master/Manager.hpp \
+		../include/master/Worker.hpp \
+		../include/Command.hpp \
+		../include/Information.hpp \
+		../include/scrap/Result.hpp \
+		../include/scrap/IScrapper.hpp \
+		../include/ScopedLock.hpp \
+		../include/ILink.hpp \
+		../include/master/Logger.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Manager.o ../src/master/Manager.cpp
+
+Logger.o: ../src/master/Logger.cpp ../include/master/Logger.hpp \
+		../include/Information.hpp \
+		../include/scrap/Result.hpp \
+		../include/scrap/IScrapper.hpp \
+		../include/Command.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Logger.o ../src/master/Logger.cpp
+
+Worker.o: ../src/master/Worker.cpp ../include/master/Worker.hpp \
+		../include/Command.hpp \
+		../include/Information.hpp \
+		../include/scrap/Result.hpp \
+		../include/scrap/IScrapper.hpp \
+		../include/ScopedLock.hpp \
+		../include/ILink.hpp \
+		../include/slave/Launch.hpp \
+		../include/slave/Worker.hpp \
+		../include/NamedPipe.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Worker.o ../src/master/Worker.cpp
+
+Launch.o: ../src/slave/Launch.cpp ../include/slave/Launch.hpp \
+		../include/slave/Worker.hpp \
+		../include/ILink.hpp \
+		../include/Command.hpp \
+		../include/Information.hpp \
+		../include/scrap/IScrapper.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Launch.o ../src/slave/Launch.cpp
+
+NamedPipe.o: ../src/NamedPipe.cpp ../include/NamedPipe.hpp \
+		../include/ILink.hpp \
+		../include/Command.hpp \
+		../include/Information.hpp \
+		../include/scrap/IScrapper.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o NamedPipe.o ../src/NamedPipe.cpp
+
+ILink.o: ../src/ILink.cpp ../include/ILink.hpp \
+		../include/Command.hpp \
+		../include/Information.hpp \
+		../include/scrap/IScrapper.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ILink.o ../src/ILink.cpp
+
+Result.o: ../src/scrap/Result.cpp ../include/scrap/Result.hpp \
+		../include/scrap/IScrapper.hpp \
 		../include/Command.hpp \
 		../include/Information.hpp
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o PlazzaGui.o src/PlazzaGui.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Result.o ../src/scrap/Result.cpp
+
+Command.o: ../src/Command.cpp ../include/Command.hpp \
+		../include/Information.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Command.o ../src/Command.cpp
 
 moc_PlazzaGui.o: moc_PlazzaGui.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_PlazzaGui.o moc_PlazzaGui.cpp

@@ -27,7 +27,7 @@ static plazza::master::IUserController *getController(char **av)
 	try {
 		plazza::master::DynamicObject<plazza::master::IUserController>
 		dynobj("PlazzaGui/libPlazzaGui.so.1.0.0");
-		return dynobj.get(av[1]);
+		return dynobj.get(av);
 	} catch (std::runtime_error &err) {
 		return new plazza::master::ControllerCLI(av);
 	}

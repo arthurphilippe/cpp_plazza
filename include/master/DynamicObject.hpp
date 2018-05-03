@@ -23,7 +23,7 @@ namespace plazza::master {
 		{
 			dlclose(_handle);
 		}
-		T *get(char *arg) noexcept
+		T *get(char **arg) noexcept
 		{
 			return call(arg);
 		}
@@ -36,7 +36,7 @@ namespace plazza::master {
 			return call();
 		}
 	private:
-		T	*(*call)(char *);
+		T	*(*call)(char **);
 		void	*_handle;
 
 		void _init(const std::string &dl, const std::string &sym)
@@ -44,10 +44,11 @@ namespace plazza::master {
 			if (dl.length() == 0)
 				throw std::runtime_error("No lib available");
 			_handle = dlopen(dl.c_str(), RTLD_LAZY);
+			std::cout << dlerror() << std::endl;
 			if (!_handle)
 				throw std::runtime_error(dlerror());
 			dlerror();
-			call = (T *(*)(char *)) dlsym(_handle, sym.c_str());
+			call = (T *(*)(char **)) dlsym(_handle, sym.c_str());
 			const char *dlsym_error(dlerror());
 			if (dlsym_error)
 				throw std::runtime_error(dlsym_error);

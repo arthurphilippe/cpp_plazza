@@ -7,9 +7,10 @@
 
 #include <QMessageBox>
 #include <fstream>
+#include "slave/Launch.hpp"
 #include "PlazzaGui.hpp"
 
-plazza::master::PlazzaGui::PlazzaGui(char *arg)
+plazza::master::PlazzaGui::PlazzaGui(char **arg)
 	:
 	_window(new QWidget()),
 	_layout(new QHBoxLayout),
@@ -33,8 +34,9 @@ plazza::master::PlazzaGui::PlazzaGui(char *arg)
 	_TxtTodo(new QLabel(_window)),
 	_info(Information::IP_ADDRESS),
 	_cmdQIdx(1),
-	_threadNb(std::stoi(arg)),
-	_manager(_threadNb, _cmdQ)
+	_threadNb(std::stoi(arg[1])),
+	_manager(_threadNb, _cmdQ),
+	_binName(arg[0])
 {
 	_window->setFixedSize(1680, 720);
 	_bChoose->move(600, 200);
@@ -91,7 +93,11 @@ plazza::master::PlazzaGui::PlazzaGui(char *arg)
 
 plazza::master::PlazzaGui::~PlazzaGui()
 {
-	_manager.wait();
+	try {
+		_manager.wait();
+	} catch (slave::Launch &slaveLauncher) {
+		slaveLauncher.exec(_binName.c_str());
+	}
 }
 
 void plazza::master::PlazzaGui::checkedIpAddress()
@@ -192,7 +198,12 @@ void plazza::master::PlazzaGui::_computeFive()
 		i -= 1;
 		_cmdQStack.pop();
 		if (i < 1)
-			return;
+			break;
+	}
+	try {
+		_manager.manage();
+	} catch (slave::Launch &slaveLauncher) {
+		slaveLauncher.exec(_binName.c_str());
 	}
 }
 
@@ -205,6 +216,11 @@ void plazza::master::PlazzaGui::_compute()
 		_filelistwid->takeItem(0);
 		_cmdQStack.pop();
 	}
+	try {
+		_manager.manage();
+	} catch (plazza::slave::Launch &slaveLauncher) {
+		slaveLauncher.exec(_binName.c_str());
+	}
 }
 
 bool plazza::master::PlazzaGui::poll(std::queue<plazza::Command> &cmdQ)
@@ -216,6 +232,5 @@ bool plazza::master::PlazzaGui::poll(std::queue<plazza::Command> &cmdQ)
 		_filelistwid->takeItem(0);
 		_cmdQ.pop();
 	}
-	_manager.manage();
 	return true;
 }

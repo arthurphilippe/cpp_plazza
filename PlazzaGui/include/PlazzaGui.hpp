@@ -9,7 +9,11 @@
 	#define PLAZZAGUI_HPP_
 
 #include <QtCore/QtGlobal>
-
+#if defined(MYSHAREDLIB_LIBRARY)
+#  define MYSHAREDLIB_EXPORT Q_DECL_EXPORT
+#else
+#  define MYSHAREDLIB_EXPORT Q_DECL_IMPORT
+#endif
 	#include <QLabel>
 	#include <QProgressBar>
 	#include <QFileDialog>
@@ -31,18 +35,18 @@
 
 namespace plazza {
 	namespace master {
-	class  PlazzaGui;
+	class MYSHAREDLIB_EXPORT PlazzaGui;
 }
 }
 
-class
+class MYSHAREDLIB_EXPORT
 plazza::master::
 PlazzaGui :
 public QObject,
 public plazza::master::IUserController {
 	Q_OBJECT
 	public:
-		PlazzaGui(char *arg);
+		PlazzaGui(char **arg);
 		~PlazzaGui() override;
         bool poll(std::queue<Command> &cmdQ);
 	protected:
@@ -75,6 +79,7 @@ public plazza::master::IUserController {
 		uint _cmdQIdx;
 		uint		_threadNb;
 		Manager		_manager;
+		std::string	_binName;
 
 
 		QString _createCommandQString(plazza::Command &cmd);

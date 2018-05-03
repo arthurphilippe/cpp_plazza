@@ -11,7 +11,7 @@
 #include "IUserController.hpp"
 
 extern "C" {
-	plazza::master::IUserController *Construct(char *arg)
+	plazza::master::IUserController *Construct(char **arg)
 	{
 		int ac = 1;
 		char **av = NULL;

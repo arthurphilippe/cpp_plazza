@@ -7,7 +7,8 @@ TARGET = PlazzaGui
 INCLUDEPATH += . ../include/ include/ ../include/master
 QT += widgets
 LIBS += -ldl
+DEFINES += MYSHAREDLIB_LIBRARY
 
 # Input
 HEADERS += include/PlazzaGui.hpp
-SOURCES += src/Construct.cpp src/PlazzaGui.cpp
+SOURCES += src/Construct.cpp src/PlazzaGui.cpp ../src/master/Manager.cpp ../src/master/Logger.cpp ../src/master/Worker.cpp ../src/slave/Launch.cpp ../src/NamedPipe.cpp ../src/ILink.cpp ../src/scrap/Result.cpp ../src/Command.cpp
