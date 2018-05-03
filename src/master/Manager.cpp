@@ -15,7 +15,7 @@ Manager::Manager(unsigned int threadNb, std::queue<Command> &despatchQ)
 	_sentCommands(),
 	_workerIdBase(1),
 	_results(),
-	_completedCommands()
+	_completedCount(0)
 {}
 
 Manager::~Manager()
@@ -86,7 +86,7 @@ void Manager::_completeCommand(scrap::Result &result)
 		it != _sentCommands.end() ; it++) {
 		if (it->cmdId == result.id()) {
 			_logger.logResult(*it, result);
-			_completedCommands.push_back(*it);
+			_completedCount += 1;
 			_sentCommands.erase(it);
 			return;
 		}

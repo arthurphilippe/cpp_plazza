@@ -42,7 +42,8 @@ private:
 	std::vector<workerptr>		_workers;
 	unsigned int			_workerIdBase;
 	std::vector<scrap::Result>	_results;
-	std::vector<Command>		_completedCommands;
+	// std::vector<Command>		_completedCommands;
+	unsigned int			_completedCount;
 	Logger				_logger;
 };
 
