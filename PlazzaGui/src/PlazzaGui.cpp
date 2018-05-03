@@ -117,6 +117,11 @@ void plazza::master::PlazzaGui::checkedPhoneNbr()
 
 void plazza::master::PlazzaGui::validateFile()
 {
+	try {
+		_manager.manage();
+	} catch (plazza::slave::Launch &slaveLauncher) {
+		slaveLauncher.exec(_binName.c_str());
+	}
 	std::string info;
 	std::string filename = _text->toPlainText().toStdString();
 	std::ifstream istm(filename);
@@ -137,6 +142,11 @@ void plazza::master::PlazzaGui::validateFile()
 		errormsg.push_back(": No such file or directory</p>");
 		error.setText(errormsg);
 		error.exec();
+	}
+	try {
+		_manager.manage();
+	} catch (plazza::slave::Launch &slaveLauncher) {
+		slaveLauncher.exec(_binName.c_str());
 	}
 }
 
@@ -189,7 +199,11 @@ void plazza::master::PlazzaGui::update()
 void plazza::master::PlazzaGui::_computeFive()
 {
 	int i = 5;
-
+	try {
+		_manager.manage();
+	} catch (plazza::slave::Launch &slaveLauncher) {
+		slaveLauncher.exec(_binName.c_str());
+	}
 	while (!_cmdQStack.empty()) {
 		_cmdQ.push(_cmdQStack.front());
 		if (_filelist.size() > 0)
@@ -197,6 +211,11 @@ void plazza::master::PlazzaGui::_computeFive()
 		_filelistwid->takeItem(0);
 		i -= 1;
 		_cmdQStack.pop();
+		try {
+			_manager.manage();
+		} catch (plazza::slave::Launch &slaveLauncher) {
+			slaveLauncher.exec(_binName.c_str());
+		}
 		if (i < 1)
 			break;
 	}
@@ -209,12 +228,22 @@ void plazza::master::PlazzaGui::_computeFive()
 
 void plazza::master::PlazzaGui::_compute()
 {
+	try {
+		_manager.manage();
+	} catch (plazza::slave::Launch &slaveLauncher) {
+		slaveLauncher.exec(_binName.c_str());
+	}
 	while (!_cmdQStack.empty()) {
 		_cmdQ.push(_cmdQStack.front());
 		if (_filelist.size() > 0)
 			_filelist.pop_front();
 		_filelistwid->takeItem(0);
 		_cmdQStack.pop();
+		try {
+			_manager.manage();
+		} catch (plazza::slave::Launch &slaveLauncher) {
+			slaveLauncher.exec(_binName.c_str());
+		}
 	}
 	try {
 		_manager.manage();
@@ -225,6 +254,11 @@ void plazza::master::PlazzaGui::_compute()
 
 bool plazza::master::PlazzaGui::poll(std::queue<plazza::Command> &cmdQ)
 {
+	try {
+		_manager.manage();
+	} catch (plazza::slave::Launch &slaveLauncher) {
+		slaveLauncher.exec(_binName.c_str());
+	}
 	while (!_cmdQ.empty()) {
 		cmdQ.push(_cmdQ.front());
 		if (_filelist.size() > 0)

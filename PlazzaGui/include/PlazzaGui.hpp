@@ -30,7 +30,7 @@
 	#include <QWidget>
 	#include <QApplication>
 
-	#include "IUserController.hpp"
+	#include "master/IUserController.hpp"
 	#include "master/Manager.hpp"
 
 namespace plazza {

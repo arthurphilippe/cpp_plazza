@@ -11,10 +11,8 @@
 
 #include "slave/Launch.hpp"
 
-#include "master/ControllerCLI.hpp"
+#include "PlazzaGui.hpp"
 #include "master/Manager.hpp"
-
-#include "master/DynamicObject.hpp"
 
 static void start_child(char **av)
 {
@@ -22,23 +20,13 @@ static void start_child(char **av)
 	launcher.enter();
 }
 
-static plazza::master::IUserController *getController(char **av)
-{
-	try {
-		plazza::master::DynamicObject<plazza::master::IUserController>
-		dynobj("PlazzaGui/libPlazzaGui.so.1.0.0");
-		return dynobj.get(av);
-	} catch (std::runtime_error &err) {
-		return new plazza::master::ControllerCLI(av);
-	}
-}
-
 static void start_controller(char **av)
 {
 	try {
-		std::unique_ptr<plazza::master::IUserController>
-			controller(getController(av));
-		controller.reset();
+		int ac = 1;
+		QApplication _app(ac, av);
+		plazza::master::PlazzaGui gui(av);
+		_app.exec();
 	} catch (plazza::slave::Launch &slaveLauncher) {
 		slaveLauncher.exec(av[0]);
 	}
