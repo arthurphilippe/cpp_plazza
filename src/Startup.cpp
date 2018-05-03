@@ -34,7 +34,7 @@ int Startup::launch()
 {
 	auto ret(EXT_OK);
 
-	if (ac == 4 && plazza::slave::SLAVE_MAGIC.compare(av[3]))
+	if (ac == 4 && plazza::slave::SLAVE_MAGIC.compare(0, 6, av[3]))
 		_startChild();
 	else if (ac == 2) {
 		_startMaster();
