@@ -32,7 +32,8 @@ private:
 	unsigned int			_threadNb;
 	std::unique_ptr<ILink>		_link;
 	std::vector<std::thread>	_threads;
-	std::mutex			_mutex;
+	std::mutex			_mutexDown;
+	std::mutex			_mutexUp;
 	bool				_live;
 };
 

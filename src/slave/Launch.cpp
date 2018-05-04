@@ -28,5 +28,5 @@ void Launch::exec(const char *bin_path)
 	execl(bin_path, SLAVE_BIN_NAME,
 		std::to_string(_workerId).c_str(),
 		std::to_string(_threadNb).c_str(),
-		SLAVE_MAGIC, nullptr);
+		SLAVE_MAGIC.c_str(), nullptr);
 }
