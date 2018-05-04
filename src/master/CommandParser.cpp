@@ -22,6 +22,12 @@ static const CommandParser::InfoTypeMap _infoTypeMap = {
 	{"NONE", plazza::Information::NONE},
 };
 
+/*
+**	This function is a functor
+**	for the function std::unique
+**	this basically check if two spaces are
+**	side to side
+*/
 bool CommandParser::_CleanSpacers(char a, char b)
 {
 	if (a == b && a == ' ')
@@ -29,6 +35,10 @@ bool CommandParser::_CleanSpacers(char a, char b)
 	return false;
 }
 
+/*
+**	This function remove side to side spaces
+**	in the string passed as parameter
+*/
 void CommandParser::_CleanStringSpace(std::string &_line)
 {
 	std::string::iterator it;
@@ -43,12 +53,21 @@ void CommandParser::_CleanStringSpace(std::string &_line)
 	}
 }
 
+/*
+**	This function check if the filename given as
+**	argument exists
+*/
 bool CommandParser::_checkFileAccess(std::string &filename)
 {
 	std::ifstream istm(filename);
 	return istm.good();
 }
 
+/*
+**	Initialise a new Command Class based on the infos
+**	given as parameters, then the class is pushed into the
+**	queue
+*/
 void CommandParser::_CreateCommand(std::string &cmdFileName,
 					const std::string &infoType)
 {
@@ -71,6 +90,10 @@ void CommandParser::_ChangeToUpperCase(std::string &_line)
 	std::transform(_line.begin(), _line.end(),_line.begin(), toupper);
 }
 
+/*
+**	Return the according enum from the string passed
+**	as parameter
+*/
 enum plazza::Information
 CommandParser::_getInfoType(std::string _stringInfo)
 {
