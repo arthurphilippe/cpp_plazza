@@ -9,7 +9,7 @@ plazza
 *.lo
 *.o
 *.obj
-
+PlazzaGui
 # Precompiled Headers
 *.gch
 *.pch

@@ -8,12 +8,6 @@
 #ifndef PLAZZAGUI_HPP_
 	#define PLAZZAGUI_HPP_
 
-#include <QtCore/QtGlobal>
-#if defined(MYSHAREDLIB_LIBRARY)
-#  define MYSHAREDLIB_EXPORT Q_DECL_EXPORT
-#else
-#  define MYSHAREDLIB_EXPORT Q_DECL_IMPORT
-#endif
 	#include <QLabel>
 	#include <QProgressBar>
 	#include <QFileDialog>
@@ -25,21 +19,19 @@
 	#include <QHBoxLayout>
 	#include <QMainWindow>
 	#include <QFileDialog>
-	#include <QLibraryInfo>
 	#include <QPushButton>
 	#include <QWidget>
 	#include <QApplication>
-	#include <mutex>
 	#include "master/IUserController.hpp"
 	#include "master/Manager.hpp"
 
 namespace plazza {
 	namespace master {
-	class MYSHAREDLIB_EXPORT PlazzaGui;
-}
+		class PlazzaGui;
+	}
 }
 
-class MYSHAREDLIB_EXPORT
+class
 plazza::master::
 PlazzaGui :
 public QObject,
@@ -79,12 +71,11 @@ public plazza::master::IUserController {
 		uint		_threadNb;
 		Manager		_manager;
 		std::string	_binName;
-		QTimer *_loop;
-		std::mutex	_cmdQLock;
+		QTimer		*_loop;
 
 		QString _createCommandQString(plazza::Command &cmd);
 		void _updateList();
-		void updateBar();
+		void _updateBar();
 
 	public slots:
 		void _compute();

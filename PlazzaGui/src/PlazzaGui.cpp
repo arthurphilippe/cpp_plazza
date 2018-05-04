@@ -57,7 +57,7 @@ plazza::master::PlazzaGui::PlazzaGui(char **arg)
 	_text->setFixedSize(460, 30);
 	_filelistbox->move(800, 150);
 	_filelistwid->move(800, 175);
-	_filelistwid->setFixedSize(650, 200);
+	_filelistwid->setFixedSize(750, 200);
 	QObject::connect(_bChoose, SIGNAL(clicked()),
 				this, SLOT(askFile()));
 	QObject::connect(_bIp_address, SIGNAL(clicked()),
@@ -97,11 +97,13 @@ plazza::master::PlazzaGui::PlazzaGui(char **arg)
 
 void plazza::master::PlazzaGui::manage()
 {
+	_updateBar();
 	try {
 		_manager.manage();
 	} catch (plazza::slave::Launch &slaveLauncher) {
 		slaveLauncher.exec(_binName.c_str());
 	}
+	_updateBar();
 }
 
 plazza::master::PlazzaGui::~PlazzaGui()
@@ -158,7 +160,7 @@ PlazzaGui::
 _createCommandQString(plazza::Command &cmd)
 {
 	std::string filestring;
-	filestring += "[";
+	filestring += "[Task n°";
 	filestring += std::to_string(cmd.cmdId);
 	filestring += "]: Path: `";
 	filestring += cmd.cmdFileName;
@@ -208,6 +210,21 @@ void plazza::master::PlazzaGui::_computeFive()
 		if (i < 1)
 			break;
 	}
+}
+
+void plazza::master::PlazzaGui::_updateBar()
+{
+	double idx(_cmdQIdx - 1);
+	double sent(_cmdQ.size());
+	double pending(_cmdQStack.size());
+	double done(_cmdQStack.size() + _cmdQ.size());
+
+	done = ((idx - done) / idx) * 100;
+	pending = (pending / idx) * 100;
+	sent = sent / idx;
+	_PBcompleted->setValue(done);
+	_PBpending->setValue(pending);
+	_PBsent->setValue(sent);
 }
 
 void plazza::master::PlazzaGui::_compute()
