@@ -195,10 +195,6 @@ void plazza::master::PlazzaGui::askFile()
 		_text->setPlainText(file);
 }
 
-void plazza::master::PlazzaGui::update()
-{
-}
-
 void plazza::master::PlazzaGui::_computeFive()
 {
 	int i = 5;

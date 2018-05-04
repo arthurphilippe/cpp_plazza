@@ -29,7 +29,7 @@
 	#include <QPushButton>
 	#include <QWidget>
 	#include <QApplication>
-
+	#include <mutex>
 	#include "master/IUserController.hpp"
 	#include "master/Manager.hpp"
 
@@ -75,16 +75,16 @@ public plazza::master::IUserController {
 		plazza::Information _info;
 		std::queue<Command> _cmdQ;
 		std::queue<Command> _cmdQStack;
-		uint _cmdQIdx;
+		uint		_cmdQIdx;
 		uint		_threadNb;
 		Manager		_manager;
 		std::string	_binName;
 		QTimer *_loop;
-
+		std::mutex	_cmdQLock;
 
 		QString _createCommandQString(plazza::Command &cmd);
 		void _updateList();
-		void update();
+		void updateBar();
 
 	public slots:
 		void _compute();

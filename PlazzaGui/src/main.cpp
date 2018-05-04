@@ -35,7 +35,7 @@ static void start_controller(char **av)
 int main(int ac, char **av)
 {
 	signal(SIGCHLD, SIG_IGN);
-	if (ac >= 4 && strcmp(plazza::slave::SLAVE_MAGIC, av[3]) == 0) {
+	if (ac >= 4 && strcmp(plazza::slave::SLAVE_MAGIC.c_str(), av[3]) == 0) {
 		start_child(av);
 	} else if (ac == 2) {
 		start_controller(av);
