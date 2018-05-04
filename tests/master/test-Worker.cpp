@@ -68,7 +68,7 @@ Test(masterWorker, results, .timeout = 2) {
 
 	*slave << *scrapper;
 
-	std::vector<plazza::scrap::Result> resultsvec;
+	std::list<plazza::scrap::Result> resultsvec;
 	cr_log_info("about to gather results");
 	while (!resultsvec.size()) {
 		cr_log_info("results loop");

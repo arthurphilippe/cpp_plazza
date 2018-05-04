@@ -23,8 +23,8 @@ Manager::~Manager()
 
 void Manager::manage()
 {
-	_despatchTasks();
 	_recieveResults();
+	_despatchTasks();
 	_stopIdleWorkers();
 }
 

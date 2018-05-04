@@ -29,7 +29,7 @@ public:
 	Worker(uint threadNb, uint workerId);
 	~Worker();
 	void send(const Command &);
-	void fillResults(std::vector<scrap::Result> &);
+	void fillResults(std::list<scrap::Result> &);
 	uint load() const noexcept
 	{
 		return _load;
@@ -64,6 +64,7 @@ private:
 	void _threadEntry();
 	std::mutex			_lock;
 	void _register(scrap::Result &);
+	bool _spaceLeftInResults();
 };
 
 #endif /* !WORKER_HPP_ */

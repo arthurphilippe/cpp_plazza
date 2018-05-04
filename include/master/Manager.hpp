@@ -17,7 +17,7 @@
 namespace plazza::master {
 	class Manager;
 	constexpr auto MAX_WORKER_COUNT(10);
-	constexpr auto MAX_PENDING_CMD(200);
+	constexpr auto MAX_PENDING_CMD(20);
 }
 
 class plazza::master::Manager {
@@ -41,7 +41,7 @@ private:
 	std::vector<Command>		_sentCommands;
 	std::vector<workerptr>		_workers;
 	unsigned int			_workerIdBase;
-	std::vector<scrap::Result>	_results;
+	std::list<scrap::Result>	_results;
 	// std::vector<Command>		_completedCommands;
 	unsigned int			_completedCount;
 	Logger				_logger;

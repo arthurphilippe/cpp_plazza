@@ -39,7 +39,7 @@ void Worker::send(const Command &cmd)
 	*_link << cmd;
 }
 
-void Worker::fillResults(std::vector<scrap::Result> &results)
+void Worker::fillResults(std::list<scrap::Result> &results)
 {
 	plazza::ScopedLock guard(_lock);
 
@@ -81,6 +81,11 @@ void Worker::_threadEntry()
 {
 	while (_live && !_link->eof()) {
 		scrap::Result result;
+		if (!_spaceLeftInResults()) {
+			std::this_thread::sleep_for(
+				std::chrono::milliseconds(10));
+			continue;
+		}
 		*_link >> result;
 		if (result.id() != 0)
 			_register(result);
@@ -99,4 +104,11 @@ void Worker::_register(scrap::Result &res)
 		_load -= 1;
 	if (_load == 0)
 		_idleSince = std::chrono::high_resolution_clock::now();
+}
+
+bool Worker::_spaceLeftInResults()
+{
+	plazza::ScopedLock guard(_lock);
+
+	return _results.size() < 2;
 }

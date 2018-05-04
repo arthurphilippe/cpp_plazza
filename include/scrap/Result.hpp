@@ -31,7 +31,7 @@ public:
 	}
 
 private:
-	std::vector<std::string>		_contents;
+	std::vector<std::string>	_contents;
 	uint				_id;
 };
 

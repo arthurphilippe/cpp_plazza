@@ -16,7 +16,7 @@ using scrapperptr = std::unique_ptr<plazza::scrap::IScrapper>;
 Worker::Worker(unsigned int id, unsigned int threadNb)
 	: _id(id), _threadNb(threadNb),
 	_link(new plazza::NamedPipe(_id, NamedPipe::JOIN)),
-	_threads(), _mutex(), _live(true)
+	_threads(), _mutexDown(), _mutexUp(), _live(true)
 {
 	for (uint i = 0; i < _threadNb; i++) {
 		_threads.emplace_back([&] { this->loop(); });
@@ -39,7 +39,7 @@ void Worker::loop() noexcept
 
 bool Worker::_pull(Command &cmd) noexcept
 {
-	plazza::ScopedLock guard(_mutex);
+	plazza::ScopedLock guard(_mutexDown);
 	if (!_live)
 		return false;
 	if (_link->eof()) {
@@ -64,6 +64,7 @@ void Worker::_run(Command &cmd)
 	if (scrapper == nullptr)
 		return;
 	scrapper->run(cmd);
+	plazza::ScopedLock guard(_mutexUp);
 	*_link << *scrapper;
 }
 
@@ -71,6 +72,6 @@ void Worker::_wait()
 {
 	for (std::thread &th : _threads) {
 		th.join();
-		plazza::ScopedLock guard(_mutex);
+		plazza::ScopedLock guard(_mutexDown);
 	}
 }

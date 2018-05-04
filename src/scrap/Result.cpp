@@ -21,6 +21,7 @@ std::istream &Result::fill(std::istream &is) noexcept
 {
 	uint count;
 	char separator;
+	std::vector<char> arr;
 
 	is >> _id;
 	is >> count;
@@ -28,15 +29,16 @@ std::istream &Result::fill(std::istream &is) noexcept
 		_id = 0;
 		return is;
 	}
+	_contents.resize(count);
 	for (uint i = 0; i < count; i++) {
 		uint size;
 		is >> size;
 		is >> separator;
-		std::vector<char> arr(size);
+		arr.resize(size);
 		is.read(arr.data(), size);
 
 		std::string tmp(arr.data(), size);
-		_contents.push_back(tmp);
+		_contents[i] = tmp;
 	}
 	return is;
 }
