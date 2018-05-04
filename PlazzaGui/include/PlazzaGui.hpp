@@ -48,7 +48,6 @@ public plazza::master::IUserController {
 	public:
 		PlazzaGui(char **arg);
 		~PlazzaGui() override;
-        bool poll(std::queue<Command> &cmdQ);
 	protected:
 	private:
 		QWidget *_window;
@@ -80,6 +79,7 @@ public plazza::master::IUserController {
 		uint		_threadNb;
 		Manager		_manager;
 		std::string	_binName;
+		QTimer *_loop;
 
 
 		QString _createCommandQString(plazza::Command &cmd);
@@ -94,6 +94,7 @@ public plazza::master::IUserController {
 		void checkedIpAddress();
 		void askFile();
 		void validateFile();
+		void manage();
 };
 
 #endif /* !PLAZZAGUI_HPP_ */

@@ -20,7 +20,7 @@ plazza::master::PlazzaGui::PlazzaGui(char **arg)
 	_bIp_address(new QRadioButton("IP_ADDRESS", _groupBox)),
 	_bPhone_number(new QRadioButton("PHONE_NUMBER", _groupBox)),
 	_bEmail_address(new QRadioButton("EMAIL_ADDRESS", _groupBox)),
-	_text(new QPlainTextEdit("", _window)),
+	_text(new QPlainTextEdit("/home/cheap/Code_Arena/cpp_plazza/tests/4phone_numbers.txt", _window)),
 	_bChoose(new QPushButton("Choose", _window)),
 	_filelistbox(new QGroupBox("Parsing Queue:", _window)),
 	_filelistwid(new QListWidget(_window)),
@@ -32,11 +32,12 @@ plazza::master::PlazzaGui::PlazzaGui(char **arg)
 	_TxtCmplt(new QLabel(_window)),
 	_bComputeFive(new QPushButton("Compute 5", _window)),
 	_TxtTodo(new QLabel(_window)),
-	_info(Information::IP_ADDRESS),
+	_info(Information::PHONE_NUMBER),
 	_cmdQIdx(1),
 	_threadNb(std::stoi(arg[1])),
 	_manager(_threadNb, _cmdQ),
-	_binName(arg[0])
+	_binName(arg[0]),
+	_loop(new QTimer(_window))
 {
 	_window->setFixedSize(1680, 720);
 	_bChoose->move(600, 200);
@@ -46,7 +47,7 @@ plazza::master::PlazzaGui::PlazzaGui(char **arg)
 	_layout->addWidget(_bIp_address);
 	_layout->addWidget(_bEmail_address);
 	_layout->addWidget(_bPhone_number);
-	_bIp_address->setChecked(true);
+	_bPhone_number->setChecked(true);
 	_layout->setAlignment(Qt::AlignCenter);
 	_groupBox->setFlat(true);
 	_groupBox->move(100, 40);
@@ -89,6 +90,18 @@ plazza::master::PlazzaGui::PlazzaGui(char **arg)
 	_TxtTodo->adjustSize();
 	_PBcompleted->setValue(0);
 	_PBcompleted->setGeometry(900, 530, 350, 30);
+	_loop->setInterval(100);
+	QObject::connect(_loop, SIGNAL(timeout()), this, SLOT(manage()));
+	_loop->start();
+}
+
+void plazza::master::PlazzaGui::manage()
+{
+	try {
+		_manager.manage();
+	} catch (plazza::slave::Launch &slaveLauncher) {
+		slaveLauncher.exec(_binName.c_str());
+	}
 }
 
 plazza::master::PlazzaGui::~PlazzaGui()
@@ -117,11 +130,6 @@ void plazza::master::PlazzaGui::checkedPhoneNbr()
 
 void plazza::master::PlazzaGui::validateFile()
 {
-	try {
-		_manager.manage();
-	} catch (plazza::slave::Launch &slaveLauncher) {
-		slaveLauncher.exec(_binName.c_str());
-	}
 	std::string info;
 	std::string filename = _text->toPlainText().toStdString();
 	std::ifstream istm(filename);
@@ -142,11 +150,6 @@ void plazza::master::PlazzaGui::validateFile()
 		errormsg.push_back(": No such file or directory</p>");
 		error.setText(errormsg);
 		error.exec();
-	}
-	try {
-		_manager.manage();
-	} catch (plazza::slave::Launch &slaveLauncher) {
-		slaveLauncher.exec(_binName.c_str());
 	}
 }
 
@@ -199,11 +202,6 @@ void plazza::master::PlazzaGui::update()
 void plazza::master::PlazzaGui::_computeFive()
 {
 	int i = 5;
-	try {
-		_manager.manage();
-	} catch (plazza::slave::Launch &slaveLauncher) {
-		slaveLauncher.exec(_binName.c_str());
-	}
 	while (!_cmdQStack.empty()) {
 		_cmdQ.push(_cmdQStack.front());
 		if (_filelist.size() > 0)
@@ -211,60 +209,18 @@ void plazza::master::PlazzaGui::_computeFive()
 		_filelistwid->takeItem(0);
 		i -= 1;
 		_cmdQStack.pop();
-		try {
-			_manager.manage();
-		} catch (plazza::slave::Launch &slaveLauncher) {
-			slaveLauncher.exec(_binName.c_str());
-		}
 		if (i < 1)
 			break;
-	}
-	try {
-		_manager.manage();
-	} catch (slave::Launch &slaveLauncher) {
-		slaveLauncher.exec(_binName.c_str());
 	}
 }
 
 void plazza::master::PlazzaGui::_compute()
 {
-	try {
-		_manager.manage();
-	} catch (plazza::slave::Launch &slaveLauncher) {
-		slaveLauncher.exec(_binName.c_str());
-	}
 	while (!_cmdQStack.empty()) {
 		_cmdQ.push(_cmdQStack.front());
 		if (_filelist.size() > 0)
 			_filelist.pop_front();
 		_filelistwid->takeItem(0);
 		_cmdQStack.pop();
-		try {
-			_manager.manage();
-		} catch (plazza::slave::Launch &slaveLauncher) {
-			slaveLauncher.exec(_binName.c_str());
-		}
 	}
-	try {
-		_manager.manage();
-	} catch (plazza::slave::Launch &slaveLauncher) {
-		slaveLauncher.exec(_binName.c_str());
-	}
-}
-
-bool plazza::master::PlazzaGui::poll(std::queue<plazza::Command> &cmdQ)
-{
-	try {
-		_manager.manage();
-	} catch (plazza::slave::Launch &slaveLauncher) {
-		slaveLauncher.exec(_binName.c_str());
-	}
-	while (!_cmdQ.empty()) {
-		cmdQ.push(_cmdQ.front());
-		if (_filelist.size() > 0)
-			_filelist.pop_front();
-		_filelistwid->takeItem(0);
-		_cmdQ.pop();
-	}
-	return true;
 }
