@@ -44,8 +44,6 @@ std::istream &Result::fill(std::istream &is) noexcept
 std::ostream &Result::dump(std::ostream &os) noexcept
 {
 	for (const auto &elem : _contents) {
-		if (&os != &std::cout)
-			std::cout << elem << std::endl;
 		os << elem << std::endl;
 	}
 	return os;

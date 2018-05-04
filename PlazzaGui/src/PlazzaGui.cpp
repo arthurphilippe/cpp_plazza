@@ -20,7 +20,7 @@ plazza::master::PlazzaGui::PlazzaGui(char **arg)
 	_bIp_address(new QRadioButton("IP_ADDRESS", _groupBox)),
 	_bPhone_number(new QRadioButton("PHONE_NUMBER", _groupBox)),
 	_bEmail_address(new QRadioButton("EMAIL_ADDRESS", _groupBox)),
-	_text(new QPlainTextEdit("/home/cheap/Code_Arena/cpp_plazza/tests/4phone_numbers.txt", _window)),
+	_text(new QPlainTextEdit("", _window)),
 	_bChoose(new QPushButton("Choose", _window)),
 	_filelistbox(new QGroupBox("Parsing Queue:", _window)),
 	_filelistwid(new QListWidget(_window)),
@@ -32,7 +32,7 @@ plazza::master::PlazzaGui::PlazzaGui(char **arg)
 	_TxtCmplt(new QLabel(_window)),
 	_bComputeFive(new QPushButton("Compute 5", _window)),
 	_TxtTodo(new QLabel(_window)),
-	_info(Information::PHONE_NUMBER),
+	_info(Information::IP_ADDRESS),
 	_cmdQIdx(1),
 	_threadNb(std::stoi(arg[1])),
 	_manager(_threadNb, _cmdQ),
@@ -47,7 +47,7 @@ plazza::master::PlazzaGui::PlazzaGui(char **arg)
 	_layout->addWidget(_bIp_address);
 	_layout->addWidget(_bEmail_address);
 	_layout->addWidget(_bPhone_number);
-	_bPhone_number->setChecked(true);
+	_bIp_address->setChecked(true);
 	_layout->setAlignment(Qt::AlignCenter);
 	_groupBox->setFlat(true);
 	_groupBox->move(100, 40);
