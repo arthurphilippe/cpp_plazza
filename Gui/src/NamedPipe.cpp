@@ -1,0 +1,1 @@
+../../src/NamedPipe.cpp

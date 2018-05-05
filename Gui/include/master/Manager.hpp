@@ -1,0 +1,1 @@
+../../../include/master/Manager.hpp

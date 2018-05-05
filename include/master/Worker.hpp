@@ -20,8 +20,10 @@
 	#include "ScopedLock.hpp"
 	#include "ILink.hpp"
 
-namespace plazza::master {
-	class Worker;
+namespace plazza {
+	namespace master	{
+		class Worker;
+	}
 }
 
 class plazza::master::Worker {
