@@ -9,6 +9,8 @@ CXX		=	g++
 
 NAME		=	plazza
 
+NAME_GUI	=	plazzaGui
+
 RM		=	rm -vf
 
 MAIN		=	src/main.cpp
@@ -42,7 +44,6 @@ SRCS_TEST	=	tests/test-Command.cpp		\
 			tests/test-RegexScrapper.cpp	\
 			tests/test-Result.cpp		\
 			tests/master/test-Worker.cpp	\
-#			tests/master/test-ControllerCLI.cpp	\
 			tests/slave/test-Worker.cpp	\
 
 SRCS_TEST	+=	$(OBJS)
@@ -84,6 +85,12 @@ $(TEST): $(OBJS_TEST)
 	@printf "[\033[0;36mlinking\033[0m]% 41s\r" $(TEST) | tr " " "."
 	@$(CXX) $(OBJS_TEST) -o $(TEST) -lcriterion $(LDFLAGS)
 	@printf "[\033[0;36mlinked\033[0m]% 42s\n" $(TEST) | tr " " "."
+
+ui: $(NAME_GUI)
+
+$(NAME_GUI):
+	@./installGui.sh
+
 clean: artifacts_clean
 	@printf "[\033[0;31mdeletion\033[0m][objects]% 31s\n" `$(RM) $(OBJ_MAIN) $(OBJS) $(OBJS_TEST) | wc -l | tr -d '\n'` | tr " " "."
 
@@ -96,4 +103,4 @@ artifacts_clean:
 
 re: fclean all
 
-.PHONY: all clean fclean re debug tests artifacts_clean
+.PHONY: all clean fclean re debug tests artifacts_clean ui
