@@ -9,7 +9,7 @@ CXX		=	g++
 
 NAME		=	plazza
 
-NAME_GUI	=	plazzaGui
+NAME_GUI	=	PlazzaGui
 
 RM		=	rm -vf
 
@@ -86,9 +86,7 @@ $(TEST): $(OBJS_TEST)
 	@$(CXX) $(OBJS_TEST) -o $(TEST) -lcriterion $(LDFLAGS)
 	@printf "[\033[0;36mlinked\033[0m]% 42s\n" $(TEST) | tr " " "."
 
-ui: $(NAME_GUI)
-
-$(NAME_GUI):
+ui:
 	@./installGui.sh
 
 clean: artifacts_clean

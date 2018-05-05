@@ -14,14 +14,14 @@ plazza::master::PlazzaGui::PlazzaGui(char **arg)
 	:
 	_window(new QWidget()),
 	_layout(new QHBoxLayout),
-	_bOk(new QPushButton("OK", _window)),
-	_bCompute(new QPushButton("Compute", _window)),
+	_bOk(new QPushButton("Add", _window)),
+	_bCompute(new QPushButton("Run", _window)),
 	_groupBox(new QGroupBox("Choose Type", _window)),
 	_bIp_address(new QRadioButton("IP_ADDRESS", _groupBox)),
 	_bPhone_number(new QRadioButton("PHONE_NUMBER", _groupBox)),
 	_bEmail_address(new QRadioButton("EMAIL_ADDRESS", _groupBox)),
 	_text(new QPlainTextEdit("", _window)),
-	_bChoose(new QPushButton("Choose", _window)),
+	_bChoose(new QPushButton("Browse...", _window)),
 	_filelistbox(new QGroupBox("Parsing Queue:", _window)),
 	_filelistwid(new QListWidget(_window)),
 	_PBpending(new QProgressBar(_window)),
@@ -30,7 +30,7 @@ plazza::master::PlazzaGui::PlazzaGui(char **arg)
 	_TxtPending(new QLabel(_window)),
 	_TxtSent(new QLabel(_window)),
 	_TxtCmplt(new QLabel(_window)),
-	_bComputeFive(new QPushButton("Compute 5", _window)),
+	_bComputeFive(new QPushButton("Run 5", _window)),
 	_TxtTodo(new QLabel(_window)),
 	_info(Information::IP_ADDRESS),
 	_cmdQIdx(1),
@@ -41,9 +41,9 @@ plazza::master::PlazzaGui::PlazzaGui(char **arg)
 {
 	_window->setFixedSize(1680, 720);
 	_bChoose->move(600, 200);
-	_bOk->move(470, 330);
-	_bCompute->move(600, 330);
-	_bComputeFive->move(600, 270);
+	_bOk->move(600, 250);
+	_bCompute->move(800, 400);
+	_bComputeFive->move(900, 400);
 	_layout->addWidget(_bIp_address);
 	_layout->addWidget(_bEmail_address);
 	_layout->addWidget(_bPhone_number);
@@ -72,20 +72,20 @@ plazza::master::PlazzaGui::PlazzaGui(char **arg)
 				this, SLOT(_compute()));
 	QObject::connect(_bComputeFive, SIGNAL(clicked()),
 				this, SLOT(_computeFive()));
-	_TxtPending->move(850, 455);
+	_TxtPending->move(825, 455);
 	_TxtPending->setText(QString("Pending"));
 	_TxtPending->adjustSize();
 	_PBpending->setValue(0);
 	_PBpending->setGeometry(900, 450, 350, 30);
-	_TxtSent->move(869, 495);
+	_TxtSent->move(825, 495);
 	_TxtSent->setText(QString("Sent"));
 	_TxtSent->adjustSize();
 	_PBsent->setValue(0);
 	_PBsent->setGeometry(900, 490, 350, 30);
-	_TxtCmplt->move(837, 535);
+	_TxtCmplt->move(825, 535);
 	_TxtCmplt->setText(QString("Completed"));
 	_TxtCmplt->adjustSize();
-	_TxtTodo->move(1000, 400);
+	_TxtTodo->move(1000, 600);
 	_TxtTodo->setText("Total Commands: 0");
 	_TxtTodo->adjustSize();
 	_PBcompleted->setValue(0);
