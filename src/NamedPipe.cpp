@@ -35,11 +35,8 @@ NamedPipe::NamedPipe(uint id, ILink::Mode mode)
 	} else {
 		throw LinkExeption("No mode specified.");
 	}
-	if (!_in) {
-		throw LinkExeption("Pipe in wasn't opened...");
-	}
-	if (!_out) {
-		throw LinkExeption("Pipe out wasn't opened...");
+	if (!_in || !_out) {
+		throw LinkExeption("Failed to open pipe");
 	}
 }
 

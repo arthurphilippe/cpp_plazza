@@ -97,9 +97,6 @@ void Worker::_register(scrap::Result &res)
 	plazza::ScopedLock guard(_lock);
 
 	_results.push_back(res);
-	// std::cout << "===================" << std::endl;
-	// std::cout << res;
-
 	if (_load != 0)
 		_load -= 1;
 	if (_load == 0)

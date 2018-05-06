@@ -31,7 +31,6 @@ void Regex::run(const Command &cmd)
 
 std::ostream &Regex::serialise(std::ostream &os)
 {
-	// std::stringstream oss;
 	os << _cmd.cmdId;
 	os << " ";
 	os << _results.size();
@@ -43,8 +42,6 @@ std::ostream &Regex::serialise(std::ostream &os)
 		os << entry;
 		_results.pop();
 	}
-	// std::cout << os.str() << std::endl;
-	// os << os.str() << std::endl;
 	os << std::endl;
 	return os;
 }
